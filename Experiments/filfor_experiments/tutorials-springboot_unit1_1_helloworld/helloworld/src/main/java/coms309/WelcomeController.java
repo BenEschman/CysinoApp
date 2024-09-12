@@ -16,4 +16,7 @@ class WelcomeController {
     public String welcome(@PathVariable String name) {
         return "Hello and welcome to COMS 309: " + name;
     }
+
+    @GetMapping("/test/1")
+    public String test1() {return "Test passed! :D";}
 }
