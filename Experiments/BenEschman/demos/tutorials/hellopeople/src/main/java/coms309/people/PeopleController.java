@@ -88,5 +88,12 @@ public class PeopleController {
         peopleList.remove(firstName);
         return peopleList;
     }
+
+    @PutMapping("/people/address/{firstName}")
+    public String updatePhone(@PathVariable String firstName, @RequestBody Person p) {
+        if(!peopleList.containsKey(firstName)) {return "Error to find that name";}
+       peopleList.get(firstName).setAddress(p.getAddress());
+       return "Successful replace.";
+    }
 }
 
