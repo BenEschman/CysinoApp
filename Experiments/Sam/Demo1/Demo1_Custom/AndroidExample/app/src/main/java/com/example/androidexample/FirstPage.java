@@ -21,8 +21,12 @@ public class FirstPage extends AppCompatActivity {
         /* initialize UI elements */
         messageText = findViewById(R.id.msg_txt);      // link to message textview in the Main activity XML
         messageText.setText("This is the first page");
+        messageText.setTextColor(0xFFFF00FF);
+        messageText.setTextSize(40);
 
         pageNext = findViewById(R.id.page3_prev);
+        pageNext.setBackgroundColor(0xFF00FF00);
+        pageNext.setTextColor(0xFF000000);
 
 
         pageNext.setOnClickListener(new View.OnClickListener() {

@@ -7,14 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.EditText;
+import java.util.Random;
 
 public class ThirdPage extends AppCompatActivity{
 
     private TextView numberText;
     private Button pagePrev;
     private Button enterNumber;
-    private EditText numberField;
+
+    Random rand = new Random();
+    Integer num = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,7 @@ public class ThirdPage extends AppCompatActivity{
         /* initialize UI elements */
         numberText = findViewById(R.id.msg_txt);      // link to message textview in the Main activity XML
         numberText.setText("0");
-        numberField = findViewById(R.id.numberField);
+
 
         pagePrev = findViewById(R.id.page3_prev);
         enterNumber = findViewById(R.id.enterNumber);
@@ -45,8 +47,8 @@ public class ThirdPage extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
-                String number = numberField.getText().toString();
-                numberText.setText(number);
+                num = rand.nextInt(100);
+                numberText.setText(num.toString());
 
 
             }
