@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 @RestController
 public class PeopleController {
-    
+
     // Note that there is only ONE instance of PeopleController in 
     // Springboot system.
     HashMap<String, Person> peopleList = new  HashMap<>();
