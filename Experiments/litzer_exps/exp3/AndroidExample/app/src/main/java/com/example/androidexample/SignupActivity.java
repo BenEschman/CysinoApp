@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Switch;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -16,6 +17,9 @@ public class SignupActivity extends AppCompatActivity {
     private EditText confirmEditText;   // define confirm edittext variable
     private Button loginButton;         // define login button variable
     private Button signupButton;        // define signup button variable
+    private Switch membership ;
+
+    private boolean subscribed = false ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

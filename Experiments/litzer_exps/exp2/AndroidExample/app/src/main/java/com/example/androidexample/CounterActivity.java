@@ -15,7 +15,10 @@ public class CounterActivity extends AppCompatActivity {
     private Button decreaseBtn; // define decrease button variable
     private Button backBtn;     // define back button variable
 
-    private int counter = 0;    // counter variable
+    private int counter = 1;    // counter variable
+    private int prevFib = 0 ; // fibonacci prev
+    private int currentFib = 1 ; // fibonacci current
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,11 @@ public class CounterActivity extends AppCompatActivity {
         increaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberTxt.setText(String.valueOf(++counter));
+                int nextFib = prevFib + currentFib ;
+                prevFib = currentFib ;
+                currentFib = nextFib ;
+
+                numberTxt.setText(String.valueOf(currentFib)) ;
             }
         });
 
@@ -40,7 +47,13 @@ public class CounterActivity extends AppCompatActivity {
         decreaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberTxt.setText(String.valueOf(--counter));
+                if(prevFib == 0) {
+                    return;
+                }
+                int temp = prevFib ;
+                prevFib = currentFib - prevFib ;
+                currentFib = temp ;
+                numberTxt.setText(String.valueOf(currentFib));
             }
         });
 
