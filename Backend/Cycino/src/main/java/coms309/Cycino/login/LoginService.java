@@ -1,7 +1,7 @@
 package coms309.Cycino.login;
 
+import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +25,17 @@ public class LoginService {
             };
         });
         return contained.get();
+    }
+
+    public coms309.Cycino.users.User getUser(String username){
+
+        List<coms309.Cycino.users.User> users = new ArrayList<>(userRepository.findAll());
+        for(coms309.Cycino.users.User u : users){
+            if(u.getLogin()[0].equalsIgnoreCase(username)){
+                return u;
+            }
+        }
+        return null;
     }
 
 }

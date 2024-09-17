@@ -1,9 +1,7 @@
 package coms309.Cycino.login;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import coms309.Cycino.users.User;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoginController {
@@ -16,6 +14,9 @@ public class LoginController {
         return loginService.checkInfo(info);
     }
 
-    @GetMapping("/login/")
+    @GetMapping("/login/{username}")
+    public User getUser(@PathVariable String username){
+        return loginService.getUser(username);
+    }
 
 }
