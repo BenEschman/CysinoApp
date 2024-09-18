@@ -2,6 +2,7 @@ package coms309.Cycino.login;
 
 import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserRepository;
+import coms309.Cycino.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,26 +17,20 @@ public class LoginService {
     @Autowired
     private UserRepository userRepository;
 
+    private UserService userService;
+
     public boolean checkInfo(String[] info){
 
-        AtomicBoolean contained = new AtomicBoolean(false);
-        userRepository.findAll().forEach((u) -> {
-            if(u.getLogin()[0].equalsIgnoreCase(info[0]) && u.getLogin()[1].equals(info[1])){
-                contained.set(true);
-            };
-        });
-        return contained.get();
+        if(userService.containsUser(info[0])){
+            return userService.getUser(info[0]).getLogin()[1].equals(info[1]);
+        }
+        return false;
     }
 
     public coms309.Cycino.users.User getUser(String username){
 
-        List<coms309.Cycino.users.User> users = new ArrayList<>(userRepository.findAll());
-        for(coms309.Cycino.users.User u : users){
-            if(u.getLogin()[0].equalsIgnoreCase(username)){
-                return u;
-            }
-        }
-        return null;
+        return userService.getUser(username);
+
     }
 
 }

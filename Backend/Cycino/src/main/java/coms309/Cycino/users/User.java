@@ -2,8 +2,10 @@ package coms309.Cycino.users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "\"user\"") // escaping using double quotes for H2 SQL compatibility
 public class User {
 
     @Id
