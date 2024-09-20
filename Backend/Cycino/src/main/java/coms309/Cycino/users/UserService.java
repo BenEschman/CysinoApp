@@ -10,7 +10,7 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository userRepository;
 
     public User getUser(String username){
 

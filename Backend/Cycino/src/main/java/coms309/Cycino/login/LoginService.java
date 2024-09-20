@@ -1,7 +1,7 @@
 package coms309.Cycino.login;
 
 import coms309.Cycino.users.User;
-import coms309.Cycino.users.UserRepository;
+import coms309.Cycino.users.UsersRepository;
 import coms309.Cycino.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LoginService {
 
     @Autowired
-    private UserRepository userRepository;
-
     private UserService userService;
 
     public boolean checkInfo(String[] info){
