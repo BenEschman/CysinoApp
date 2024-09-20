@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "\"user\"") // escaping using double quotes for H2 SQL compatibility
+@Table(name = "users") // escaping using double quotes for H2 SQL compatibility
 public class User {
 
     @Id
@@ -16,6 +16,9 @@ public class User {
     private String phoneNumber;
     private String password;
     private String role;
+
+
+    public User(){}
 
     public User(String id, String username, String password){
         this.id = id;
