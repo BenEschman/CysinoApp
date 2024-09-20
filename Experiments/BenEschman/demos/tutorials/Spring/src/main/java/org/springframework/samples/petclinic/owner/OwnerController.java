@@ -70,10 +70,13 @@ class OwnerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/owners/{ownerId}")
-    public Optional<Owners> findOwnerById(@PathVariable("ownerId") int id) {
+    public String findOwnerById(@PathVariable("ownerId") int id) {
         logger.info("Entered into Controller Layer");
         Optional<Owners> results = ownersRepository.findById(id);
-        return results;
+        if(results.isEmpty()){
+            return "No Owner Found";
+        }
+        return results.get().getFirstName() + " " + results.get().getLastName();
     }
 
 }
