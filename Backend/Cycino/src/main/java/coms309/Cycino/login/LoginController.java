@@ -20,5 +20,10 @@ public class LoginController {
         return loginService.getUser(username);
     }
 
+    @GetMapping("/new/{username}")
+    public User makeUser(@PathVariable String username){
+        return loginService.makeUser(username);
+    }
+
 
 }
