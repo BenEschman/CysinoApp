@@ -1,5 +1,7 @@
 package coms309.Cycino.signup;
 
+import coms309.Cycino.login.LoginInfo;
+import coms309.Cycino.login.LoginService;
 import coms309.Cycino.users.User;
 import coms309.Cycino.users.UsersRepository;
 import coms309.Cycino.users.UserService;
@@ -10,13 +12,13 @@ import org.springframework.stereotype.Service;
 public class SignupService {
 
     @Autowired
-    private UserService userService;
+    private LoginService loginService;
 
-    public boolean signup(User user){
-        if(userService.containsUser(user.getLogin()[0])){
+    public boolean signup(LoginInfo user){
+        if(loginService.containsUser(user.getUsername())){
             return false;
         }
-        userService.addUser(user);
+        loginService.addUser(user);
         return true;
     }
 }

@@ -16,14 +16,14 @@ public class LoginController {
     }
 
     @GetMapping("/login/{username}")
-    public User getUser(@PathVariable String username){
+    public LoginInfo getUser(@PathVariable String username){
         return loginService.getUser(username);
     }
 
-    @GetMapping("/new/{username}")
-    public User makeUser(@PathVariable String username){
-        return loginService.makeUser(username);
-    }
+//    @GetMapping("/new/{username}")
+//    public User makeUser(@PathVariable String username){
+//        return loginService.makeUser(username);
+//    }
 
 
 }

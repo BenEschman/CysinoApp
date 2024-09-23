@@ -15,26 +15,53 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LoginService {
 
     @Autowired
-    private UserService userService;
+    private LoginRepository loginRepository;
 
     public boolean checkInfo(String[] info){
 
-        if(userService.containsUser(info[0])){
-            return userService.getUser(info[0]).getLogin()[1].equals(info[1]);
+        if(containsUser(info[0])){
+            return getUser(info[0]).getPassword().equals(info[1]);
         }
         return false;
     }
 
-    public coms309.Cycino.users.User getUser(String username){
+    public LoginInfo getUser(String username){
 
-        return userService.getUser(username);
-
+        List<LoginInfo> users = new ArrayList<>(loginRepository.findAll());
+        for(LoginInfo u : users){
+            if(u.getUsername().equalsIgnoreCase(username)){
+                return u;
+            }
+        }
+        return null;
     }
 
-    public coms309.Cycino.users.User makeUser(String username){
+//    public coms309.Cycino.users.User makeUser(String username){
+//
+//        return new User("10", "BenEsch", "BEschman3905!", "Ben", "Eschman", "815-528-3105", "Admin" );
+//
+//    }
+    public boolean containsUser(LoginInfo user){
+        List<LoginInfo> users = new ArrayList<>(loginRepository.findAll());
+        for(LoginInfo u : users){
+            if(u.equals(user)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean containsUser(String username){
+        List<LoginInfo> users = new ArrayList<>(loginRepository.findAll());
+        for(LoginInfo u : users){
+            if(u.getUsername().equalsIgnoreCase(username)){
+                return true;
+            }
+        }
+        return false;
+    }
 
-        return new User("10", "BenEsch", "BEschman3905!", "Ben", "Eschman", "815-528-3105", "Admin" );
-
+    public void addUser(LoginInfo user){
+        loginRepository.save(user);
     }
 
 }

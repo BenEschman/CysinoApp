@@ -10,40 +10,27 @@ public class User {
 
     @Id
     private String id;
-    private String username;
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String password;
     private String role;
 
 
     public User(){}
 
-    public User(String id, String username, String password){
+    public User(String id, String firstName, String lastName){
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
-    public User(String id, String username, String password, String first, String last){
+    public User(String id, String first, String last, String phoneNumber){
         this.id = id;
-        this.username = username;
-        this.password = password;
-        this.firstName = first;
-        this.lastName = last;
-    }
-    public User(String id, String username, String password, String first, String last, String phoneNumber){
-        this.id = id;
-        this.username = username;
-        this.password = password;
         this.firstName = first;
         this.lastName = last;
         this.phoneNumber = phoneNumber;
     }
-    public User(String id, String username, String password, String first, String last, String phoneNumber, String role){
+    public User(String id, String first, String last, String phoneNumber, String role){
         this.id = id;
-        this.username = username;
-        this.password = password;
         this.firstName = first;
         this.lastName = last;
         this.phoneNumber = phoneNumber;
@@ -53,20 +40,13 @@ public class User {
     public String getId(){
         return id;
     }
-    public String[] getLogin(){
-        return new String[]{username, password};
-    }
+
     public String[] getContact(){
         return new String[]{firstName, lastName, phoneNumber};
     }
 
     public String getRole(){
         return role;
-    }
-
-    public void updateLogin(String[] login){
-        this.username = login[0];
-        this.password = login[1];
     }
 
     public void updateContact(String[] contact){

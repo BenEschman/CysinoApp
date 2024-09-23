@@ -12,25 +12,19 @@ public class UserService {
     @Autowired
     private UsersRepository userRepository;
 
-    public User getUser(String username){
+    public User getUser(String firstName, String lastName){
 
         List<User> users = new ArrayList<>(userRepository.findAll());
         for(coms309.Cycino.users.User u : users){
-            if(u.getLogin()[0].equalsIgnoreCase(username)){
+            if(u.getContact()[0].equalsIgnoreCase(firstName) && u.getContact()[1].equalsIgnoreCase(lastName)){
                 return u;
             }
         }
         return null;
     }
 
-    public boolean containsUser(String username){
-        List<User> users = new ArrayList<>(userRepository.findAll());
-        for(coms309.Cycino.users.User u : users){
-            if(u.getLogin()[0].equalsIgnoreCase(username)){
-                return true;
-            }
-        }
-        return false;
+    public boolean containsUser(String firstName, String lastName){
+        return getUser(firstName, lastName) != null;
     }
 
     public boolean containsUser(User user){
