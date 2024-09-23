@@ -31,4 +31,10 @@ public class LoginService {
 
     }
 
+    public coms309.Cycino.users.User makeUser(String username){
+
+        return new User("10", "BenEsch", "BEschman3905!", "Ben", "Eschman", "815-528-3105", "Admin" );
+
+    }
+
 }
