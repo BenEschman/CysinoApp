@@ -1,4 +1,0 @@
-Hello from another branch - adele
-
-Resolved conflict
-
