@@ -1,4 +1,4 @@
 Hello from another branch - adele
 
-Branch lines updated from 3 to 4
+Resolved conflict
 
