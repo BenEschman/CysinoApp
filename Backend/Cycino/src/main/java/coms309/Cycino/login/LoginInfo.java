@@ -1,19 +1,28 @@
 package coms309.Cycino.login;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import coms309.Cycino.users.User;
+import jakarta.persistence.*;
+
+import java.util.Random;
 
 @Entity
 public class LoginInfo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String username;
     private String password;
 
+    @OneToOne
+    @JsonIgnore
+    private User user;
+
     public LoginInfo(){}
 
     public LoginInfo(String username, String password){
+        //id = new Random().nextLong(0, 999999999);
         this.username = username;
         this.password = password;
     }
