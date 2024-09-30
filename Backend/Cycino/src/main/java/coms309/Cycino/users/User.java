@@ -1,7 +1,10 @@
 package coms309.Cycino.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import coms309.Cycino.login.LoginService;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,6 +18,9 @@ public class User {
     private String phoneNumber;
     private String role;
 
+    @OneToOne
+    @JsonIgnore
+    private LoginService loginService;
 
     public User(){}
 

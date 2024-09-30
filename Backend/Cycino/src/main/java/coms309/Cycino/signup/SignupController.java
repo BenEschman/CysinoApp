@@ -17,6 +17,6 @@ public class SignupController {
 
     @PostMapping("/signup/register")
     public boolean signup(@RequestBody LoginInfo user){
-        return signupService.signup(user);
+        return signupService.signup(new LoginInfo(user.getUsername(), user.getPassword()));
     }
 }
