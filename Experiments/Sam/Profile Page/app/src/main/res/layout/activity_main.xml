@@ -28,20 +28,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/firstNameText"
-                    android:layout_width="197dp"
-                    android:layout_height="wrap_content"
-                    android:text="First Name" />
-
-                <TextView
-                    android:id="@+id/lastNameText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Last Name" />
-            </LinearLayout>
+                android:orientation="horizontal"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,6 +40,7 @@
                     android:layout_width="197dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="First Name"
                     android:inputType="text" />
 
                 <EditText
@@ -60,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="Last Name"
                     android:inputType="text" />
             </LinearLayout>
 

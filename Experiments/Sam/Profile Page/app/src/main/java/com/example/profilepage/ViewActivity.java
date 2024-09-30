@@ -3,9 +3,12 @@ package com.example.profilepage;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,9 +32,7 @@ import java.util.Map;
 
 public class ViewActivity extends AppCompatActivity {
 
-
     private Button viewButton;
-    private Button updateButton;
     RequestQueue requestQueue;
     private TextView fNameOut;
     private TextView lNameOut;
@@ -46,7 +47,6 @@ public class ViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view);
 
         viewButton = findViewById(R.id.returnButton);
-        updateButton = findViewById(R.id.updateButton);
         fNameOut = findViewById(R.id.firstNameOut);
         lNameOut = findViewById(R.id.lastNameOut);
 
@@ -65,6 +65,8 @@ public class ViewActivity extends AppCompatActivity {
 
 
 
+
+
         viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,39 +74,32 @@ public class ViewActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    private void updateScreen() {
 
-                    fNameOut.setText(serverOut.get("fName"));
-                    lNameOut.setText(serverOut.get("lName"));
+        fNameOut.setText(serverOut.get("fName"));
+        lNameOut.setText(serverOut.get("lName"));
 
-                for (int i = 0; i < jArr.length(); i++) {
-                    String key;
-                    String value;
-                    try {
+        for (int i = 0; i < jArr.length(); i++) {
+            String key;
+            String value;
+            try {
 
-                        JSONObject jObj = new JSONObject(String.valueOf(jArr.get(i)));
-                        key = jObj.getString("key");
-                        value = jObj.getString("value");
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    if (key.equals("fName")){
-                        fNameOut.setText(value);
-                    } else if (key.equals("lName")) {
-                        lNameOut.setText(value);
-                    }
-
-                }
-
-
+                JSONObject jObj = new JSONObject(String.valueOf(jArr.get(i)));
+                key = jObj.getString("key");
+                value = jObj.getString("value");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-        });
 
+            if (key.equals("fName")){
+                fNameOut.setText(value);
+            } else if (key.equals("lName")) {
+                lNameOut.setText(value);
+            }
 
+        }
 
 
     }
@@ -125,6 +120,8 @@ public class ViewActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
+                        updateScreen();
 
                     }
                 }, new Response.ErrorListener() {

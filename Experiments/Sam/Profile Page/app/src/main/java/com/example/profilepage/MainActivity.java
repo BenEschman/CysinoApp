@@ -28,8 +28,6 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private TextView profileText;
-    private TextView firstNameText;
-    private TextView lastNameText;
     private EditText firstName;
     private EditText lastName;
     private Button submit;
@@ -44,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         profileText = findViewById(R.id.profileText);
         firstName = findViewById(R.id.firstName);
-        firstNameText = findViewById(R.id.firstNameText);
-        lastNameText = findViewById(R.id.lastNameText);
         lastName = findViewById(R.id.lastName);
         submit = findViewById(R.id.submitButton);
         view = findViewById(R.id.viewProfile);
@@ -65,19 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 String fNameStr = firstName.getText().toString();
                 String lNameStr = lastName.getText().toString();
 
-                if (fNameStr.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Please enter a first name", Toast.LENGTH_SHORT).show();
-                    firstNameText.setTextColor(0xFFFF0000);
-                }
-                if (lNameStr.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Please enter a last name", Toast.LENGTH_SHORT).show();
-                    lastNameText.setTextColor(0xFFFF0000);
-                }
-
-                else {
                     pushData(fNameStr,lNameStr);
                     System.out.println(fNameStr + lNameStr);
-                }
+
 
             }
         });
