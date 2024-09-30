@@ -1,6 +1,7 @@
 package coms309.Cycino.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.login.LoginService;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,7 +21,7 @@ public class User {
 
     @OneToOne
     @JsonIgnore
-    private LoginService loginService;
+    private LoginInfo loginInfo;
 
     public User(){}
 
