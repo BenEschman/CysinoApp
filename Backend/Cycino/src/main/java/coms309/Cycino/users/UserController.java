@@ -11,7 +11,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/users/")
+    @RequestMapping(method = RequestMethod.GET, path = "/users")
     public List<User> getUsers(){
         return userService.getUsers();
     }
