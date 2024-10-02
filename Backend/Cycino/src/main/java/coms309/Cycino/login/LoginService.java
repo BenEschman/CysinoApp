@@ -64,4 +64,10 @@ public class LoginService {
         loginRepository.save(user);
     }
 
+    public boolean setUser(String username, User user){
+        LoginInfo login = getUser(username);
+        login.setUser(user);
+        return true;
+    }
+
 }

@@ -1,9 +1,7 @@
 package coms309.Cycino.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,6 +14,11 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, path = "/users/")
     public List<User> getUsers(){
         return userService.getUsers();
+    }
+
+    @PostMapping("/users/create")
+    public boolean create(@RequestBody User user){
+        return userService.create(user);
     }
 
 }

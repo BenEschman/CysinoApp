@@ -11,11 +11,12 @@ public class LoginInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String username;
     private String password;
 
     @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
     private User user;
 
@@ -45,5 +46,9 @@ public class LoginInfo {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 }

@@ -32,6 +32,12 @@ public class LoginController {
     public boolean containsUser(@RequestBody LoginInfo user){
         return loginService.containsUser(user);
     }
+
+    @PostMapping("/login/setUser/{username}")
+    public boolean setUser(@RequestBody User user, String username){
+        return loginService.setUser(username, user);
+    }
+
 //    @GetMapping("/new/{username}")
 //    public User makeUser(@PathVariable String username){
 //        return loginService.makeUser(username);

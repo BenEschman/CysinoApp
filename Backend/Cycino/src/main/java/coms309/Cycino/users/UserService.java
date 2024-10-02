@@ -1,5 +1,7 @@
 package coms309.Cycino.users;
 
+import coms309.Cycino.login.LoginInfo;
+import coms309.Cycino.login.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,15 @@ public class UserService {
         return null;
     }
 
+    public boolean create(User user){
+        System.out.println(user);
+        if(!containsUser(user)) {
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
     public boolean containsUser(String firstName, String lastName){
         return getUser(firstName, lastName) != null;
     }
@@ -37,12 +48,7 @@ public class UserService {
         return false;
     }
 
-    public void addUser(User user){
-        userRepository.save(user);
-    }
-
     public List<User> getUsers(){
         return userRepository.findAll();
     }
-
 }
