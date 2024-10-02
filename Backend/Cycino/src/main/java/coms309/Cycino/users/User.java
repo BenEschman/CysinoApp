@@ -17,8 +17,6 @@ public class User {
     private String lastName;
     private String phoneNumber;
     private Roles role = Roles.BEGINNER;
-    private String userBiography;
-
 
     @OneToOne
     @JsonIgnore
@@ -74,9 +72,6 @@ public class User {
         return role;
     }
 
-    public String getUserBiography() {return userBiography;}
-
-    public void setUserBiography(String userBiography) {this.userBiography = userBiography;}
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -99,18 +94,5 @@ public class User {
     }
     public void updateRole(String role){
         this.role = Roles.valueOf(role.toUpperCase());
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", role=" + role +
-                ", userBiography='" + userBiography + '\'' +
-                ", loginInfo=" + loginInfo +
-                ", id=" + id +
-                '}';
     }
 }
