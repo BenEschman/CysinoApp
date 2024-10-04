@@ -16,13 +16,19 @@ public class LoginService {
 
     @Autowired
     private LoginRepository loginRepository;
+    @Autowired
+    private UserService userService;
 
-    public boolean checkInfo(String[] info){
+    public String checkInfo(String[] info){
 
         if(containsUser(info[0])){
-            return getUser(info[0]).getPassword().equals(info[1]);
+            LoginInfo l = getUser(info[0]);
+             if(l.getPassword().equals(info[1])){
+                 return l.getId() + "";
+             };
+             return "Wrong password";
         }
-        return false;
+        return "Wrong username";
     }
 
     public LoginInfo getUser(String username){
@@ -34,6 +40,10 @@ public class LoginService {
             }
         }
         return null;
+    }
+
+    public LoginInfo getUser(long id){
+        return loginRepository.getReferenceById(id);
     }
 
 //    public coms309.Cycino.users.User makeUser(String username){
@@ -61,13 +71,25 @@ public class LoginService {
     }
 
     public void addUser(LoginInfo user){
+        User user2 = userService.create(user);
+        user.setUser(user2);
         loginRepository.save(user);
+        user2.setId(user.getId());
     }
 
     public boolean setUser(String username, User user){
         LoginInfo login = getUser(username);
         login.setUser(user);
         return true;
+    }
+
+    public boolean deleteUser(long id){
+        if(userService.deleteUser(id)){
+            loginRepository.deleteById(id);
+            return true;
+        }
+        return false;
+
     }
 
 }

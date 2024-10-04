@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -13,6 +14,8 @@ public class UserService {
 
     @Autowired
     private UsersRepository userRepository;
+//    @Autowired
+//    private LoginService loginService;
 
     public User getUser(String firstName, String lastName){
 
@@ -24,14 +27,38 @@ public class UserService {
         }
         return null;
     }
+    public User getUser(long id){
 
-    public boolean create(User user){
-        System.out.println(user);
-        if(!containsUser(user)) {
-            userRepository.save(user);
+        List<User> users = new ArrayList<>(userRepository.findAll());
+        for(coms309.Cycino.users.User u : users){
+            if(u.getLoginInfo().getId() == id){
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean create(User user, long id){
+        User oldUser = getUser(id);
+        if(oldUser != null) {
+            oldUser.setFirstName(user.getFirstName());
+            oldUser.setLastName(user.getLastName());
+            oldUser.setPhoneNumber(user.getPhoneNumber());
+            userRepository.save(oldUser);
             return true;
         }
         return false;
+    }
+
+    public User create(LoginInfo loginInfo){
+        User user = new User();
+        user.setLoginInfo(loginInfo);
+        userRepository.save(user);
+        return user;
+    }
+
+    public void setId(long id, User user){
+        user.setId(id);
     }
 
     public boolean containsUser(String firstName, String lastName){
@@ -50,5 +77,13 @@ public class UserService {
 
     public List<User> getUsers(){
         return userRepository.findAll();
+    }
+
+    public boolean deleteUser(long id){
+        if(getUser(id) != null) {
+            userRepository.delete(getUser(id));
+            return true;
+        }
+        return false;
     }
 }

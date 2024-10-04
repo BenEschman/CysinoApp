@@ -3,8 +3,8 @@ package coms309.Cycino.login;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
-
-import java.util.Random;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 public class LoginInfo {
@@ -15,6 +15,7 @@ public class LoginInfo {
     private String username;
     private String password;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore

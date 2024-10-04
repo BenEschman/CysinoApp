@@ -14,13 +14,13 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login/submit")
-    public boolean checkInfo(@RequestBody String[] info){
+    public String checkInfo(@RequestBody String[] info){
         return loginService.checkInfo(info);
     }
 
-    @GetMapping("/login/{username}")
-    public LoginInfo getUser(@PathVariable String username){
-        return loginService.getUser(username);
+    @GetMapping("/login/{id}")
+    public LoginInfo getUser(@PathVariable long id){
+        return loginService.getUser(id);
     }
 
     @GetMapping("/login/contains/{username}")
@@ -38,10 +38,9 @@ public class LoginController {
         return loginService.setUser(username, user);
     }
 
-//    @GetMapping("/new/{username}")
-//    public User makeUser(@PathVariable String username){
-//        return loginService.makeUser(username);
-//    }
-
+    @DeleteMapping("/login/delete/{id}")
+    public boolean deleteUser(@PathVariable long id){
+        return loginService.deleteUser(id);
+    }
 
 }
