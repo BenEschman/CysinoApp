@@ -2,9 +2,9 @@ package coms309.Cycino.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.login.LoginInfo;
+import coms309.Cycino.login.LoginService;
 import jakarta.persistence.*;
 import coms309.Cycino.Roles;
-
 
 @Entity
 @Table(name = "users") // escaping using double quotes for H2 SQL compatibility
@@ -18,9 +18,10 @@ public class User {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.BEGINNER;
+    private String userBiography;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "login_info_id", referencedColumnName = "id")
+
+    @OneToOne
     @JsonIgnore
     private LoginInfo loginInfo;
 
@@ -74,6 +75,9 @@ public class User {
         return role;
     }
 
+    public String getUserBiography() {return userBiography;}
+
+    public void setUserBiography(String userBiography) {this.userBiography = userBiography;}
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -96,6 +100,19 @@ public class User {
     }
     public void updateRole(String role){
         this.role = Roles.valueOf(role.toUpperCase());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", role=" + role +
+                ", userBiography='" + userBiography + '\'' +
+                ", loginInfo=" + loginInfo +
+                ", id=" + id +
+                '}';
     }
     public void setId(long id){
         this.id=id;
