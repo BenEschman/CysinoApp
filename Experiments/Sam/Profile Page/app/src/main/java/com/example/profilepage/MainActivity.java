@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.InterpolatorRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText firstName;
     private EditText lastName;
     private EditText phoneNumber;
+    private EditText idNum;
     private Button submit;
     private Button view;
     private Button leaderboard;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         firstName = findViewById(R.id.firstName);
         lastName = findViewById(R.id.lastName);
         phoneNumber = findViewById(R.id.editTextPhone);
+        idNum = findViewById(R.id.edit_id);
         submit = findViewById(R.id.submitButton);
         view = findViewById(R.id.viewProfile);
         leaderboard = findViewById(R.id.button_leaderboard);
@@ -73,8 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 String fNameStr = firstName.getText().toString();
                 String lNameStr = lastName.getText().toString();
                 String phoneNum = phoneNumber.getText().toString();
+                String id = idNum.getText().toString();
 
-                    pushData(fNameStr,lNameStr,phoneNum);
+
+                    pushData(fNameStr,lNameStr,phoneNum,id);
                     System.out.println(fNameStr + lNameStr);
 
 
@@ -101,10 +106,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void pushData(final String fName, final String lName, final String phoneNum) {
-        //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/putData";
-        //String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/create";
-        String url = "10.90.75.20:8080/users/create";
+    private void pushData(final String fName, final String lName, final String phoneNum, final String id) {
+        //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/putData/"+id;
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/update/"+id;
+
+        System.out.println(url);
 
         JSONObject postData = new JSONObject();
 
@@ -113,19 +119,20 @@ public class MainActivity extends AppCompatActivity {
             postData.put("lastName",lName);
             postData.put("phoneNumber",phoneNum);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, postData, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, postData,
+                new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), "Response: "+response, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Response: "+(response.toString()), Toast.LENGTH_LONG).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(),"FAIL", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"FAIL"+ error, Toast.LENGTH_LONG).show();
             }
         });
 
