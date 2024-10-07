@@ -73,8 +73,8 @@ public class LoginService {
     public void addUser(LoginInfo user){
         User user2 = userService.create(user);
         user.setUser(user2);
-        loginRepository.save(user);
         user2.setId(user.getId());
+        loginRepository.save(user);
     }
 
     public boolean setUser(String username, User user){

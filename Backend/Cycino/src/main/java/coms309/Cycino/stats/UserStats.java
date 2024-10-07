@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class UserStats {
 
     @Id
-    private long userId;
+    private String userId;
     private String game;
     private int wins;
     private int losses;
@@ -19,11 +19,8 @@ public class UserStats {
     public UserStats(){}
 
     public UserStats(long userId, Games game){
-        this.userId = userId + game.ordinal();
-    }
-
-    public void addGame(String game){
-        this.game = game;
+        this.userId = userId + game.toString();
+        this.game = game.toString();
     }
 
     public void setWinsLosses(int wins, int losses){
@@ -34,9 +31,33 @@ public class UserStats {
     public void updateWins(int w, int l){
         wins += w;
         losses += l;
+        update();
     }
 
     private void update(){
         this.percentage = ((double)wins)/losses;
+    }
+
+    public int getWins(){
+        return wins;
+    }
+    public int getLosses(){
+        return losses;
+    }
+
+    public double getNet() {
+        return net;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getGame() {
+        return game;
     }
 }

@@ -10,6 +10,8 @@ In body put"
 "
 Will send back a long in string form to serve as an ID.
 
+
+
 Adding user info:
 
 send a put to http://.../users/create/{id},
@@ -21,8 +23,10 @@ In body put"
 }
 "
 
+
+
 To login:
-send to http://.../login/submit
+send GET request to http://.../login/submit
 In body put a string[] with {username, password}.
 Important!! Will return a string that needs to be acknoledged. The string will be three possibilities:
 1. "Wrong password"

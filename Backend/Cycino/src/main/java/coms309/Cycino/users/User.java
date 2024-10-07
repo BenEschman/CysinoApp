@@ -21,7 +21,7 @@ public class User {
     private String userBiography;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private LoginInfo loginInfo;
 

@@ -17,7 +17,6 @@ public class LoginInfo {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
     private User user;
 

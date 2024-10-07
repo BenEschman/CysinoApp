@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     phone_number VARCHAR(20),
@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS login_info (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50),
     password VARCHAR(255) UNIQUE
 );

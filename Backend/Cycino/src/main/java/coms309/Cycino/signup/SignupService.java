@@ -14,11 +14,11 @@ public class SignupService {
     @Autowired
     private LoginService loginService;
 
-    public boolean signup(LoginInfo user){
+    public Long signup(LoginInfo user){
         if(loginService.containsUser(user.getUsername())){
-            return false;
+            return null;
         }
         loginService.addUser(user);
-        return true;
+        return user.getId();
     }
 }

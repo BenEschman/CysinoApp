@@ -13,7 +13,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("/login/submit")
+    @GetMapping("/login/submit")
     public String checkInfo(@RequestBody String[] info){
         return loginService.checkInfo(info);
     }
