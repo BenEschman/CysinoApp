@@ -25,6 +25,16 @@ public class UserService {
         return null;
     }
 
+    public User getUser(Long uid){
+        List<User> users = new ArrayList<>(userRepository.findAll());
+        for(coms309.Cycino.users.User u : users){
+            if (u.getId() == uid){
+                return u;
+            }
+        }
+        return null;
+    }
+
     public boolean create(User user){
         System.out.println(user);
         if(!containsUser(user)) {
