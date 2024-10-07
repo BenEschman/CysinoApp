@@ -30,6 +30,11 @@
 
 
         </activity>
+        <activity android:name=".LeaderboardActivity"
+            android:exported="true">
+
+
+        </activity>
     </application>
 
 </manifest>
