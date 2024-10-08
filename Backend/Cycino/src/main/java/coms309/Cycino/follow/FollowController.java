@@ -20,9 +20,13 @@ public class FollowController {
         return followService.getFollowingList(uid);
     }
 
-    @Transactional
     @PostMapping("/users/{uid}/follow")
     public boolean addToFollowList(@RequestBody Follow follow, @PathVariable long uid){
         return followService.addToFollowList(follow, uid);
+    }
+
+    @DeleteMapping("/users/{uid}/unfollow")
+    public boolean removeFromFollowList(@RequestBody Follow follow, @PathVariable long uid){
+        return followService.removeFromFollowList(follow, uid);
     }
 }

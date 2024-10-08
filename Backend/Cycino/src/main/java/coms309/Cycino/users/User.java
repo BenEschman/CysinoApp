@@ -89,6 +89,9 @@ public class User {
     public void newFollow(Follow follow){
         this.followList.add(follow);
     }
+    public void removeFollow(Follow follow){
+        this.followList.remove(follow);
+    }
 
     public long getId(){
         return id;
