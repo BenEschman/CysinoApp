@@ -1,7 +1,7 @@
 package coms309.Cycino.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import coms309.Cycino.follow.follow;
+import coms309.Cycino.follow.Follow;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.login.LoginService;
 import jakarta.persistence.*;
@@ -27,7 +27,7 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_user_ID", referencedColumnName = "id")
-    private List<follow> followList;
+    private List<Follow> followList;
 
     @OneToOne
     @JsonIgnore
@@ -35,7 +35,7 @@ public class User {
 
     public User(){}
 
-    public User(Long id, String firstName, String lastName, String phoneNumber, Roles role, String userBiography, List<follow> followList, LoginInfo loginInfo) {
+    public User(Long id, String firstName, String lastName, String phoneNumber, Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -80,11 +80,11 @@ public class User {
     }
 */
 
-    public List<follow> getFollowList() {
+    public List<Follow> getFollowList() {
         return followList;
     }
 
-    public void setFollowList(List<follow> followList) {
+    public void setFollowList(List<Follow> followList) {
         this.followList = followList;
     }
 
@@ -139,8 +139,8 @@ public class User {
         this.role = Roles.valueOf(role.toUpperCase());
     }
 
-    public void newFollow(follow follow){
-        List<follow> newFollowList = getFollowList();
+    public void newFollow(Follow follow){
+        List<Follow> newFollowList = getFollowList();
         newFollowList.add(follow);
         setFollowList(newFollowList);
         System.out.println(this.followList);

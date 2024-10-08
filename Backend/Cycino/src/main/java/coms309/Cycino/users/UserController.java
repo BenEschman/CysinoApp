@@ -31,12 +31,4 @@ public class UserController {
         return userService.create(user);
     }
 
-    @Transactional
-    @PostMapping("/users/{uid}/follow")
-    public boolean update(@RequestBody follow follow, @PathVariable long uid){
-        User user = userService.getUser(uid);
-        user.newFollow(follow);
-        return true;
-    }
-
 }

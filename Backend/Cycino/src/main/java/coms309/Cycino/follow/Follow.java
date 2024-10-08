@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "follow")
-public class follow {
+public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -13,8 +13,8 @@ public class follow {
     private long followingID;
 
     // Constructors
-    public follow() {}
-    public follow(long followingID) {
+    public Follow() {}
+    public Follow(long followingID) {
         this.followingID = followingID;
     }
 
