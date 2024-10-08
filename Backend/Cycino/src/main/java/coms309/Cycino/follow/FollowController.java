@@ -4,23 +4,25 @@ import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class FollowController {
     @Autowired
-    private FollowRepository followRepository;
+    private FollowService followService;
     @Autowired
     private UserService userService;
 
+    @GetMapping("/users/{uid}/following")
+    public List<Follow> getFollowingList(@PathVariable long uid) {
+        return followService.getFollowingList(uid);
+    }
+
     @Transactional
     @PostMapping("/users/{uid}/follow")
-    public boolean update(@RequestBody Follow follow, @PathVariable long uid){
-        User user = userService.getUser(uid);
-        user.newFollow(follow);
-        return true;
+    public boolean addToFollowList(@RequestBody Follow follow, @PathVariable long uid){
+        return followService.addToFollowList(follow, uid);
     }
 }

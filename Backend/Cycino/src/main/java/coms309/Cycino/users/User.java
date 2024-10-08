@@ -83,9 +83,11 @@ public class User {
     public List<Follow> getFollowList() {
         return followList;
     }
-
     public void setFollowList(List<Follow> followList) {
         this.followList = followList;
+    }
+    public void newFollow(Follow follow){
+        this.followList.add(follow);
     }
 
     public long getId(){
@@ -139,7 +141,4 @@ public class User {
         this.role = Roles.valueOf(role.toUpperCase());
     }
 
-    public void newFollow(Follow follow){
-        this.followList.add(follow);
-    }
 }
