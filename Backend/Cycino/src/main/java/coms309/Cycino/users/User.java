@@ -140,9 +140,6 @@ public class User {
     }
 
     public void newFollow(Follow follow){
-        List<Follow> newFollowList = getFollowList();
-        newFollowList.add(follow);
-        setFollowList(newFollowList);
-        System.out.println(this.followList);
+        this.followList.add(follow);
     }
 }
