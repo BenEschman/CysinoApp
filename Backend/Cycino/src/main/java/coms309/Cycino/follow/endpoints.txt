@@ -31,7 +31,7 @@ RESPONSE:
     }
 ]
 The "id" is simply the primary key for the entry into the follow database table and can be ignored.
-The "followingID" is the user ID of the people that user {uid} is following.
+The "followingID" is the user ID of the people that user {5} is following.
 
 
 ENDPOINT 2:
