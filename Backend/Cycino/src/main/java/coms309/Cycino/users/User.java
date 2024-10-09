@@ -1,10 +1,15 @@
 package coms309.Cycino.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import coms309.Cycino.follow.Follow;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.login.LoginService;
 import jakarta.persistence.*;
 import coms309.Cycino.Roles;
+import jakarta.transaction.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users") // escaping using double quotes for H2 SQL compatibility
@@ -12,6 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     private String firstName;
     private String lastName;
@@ -20,6 +26,9 @@ public class User {
     private Roles role = Roles.BEGINNER;
     private String userBiography;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_user_ID", referencedColumnName = "id")
+    private List<Follow> followList;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
@@ -27,7 +36,18 @@ public class User {
 
     public User(){}
 
-    public User( String firstName, String lastName){
+    public User(Long id, String firstName, String lastName, String phoneNumber, Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.userBiography = userBiography;
+        this.followList = followList;
+        this.loginInfo = loginInfo;
+    }
+/*
+    public User(String firstName, String lastName){
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -49,6 +69,29 @@ public class User {
         this.lastName = last;
         this.phoneNumber = phoneNumber;
         this.role = Roles.valueOf(role.toUpperCase());
+    }
+
+    public User(long id, String first, String last, String phoneNumber, String role, List<follow> followList){
+        this.id = id;
+        this.firstName = first;
+        this.lastName = last;
+        this.phoneNumber = phoneNumber;
+        this.role = Roles.valueOf(role.toUpperCase());
+        this.followList = followList;
+    }
+*/
+
+    public List<Follow> getFollowList() {
+        return followList;
+    }
+    public void setFollowList(List<Follow> followList) {
+        this.followList = followList;
+    }
+    public void newFollow(Follow follow){
+        this.followList.add(follow);
+    }
+    public void removeFollow(Follow follow){
+        this.followList.remove(follow);
     }
 
     public long getId(){
@@ -75,9 +118,6 @@ public class User {
         return role;
     }
 
-    public String getUserBiography() {return userBiography;}
-
-    public void setUserBiography(String userBiography) {this.userBiography = userBiography;}
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -94,6 +134,9 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public String getUserBiography() {return userBiography;}
+    public void setUserBiography(String userBiography) {this.userBiography = userBiography;}
 
     public String[] getContact(){
         return new String[]{firstName, lastName, phoneNumber};
