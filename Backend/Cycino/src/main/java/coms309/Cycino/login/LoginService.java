@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
@@ -19,16 +21,23 @@ public class LoginService {
     @Autowired
     private UserService userService;
 
-    public String checkInfo(String[] info){
-
-        if(containsUser(info[0])){
-            LoginInfo l = getUser(info[0]);
-             if(l.getPassword().equals(info[1])){
-                 return l.getId() + "";
+    public Map<String, Object> checkInfo(LoginInfo info){
+        Map<String, Object> response = new HashMap<>();
+        if(containsUser(info.getUsername()).get("status").equals("200 ok")){
+            LoginInfo l = getUser(info.getUsername());
+             if(l.getPassword().equals(info.getPassword())){
+                 response.put("status", "200 ok");
+                 response.put("Id", l.getId());
+                 return response;
              };
-             return "Wrong password";
+             response.put("status", "404 not found");
+            response.put("error", "Wrong Password");
+            return response;
         }
-        return "Wrong username";
+        response.put("status", "404 not found");
+        response.put("error", "Wrong username");
+        return response;
+
     }
 
     public LoginInfo getUser(String username){
@@ -51,23 +60,18 @@ public class LoginService {
 //        return new User("10", "BenEsch", "BEschman3905!", "Ben", "Eschman", "815-528-3105", "Admin" );
 //
 //    }
-    public boolean containsUser(LoginInfo user){
-        List<LoginInfo> users = new ArrayList<>(loginRepository.findAll());
-        for(LoginInfo u : users){
-            if(u.equals(user)){
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean containsUser(String username){
+    public Map<String, Object> containsUser(String username){
+
+        Map<String, Object> response = new HashMap<>();
         List<LoginInfo> users = new ArrayList<>(loginRepository.findAll());
         for(LoginInfo u : users){
             if(u.getUsername().equalsIgnoreCase(username)){
-                return true;
+                response.put("status", "200 ok");
+                return response;
             }
         }
-        return false;
+        response.put("status", "404 not found");
+        return response;
     }
 
     public void addUser(LoginInfo user){
@@ -77,18 +81,30 @@ public class LoginService {
         loginRepository.save(user);
     }
 
-    public boolean setUser(String username, User user){
+    public Map<String, Object> setUser(String username, User user){
+        Map<String, Object> response = new HashMap<>();
+
         LoginInfo login = getUser(username);
+        if(login == null){
+            response.put("status", "404 not found");
+            response.put("error", "No user with that username");
+            return response;
+        }
         login.setUser(user);
-        return true;
+        response.put("status", "200 ok");
+        return response;
     }
 
-    public boolean deleteUser(long id){
+    public Map<String, Object> deleteUser(long id){
+        Map<String, Object> response = new HashMap<>();
         if(userService.deleteUser(id)){
             loginRepository.deleteById(id);
-            return true;
+            response.put("status", "200 ok");
+            return response;
         }
-        return false;
+        response.put("status", "404 not found");
+        response.put("error", "No user with that id");
+        return response;
 
     }
 

@@ -8,17 +8,24 @@ import coms309.Cycino.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class SignupService {
 
     @Autowired
     private LoginService loginService;
 
-    public Long signup(LoginInfo user){
-        if(loginService.containsUser(user.getUsername())){
-            return null;
+    public Map<String, Object> signup(LoginInfo user){
+        Map<String, Object> response = new HashMap<>();
+        if(loginService.containsUser(user.getUsername()).get("Status").equals("200 ok")){
+            response.put("status", "500");
+            response.put("error", "User already exists");
         }
         loginService.addUser(user);
-        return user.getId();
+        response.put("status", "200 ok");
+        response.put("Id", user.getId());
+        return response;
     }
 }

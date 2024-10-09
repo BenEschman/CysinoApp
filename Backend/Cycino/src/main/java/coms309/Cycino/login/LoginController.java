@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -14,7 +15,7 @@ public class LoginController {
     private LoginService loginService;
 
     @GetMapping("/login/submit")
-    public String checkInfo(@RequestBody String[] info){
+    public Map<String, Object> checkInfo(@RequestBody LoginInfo info){
         return loginService.checkInfo(info);
     }
 
@@ -24,22 +25,17 @@ public class LoginController {
     }
 
     @GetMapping("/login/contains/{username}")
-    public boolean containsUser(@PathVariable String username){
+    public Map<String, Object> containsUser(@PathVariable String username){
         return loginService.containsUser(username);
     }
 
-    @GetMapping("/login/contains")
-    public boolean containsUser(@RequestBody LoginInfo user){
-        return loginService.containsUser(user);
-    }
-
     @PostMapping("/login/setUser/{username}")
-    public boolean setUser(@RequestBody User user, String username){
+    public Map<String, Object> setUser(@RequestBody User user, String username){
         return loginService.setUser(username, user);
     }
 
     @DeleteMapping("/login/delete/{id}")
-    public boolean deleteUser(@PathVariable long id){
+    public Map<String, Object> deleteUser(@PathVariable long id){
         return loginService.deleteUser(id);
     }
 

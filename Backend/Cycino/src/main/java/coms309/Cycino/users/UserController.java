@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PutMapping("/users/update/{id}")
-    public boolean create(@RequestBody User user, @PathVariable long id){
+    public Object create(@RequestBody User user, @PathVariable long id){
         return userService.create(user, id);
     }
 

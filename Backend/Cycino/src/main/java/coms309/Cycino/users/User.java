@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.follow.Follow;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.login.LoginService;
+import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
 import coms309.Cycino.Roles;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_user_ID", referencedColumnName = "id")
     private List<Follow> followList;
+
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    private List<UserStats> userStatslist;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
