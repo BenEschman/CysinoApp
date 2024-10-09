@@ -140,16 +140,15 @@ public class ViewActivity extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Toast.makeText(getApplicationContext(),"It worked", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
 
-                                Toast.makeText(getApplicationContext(),"It worked", Toast.LENGTH_LONG).show();
                                 showOneUser(response);
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"It failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"view failed", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -176,7 +175,7 @@ public class ViewActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"It failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"view failed", Toast.LENGTH_LONG).show();
                 }
             });
             requestQueue.add(jsonArrayRequest);
