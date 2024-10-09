@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".MainActivity">
+    tools:context=".EditActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -60,31 +60,12 @@
                 android:hint="Phone Number"
                 android:inputType="phone" />
 
-            <EditText
-                android:id="@+id/edit_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="ID here until combined with login"
-                android:inputType="text" />
-
             <Button
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Submit" />
 
-            <Button
-                android:id="@+id/viewProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="View" />
-
-            <Button
-                android:id="@+id/button_leaderboard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Leaderboard" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,6 +44,7 @@ public class UserService {
             oldUser.setFirstName(user.getFirstName());
             oldUser.setLastName(user.getLastName());
             oldUser.setPhoneNumber(user.getPhoneNumber());
+            oldUser.setUserBiography(user.getUserBiography());
             userRepository.save(oldUser);
             return true;
         }
