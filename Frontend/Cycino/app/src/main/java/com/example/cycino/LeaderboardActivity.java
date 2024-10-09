@@ -1,4 +1,4 @@
-package com.example.profilepage;
+package com.example.cycino;
 
 import android.os.Bundle;
 import android.view.Gravity;
