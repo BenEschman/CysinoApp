@@ -28,7 +28,7 @@ In body put"
 To login:
 send GET request to http://.../login/submit
 In body put a string[] with {username, password}.
-Important!! Will return a string that needs to be acknoledged. The string will be three possibilities:
+Important!! Will return a string that needs to be acknowledged. The string will be three possibilities:
 1. "Wrong password"
 2. "Wrong username"
 3. The long id in form of a string. Parse this long.
