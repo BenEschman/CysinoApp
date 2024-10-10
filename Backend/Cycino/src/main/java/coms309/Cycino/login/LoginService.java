@@ -21,11 +21,11 @@ public class LoginService {
     @Autowired
     private UserService userService;
 
-    public Map<String, Object> checkInfo(LoginInfo info){
+    public Map<String, Object> checkInfo(String username, String password){
         Map<String, Object> response = new HashMap<>();
-        if(containsUser(info.getUsername()).get("status").equals("200 ok")){
-            LoginInfo l = getUser(info.getUsername());
-             if(l.getPassword().equals(info.getPassword())){
+        if(containsUser(username).get("status").equals("200 ok")){
+            LoginInfo l = getUser(username);
+             if(l.getPassword().equals(password)){
                  response.put("status", "200 ok");
                  response.put("Id", l.getId());
                  return response;

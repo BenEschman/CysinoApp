@@ -14,9 +14,9 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @GetMapping("/login/submit")
-    public Map<String, Object> checkInfo(@RequestBody LoginInfo info){
-        return loginService.checkInfo(info);
+    @GetMapping("/login/submit/{username}/{password}")
+    public Map<String, Object> checkInfo(@PathVariable String username, @PathVariable String password){
+        return loginService.checkInfo(username, password);
     }
 
     @GetMapping("/login/{id}")
