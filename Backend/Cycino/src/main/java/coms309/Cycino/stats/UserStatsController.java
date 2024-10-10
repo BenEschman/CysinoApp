@@ -26,8 +26,8 @@ public class UserStatsController {
     public List<UserStats> getStats(@PathVariable String game){
         List<UserStats> userStats = new ArrayList<>();
         for(UserStats u : userStatsRepo.findAll()){
-            String id = u.getUserId();
-            id = id.substring(id.length() - game.length());
+            String id = u.getUserStatsId();
+            id = id.substring((u.getUserId() + "").length());
             if(id.equalsIgnoreCase(game))
                 userStats.add(u);
         }
@@ -61,8 +61,19 @@ public class UserStatsController {
         return response;
     }
 
-    @PutMapping("/stats/update/{win}/{loss}")
-    public void update(@PathVariable int win, @PathVariable int loss, @RequestHeader("userId") String userId){
-        userStatsRepo.getReferenceById(userId).updateWins(win, loss);
+    @PutMapping("/stats/update/{win}/{loss}/{chips}/{game}")
+    public Map<String, Object> update(@PathVariable int win, @PathVariable int loss, @PathVariable int chips, @PathVariable String game, @RequestHeader("userId") Long userId){
+        Map<String,Object> response = new HashMap<>();
+        UserStats u = userStatsRepo.findById(userId + game.toUpperCase()).orElse(null);
+        if(u != null) {
+            u.updateWins(win, loss, chips);
+            userStatsRepo.save(u);
+            response.put("status", "200 ok");
+            response.put("userStats", u);
+            return response;
+        }
+        response.put("status", "404");
+        response.put("error", "no user found");
+        return response;
     }
 }
