@@ -13,7 +13,7 @@ public class Follow {
     //@Column(name = "follower")
     private long followingID;
 
-    private boolean muteNotifications;
+    private boolean muteNotifications = false;
 
     @ManyToOne
     @JoinColumn(name = "fk_user_ID")
