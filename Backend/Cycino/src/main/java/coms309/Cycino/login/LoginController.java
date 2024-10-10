@@ -39,9 +39,9 @@ public class LoginController {
         return loginService.update(login, username);
     }
 
-    @DeleteMapping("/login/delete/{id}")
-    public Map<String, Object> deleteUser(@PathVariable long id){
-        return loginService.deleteUser(id);
+    @DeleteMapping("/login/delete/{username}")
+    public Map<String, Object> deleteUser(@PathVariable String username){
+        return loginService.deleteUser(username);
     }
 
 }

@@ -123,6 +123,10 @@ public class User {
         return role;
     }
 
+    public void setRole(Roles role){
+        this.role = role;
+    }
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

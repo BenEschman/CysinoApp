@@ -95,10 +95,10 @@ public class LoginService {
         return response;
     }
 
-    public Map<String, Object> deleteUser(long id){
+    public Map<String, Object> deleteUser(String username){
         Map<String, Object> response = new HashMap<>();
-        if(userService.deleteUser(id)){
-            loginRepository.deleteById(id);
+        if(userService.deleteUser(getUser(username).getId())){
+            loginRepository.deleteById(getUser(username).getId());
             response.put("status", "200 ok");
             return response;
         }
