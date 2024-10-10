@@ -171,7 +171,9 @@ public class LeaderboardActivity extends AppCompatActivity{
         winView.setGravity(gravity.RIGHT);
         winView.setPadding(10,0,0,0);
 
-        scoreView.setText(jObj.getString("net"));
+        String score = jObj.getString("net");
+
+        scoreView.setText(score.substring(0,score.length()-2));
         scoreView.setTextSize(20);
         scoreView.setGravity(gravity.RIGHT);
         scoreView.setPadding(0,0,10,0);
