@@ -14,9 +14,9 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @GetMapping("/login/submit")
-    public Map<String, Object> checkInfo(@RequestBody LoginInfo info){
-        return loginService.checkInfo(info);
+    @GetMapping("/login/submit/{username}/{password}")
+    public Map<String, Object> checkInfo(@PathVariable String username, @PathVariable String password){
+        return loginService.checkInfo(username, password);
     }
 
     @GetMapping("/login/{id}")
@@ -34,9 +34,9 @@ public class LoginController {
         return loginService.setUser(username, user);
     }
 
-    @PutMapping("/login/update/{id}")
-    public Map<String, Object> updateUser(@RequestBody LoginInfo login, @PathVariable Long id){
-        return loginService.update(login, id);
+    @PutMapping("/login/update/{username}")
+    public Map<String, Object> updateUser(@RequestBody LoginInfo login, @PathVariable String username){
+        return loginService.update(login, username);
     }
 
     @DeleteMapping("/login/delete/{id}")

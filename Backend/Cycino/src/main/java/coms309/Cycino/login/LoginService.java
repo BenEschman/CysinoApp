@@ -21,11 +21,11 @@ public class LoginService {
     @Autowired
     private UserService userService;
 
-    public Map<String, Object> checkInfo(LoginInfo info){
+    public Map<String, Object> checkInfo(String username, String password){
         Map<String, Object> response = new HashMap<>();
-        if(containsUser(info.getUsername()).get("status").equals("200 ok")){
-            LoginInfo l = getUser(info.getUsername());
-             if(l.getPassword().equals(info.getPassword())){
+        if(containsUser(username).get("status").equals("200 ok")){
+            LoginInfo l = getUser(username);
+             if(l.getPassword().equals(password)){
                  response.put("status", "200 ok");
                  response.put("Id", l.getId());
                  return response;
@@ -108,14 +108,14 @@ public class LoginService {
 
     }
 
-    public Map<String, Object> update(LoginInfo login, Long id){
+    public Map<String, Object> update(LoginInfo login, String username){
         Map<String, Object> response = new HashMap<>();
-        if(getUser(id) == null){
+        if(getUser(username) == null){
             response.put("status", "404");
             response.put("error", "no user with that id");
             return response;
         }
-        LoginInfo temp = getUser(id);
+        LoginInfo temp = getUser(username);
         response.put("status", "200 ok");
         if(login.getUsername() == null && login.getPassword() == null){
             response.put("update", "No update to user");
