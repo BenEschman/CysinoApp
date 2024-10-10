@@ -1,4 +1,4 @@
-package com.example.loginsignuppage;
+package com.example.loginsignuppage3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
