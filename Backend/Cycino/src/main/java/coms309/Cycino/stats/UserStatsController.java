@@ -56,7 +56,7 @@ public class UserStatsController {
             response.put("status", "200 ok");
             return response;
         }
-        response.put("status", "200 ok");
+        response.put("status", "404");
         response.put("error", "No user with that id");
         return response;
     }

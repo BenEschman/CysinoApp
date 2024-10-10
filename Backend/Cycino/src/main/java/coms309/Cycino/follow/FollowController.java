@@ -44,10 +44,10 @@ public class FollowController {
         return result;
     }
 
-    @DeleteMapping("/users/{uid}/unfollow")
-    public Map<String, Object> removeFromFollowList(@RequestBody Follow follow, @PathVariable long uid){
+    @DeleteMapping("/users/{uid}/unfollow/{unfollowID}")
+    public Map<String, Object> removeFromFollowList(@PathVariable long uid, @PathVariable long unfollowID){
         Map<String, Object> result = new HashMap<>();
-        if (followService.removeFromFollowList(follow, uid)){
+        if (followService.removeFromFollowList(uid, unfollowID)){
             result.put("status", "200 OK");
         } else {
             result.put("status", "400 Bad Request");
