@@ -22,6 +22,7 @@ public class SignupService {
         if(loginService.containsUser(user.getUsername()).get("status").equals("200 ok")){
             response.put("status", "500");
             response.put("error", "User already exists");
+            return response;
         }
         loginService.addUser(user);
         response.put("status", "200 ok");

@@ -34,6 +34,11 @@ public class LoginController {
         return loginService.setUser(username, user);
     }
 
+    @PutMapping("/login/update/{id}")
+    public Map<String, Object> updateUser(@RequestBody LoginInfo login, @PathVariable Long id){
+        return loginService.update(login, id);
+    }
+
     @DeleteMapping("/login/delete/{id}")
     public Map<String, Object> deleteUser(@PathVariable long id){
         return loginService.deleteUser(id);

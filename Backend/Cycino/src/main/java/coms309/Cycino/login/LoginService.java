@@ -108,4 +108,29 @@ public class LoginService {
 
     }
 
+    public Map<String, Object> update(LoginInfo login, Long id){
+        Map<String, Object> response = new HashMap<>();
+        if(getUser(id) == null){
+            response.put("status", "404");
+            response.put("error", "no user with that id");
+            return response;
+        }
+        LoginInfo temp = getUser(id);
+        response.put("status", "200 ok");
+        if(login.getUsername() == null && login.getPassword() == null){
+            response.put("update", "No update to user");
+            return response;
+        }
+        if(login.getUsername() != null){
+            temp.setUsername(login.getUsername());
+            response.put("username", login.getUsername());
+        }
+        if(login.getPassword() != null){
+            temp.setPassword(login.getPassword());
+            response.put("password", login.getPassword());
+        }
+        loginRepository.save(temp);
+        return response;
+    }
+
 }
