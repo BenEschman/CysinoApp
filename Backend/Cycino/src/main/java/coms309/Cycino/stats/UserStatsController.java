@@ -6,10 +6,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class UserStatsController {
@@ -31,6 +28,7 @@ public class UserStatsController {
             if(id.equalsIgnoreCase(game))
                 userStats.add(u);
         }
+        userStats.sort((o1, o2) -> (int) ((o1.getNet() - o2.getNet()) / (Math.abs(o1.getNet() - o2.getNet()))));
         return userStats;
     }
 
