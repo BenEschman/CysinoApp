@@ -22,6 +22,19 @@ public class FollowService {
     }
 
     @Transactional
+    public boolean updateFollowing(Follow follow, Long uid) {
+        boolean ok = false;
+        User user = userService.getUser(uid);
+        for (Follow item : user.getFollowList()){
+            if (item.getFollowingID() == follow.getFollowingID()){
+                item.setMuteNotifications(follow.isMuteNotifications());
+                ok = true;
+            }
+        }
+        return ok;
+    }
+
+    @Transactional
     public boolean addToFollowList(Follow follow, Long uid) {
         boolean ok = true;
         User user = userService.getUser(uid);

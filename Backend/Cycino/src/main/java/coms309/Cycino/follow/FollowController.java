@@ -17,15 +17,26 @@ public class FollowController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/users/{uid}/follow")
+    public Map<String, Object> addToFollowList(@RequestBody Follow follow, @PathVariable long uid){
+        Map<String, Object> result = new HashMap<>();
+        if (followService.addToFollowList(follow, uid)){
+            result.put("status", "200 OK");
+        } else {
+            result.put("status", "400 Bad Request");
+        }
+        return result;
+    }
+
     @GetMapping("/users/{uid}/following")
     public List<Follow> getFollowingList(@PathVariable long uid) {
         return followService.getFollowingList(uid);
     }
 
-    @PostMapping("/users/{uid}/follow")
-    public Map<String, Object> addToFollowList(@RequestBody Follow follow, @PathVariable long uid){
+    @PutMapping("/users/{uid}/follow/update")
+    public Map<String, Object> updateFollowing(@RequestBody Follow follow, @PathVariable long uid){
         Map<String, Object> result = new HashMap<>();
-        if (followService.addToFollowList(follow, uid)){
+        if (followService.updateFollowing(follow, uid)){
             result.put("status", "200 OK");
         } else {
             result.put("status", "400 Bad Request");
