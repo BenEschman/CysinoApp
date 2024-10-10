@@ -27,7 +27,7 @@ public class FollowService {
         User user = userService.getUser(uid);
         for (Follow item : user.getFollowList()){
             if (item.getFollowingID() == follow.getFollowingID()){
-                item.setMuteNotifications(follow.isMuteNotifications());
+                item.setMuteNotifications(!(item.isMuteNotifications()));
                 ok = true;
             }
         }
