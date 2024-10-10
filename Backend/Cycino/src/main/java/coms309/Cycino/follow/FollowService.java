@@ -49,10 +49,10 @@ public class FollowService {
     }
 
     @Transactional
-    public boolean removeFromFollowList(Follow follow, Long uid) {
+    public boolean removeFromFollowList(Long uid, Long unfollowID) {
         User user = userService.getUser(uid);
         for (Follow item : user.getFollowList()){
-            if (item.getFollowingID() == follow.getFollowingID()) {
+            if (item.getFollowingID() == unfollowID) {
                 user.removeFollow(item);
                 followRepository.delete(item);
                 return true;
