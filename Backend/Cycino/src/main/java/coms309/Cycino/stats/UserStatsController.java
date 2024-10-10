@@ -1,11 +1,15 @@
 package coms309.Cycino.stats;
 
 import coms309.Cycino.Games;
+import coms309.Cycino.users.User;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserStatsController {
@@ -14,8 +18,8 @@ public class UserStatsController {
     private UserStatsRepo userStatsRepo;
 
     @GetMapping("/stats/{game}")
-    public UserStats getStats(@PathVariable String game, @RequestHeader("userId") long userId){
-       return userStatsRepo.getReferenceById(userId + game);
+    public UserStats getStats(@PathVariable String game, @RequestHeader("userId") Long userId){
+       return userStatsRepo.findById(userId + game.toUpperCase()).orElse(null);
     }
 
     @GetMapping("/stats/all/{game}")
@@ -31,21 +35,30 @@ public class UserStatsController {
     }
 
     @PostMapping("/stats/create/{game}")
-    public boolean createStats(@PathVariable String game, @RequestHeader("userId") long userId ){
-        if(!userStatsRepo.existsById(userId + game)){
+    public Map<String, Object> createStats(@PathVariable String game, @RequestHeader("userId") Long userId ){
+        Map<String, Object> response = new HashMap<>();
+        if(!userStatsRepo.existsById(userId + game.toUpperCase())){
+            response.put("status", "200 ok");
             userStatsRepo.save(new UserStats(userId, Games.valueOf(game)));
-            return true;
+            response.put("Id", userId + game.toUpperCase());
+            return response;
         }
-        return false;
+        response.put("status", "500");
+        response.put("error", "user already exists");
+        return response;
     }
 
-    @DeleteMapping("/stats/delete")
-    public boolean delete(@RequestHeader String userId){
-        if(userStatsRepo.existsById(userId)){
-            userStatsRepo.deleteById(userId);
-            return true;
+    @DeleteMapping("/stats/delete/{game}")
+    public Map<String, Object> delete(@PathVariable String game,@RequestHeader Long userId){
+        Map<String, Object> response = new HashMap<>();
+        if(userStatsRepo.existsById(userId + game.toUpperCase())){
+            userStatsRepo.deleteById(userId + game.toUpperCase());
+            response.put("status", "200 ok");
+            return response;
         }
-        return false;
+        response.put("status", "200 ok");
+        response.put("error", "No user with that id");
+        return response;
     }
 
     @PutMapping("/stats/update/{win}/{loss}")

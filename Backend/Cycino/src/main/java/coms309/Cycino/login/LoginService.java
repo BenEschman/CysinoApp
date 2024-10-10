@@ -52,7 +52,7 @@ public class LoginService {
     }
 
     public LoginInfo getUser(long id){
-        return loginRepository.getReferenceById(id);
+        return loginRepository.findById(id).orElse(null);
     }
 
 //    public coms309.Cycino.users.User makeUser(String username){

@@ -14,7 +14,7 @@ Will send back a long in string form to serve as an ID.
 
 Adding user info:
 
-send a put to http://.../users/create/{id},
+send a put to http://.../users/update/{id},
 In body put"
 {
     "firstName": "...",
