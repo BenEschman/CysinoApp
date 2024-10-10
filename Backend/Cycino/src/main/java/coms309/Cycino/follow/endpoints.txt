@@ -78,19 +78,16 @@ public Map<String, Object> removeFromFollowList(@RequestBody Follow follow, @Pat
     }
     return result;
 }
-PATH: /users/{uid}/unfollow
+PATH: /users/{uid}/unfollow/{unfollowID}
 PARAMETERS: {uid}
-BODY: follow pojo
+BODY: NONE
 
 It takes the {uid} form the path and uses that user ID to fetch the follow list of that
-specific user. It then uses the BODY to remove that from the list.
+specific user. It then uses the {unfollowID} to remove that from the list.
 
 EXAMPLE:
-REQUEST: http://coms-3090-052.class.las.iastate.edu:8080/users/{5}/follow
-BODY:
-{
-    "followingID":"6"
-}
+REQUEST: http://coms-3090-052.class.las.iastate.edu:8080/users/{5}/unfollow/{6}
+
 RESPONSE - if user 5 can correctly unfollow user 6:
 {
     "status": "200 OK"
