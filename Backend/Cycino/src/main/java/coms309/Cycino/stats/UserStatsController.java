@@ -28,7 +28,7 @@ public class UserStatsController {
             if(id.equalsIgnoreCase(game))
                 userStats.add(u);
         }
-        userStats.sort((o1, o2) -> (int) ((o1.getNet() - o2.getNet()) / (Math.abs(o1.getNet() - o2.getNet()))));
+        userStats.sort((o2, o1) -> (int) ((o1.getNet() - o2.getNet()) / (Math.abs(o1.getNet() - o2.getNet()))));
         return userStats;
     }
 
