@@ -110,10 +110,11 @@ ENDPOINT 4: UPDATE
     }
 PATH: /users/{uid}/follow/update
 PARAMETERS: {uid}
-BODY: follow pojo with 2 fields
+BODY: follow pojo with 1 field
 
 It takes the {uid} form the path and uses that user ID to fetch the follow list of that
 specific user. It then uses the BODY to update the muteNotifications of that specific follow that the user follows.
+It always switches the muteNotifications on/off from true/false.
 
 EXAMPLE:
 REQUEST: http://coms-3090-052.class.las.iastate.edu:8080/users/{1}/follow/update
