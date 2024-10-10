@@ -1,6 +1,6 @@
 Follow currently has 4 endpoints for the frontend:
 
-ENDPOINT 1:
+ENDPOINT 1: READ
 @GetMapping("/users/{uid}/following")
     public List<Follow> getFollowingList(@PathVariable long uid) {
         return followService.getFollowingList(uid);
@@ -34,7 +34,7 @@ The "id" is simply the primary key for the entry into the follow database table 
 The "followingID" is the user ID of the people that user {5} is following.
 
 
-ENDPOINT 2:
+ENDPOINT 2: UPDATE
 @PostMapping("/users/{uid}/follow")
 public Map<String, Object> addToFollowList(@RequestBody Follow follow, @PathVariable long uid){
     Map<String, Object> result = new HashMap<>();
@@ -67,7 +67,7 @@ ALTERNATIVE RESPONSE - if user 5 fails to follow user 6, ie they already follow 
     "status": "400 Bad Request"
 }
 
-ENDPOINT 3:
+ENDPOINT 3: DELETE
 @DeleteMapping("/users/{uid}/unfollow")
 public Map<String, Object> removeFromFollowList(@RequestBody Follow follow, @PathVariable long uid){
     Map<String, Object> result = new HashMap<>();
@@ -97,7 +97,7 @@ ALTERNATIVE RESPONSE - if user 5 fails to unfollow user 6, ie they already do no
     "status": "400 Bad Request"
 }
 
-ENDPOINT 4:
+ENDPOINT 4: UPDATE
 @PutMapping("/users/{uid}/follow/update")
     public Map<String, Object> updateFollowing(@RequestBody Follow follow, @PathVariable long uid){
         Map<String, Object> result = new HashMap<>();
