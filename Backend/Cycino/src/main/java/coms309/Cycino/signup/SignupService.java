@@ -19,7 +19,7 @@ public class SignupService {
 
     public Map<String, Object> signup(LoginInfo user){
         Map<String, Object> response = new HashMap<>();
-        if(loginService.containsUser(user.getUsername()).get("Status").equals("200 ok")){
+        if(loginService.containsUser(user.getUsername()).get("status").equals("200 ok")){
             response.put("status", "500");
             response.put("error", "User already exists");
         }

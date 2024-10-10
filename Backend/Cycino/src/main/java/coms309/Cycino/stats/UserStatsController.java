@@ -53,10 +53,10 @@ public class UserStatsController {
         Map<String, Object> response = new HashMap<>();
         if(userStatsRepo.existsById(userId + game.toUpperCase())){
             userStatsRepo.deleteById(userId + game.toUpperCase());
-            response.put("Status", "200 ok");
+            response.put("status", "200 ok");
             return response;
         }
-        response.put("Status", "200 ok");
+        response.put("status", "200 ok");
         response.put("error", "No user with that id");
         return response;
     }
