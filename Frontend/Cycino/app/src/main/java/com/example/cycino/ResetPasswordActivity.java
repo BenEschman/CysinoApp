@@ -1,4 +1,4 @@
-package com.example.loginsignuppagefinal;
+package com.example.cycino;
 
 import android.os.Bundle;
 import android.util.Log;
