@@ -1,8 +1,6 @@
 package coms309.Cycino.stats;
 
-import coms309.Cycino.Games;
-import coms309.Cycino.users.User;
-import jakarta.persistence.EntityManager;
+import coms309.Cycino.GameEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +35,7 @@ public class UserStatsController {
         Map<String, Object> response = new HashMap<>();
         if(!userStatsRepo.existsById(userId + game.toUpperCase())){
             response.put("status", "200 ok");
-            userStatsRepo.save(new UserStats(userId, Games.valueOf(game)));
+            userStatsRepo.save(new UserStats(userId, GameEnums.valueOf(game)));
             response.put("Id", userId + game.toUpperCase());
             return response;
         }

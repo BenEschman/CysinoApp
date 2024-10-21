@@ -1,6 +1,6 @@
 package coms309.Cycino;
 
-public enum Games {
+public enum GameEnums {
 
     BLACKJACK,
     POKER,

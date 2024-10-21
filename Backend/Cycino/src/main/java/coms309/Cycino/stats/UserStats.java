@@ -1,7 +1,6 @@
 package coms309.Cycino.stats;
 
-import coms309.Cycino.Games;
-import coms309.Cycino.users.User;
+import coms309.Cycino.GameEnums;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -20,7 +19,7 @@ public class UserStats {
 
     public UserStats(){}
 
-    public UserStats(long userId, Games game){
+    public UserStats(long userId, GameEnums game){
         this.userId = userId;
         this.userStatsId = userId + game.toString();
         this.game = game.toString();
