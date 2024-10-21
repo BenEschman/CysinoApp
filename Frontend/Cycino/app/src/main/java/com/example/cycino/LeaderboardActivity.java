@@ -76,14 +76,17 @@ public class LeaderboardActivity extends AppCompatActivity{
         demoButton.setText("Demo Features");
 
 
-        getAllStats();
+        getBlackjackStats();
         resetLeaderboard();
 
 
         blackjackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resetLeaderboard();
+
+                    resetLeaderboard();
+                    getBlackjackStats();
+
 
                 for (int i = 0; i < items; i++) {
 
@@ -99,6 +102,8 @@ public class LeaderboardActivity extends AppCompatActivity{
             }
         });
 
+
+
         demoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +117,7 @@ public class LeaderboardActivity extends AppCompatActivity{
     }
 
     private void resetLeaderboard() {
+
 
         lbNames.removeAllViews();
         lbScores.removeAllViews();
@@ -189,7 +195,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     }
 
-    private void getAllStats() {
+    private void getBlackjackStats() {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/stats/all/BLACKJACK";
 
@@ -227,6 +233,7 @@ public class LeaderboardActivity extends AppCompatActivity{
         // Add the request to the RequestQueue
         requestQueue.add(jsonArrayRequest);
     }
+
 
     private void getOneName(Integer id) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";

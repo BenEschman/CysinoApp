@@ -1,4 +1,4 @@
-package com.example.loginsignuppage;
+package com.example.loginsignuppage3;
 
 import android.content.Intent;
 import android.os.Bundle;

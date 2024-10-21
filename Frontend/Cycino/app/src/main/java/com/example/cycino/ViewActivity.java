@@ -46,7 +46,7 @@ public class ViewActivity extends AppCompatActivity {
         lbButton.setText("View Leaderboard");
 
 
-         Integer userID = 10;
+         Integer userID = 2;
 
 
         getOneUser(userID);

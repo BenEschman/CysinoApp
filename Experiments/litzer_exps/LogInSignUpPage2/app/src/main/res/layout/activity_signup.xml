@@ -16,7 +16,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="80dp"
         android:textSize="30dp"
-        android:textColor="#fffff">
+        android:textColor="@color/black">
     </TextView>
 
     <LinearLayout
@@ -32,7 +32,7 @@
             android:text="USERNAME: "
             android:textSize="20dp"
             android:background="@color/white"
-            android:textColor="#000000">
+            android:textColor="@color/black">
         </TextView>
 
         <EditText
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:text="PASSWORD: "
             android:textSize="20dp"
-            android:textColor="#000000">
+            android:textColor="@color/black">
         </TextView>
 
         <EditText
@@ -79,7 +79,7 @@
             android:layout_height="70sp"
             android:text="confirm\npassword: "
             android:textSize="20dp"
-            android:textColor="#000000">
+            android:textColor="@color/black">
         </TextView>
 
         <EditText
@@ -106,7 +106,7 @@
             android:layout_marginRight="10dp"
             android:text="Login"
             android:textSize="20sp"
-            android:textColor="#ffffff">
+            android:textColor="@color/black">
         </Button>
 
         <Button
@@ -116,7 +116,7 @@
             android:layout_marginLeft="10dp"
             android:text="Signup"
             android:textSize="20sp"
-            android:textColor="#ffffff">
+            android:textColor="@color/black">
         </Button>
 
     </LinearLayout>
