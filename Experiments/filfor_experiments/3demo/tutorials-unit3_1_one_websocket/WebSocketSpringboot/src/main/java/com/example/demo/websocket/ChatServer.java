@@ -129,7 +129,7 @@ public class ChatServer {
         usernameSessionMap.remove(username);
 
         // send the message to chat
-        broadcast(username + " disconnected");
+        broadcast(username + " had to go and has disconnected");
     }
 
     /**
