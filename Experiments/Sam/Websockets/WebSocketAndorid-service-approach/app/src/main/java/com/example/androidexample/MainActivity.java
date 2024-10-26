@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity{
         /* connect1 button listener */
         connectBtn1.setOnClickListener(view -> {
             String serverUrl = serverEtx1.getText().toString() + usernameEtx1.getText().toString();
+            System.out.println(serverUrl);
 
             // start Websocket service with key "chat1"
             Intent serviceIntent = new Intent(this, WebSocketService.class);

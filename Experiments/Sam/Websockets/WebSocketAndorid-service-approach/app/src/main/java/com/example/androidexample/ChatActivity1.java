@@ -60,9 +60,19 @@ public class ChatActivity1 extends AppCompatActivity {
             String key = intent.getStringExtra("key");
             if ("chat1".equals(key)){
                 String message = intent.getStringExtra("message");
+
+                assert message != null;
+                if (message.contains("Kill android")) {
+                    System.out.println("Made it here");
+                    Intent intent2 = new Intent(ChatActivity1.this, MainActivity.class);
+                    startActivity(intent2);
+
+                }
                 runOnUiThread(() -> {
                     String s = msgTv.getText().toString();
                     msgTv.setText(s + "\n" + message);
+
+
                 });
             }
         }
