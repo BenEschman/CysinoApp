@@ -3,10 +3,13 @@ package coms309.Cycino.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.follow.Follow;
 import coms309.Cycino.login.LoginInfo;
+import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
 import coms309.Cycino.Enums;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users") // escaping using double quotes for H2 SQL compatibility
@@ -34,6 +37,10 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private LoginInfo loginInfo;
+
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
+    private Set<UserStats> userStats = new HashSet<>();
 
     public User(){}
 
