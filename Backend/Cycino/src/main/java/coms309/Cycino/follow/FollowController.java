@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,16 @@ public class FollowController {
     @GetMapping("/users/{uid}/following")
     public List<Follow> getFollowingList(@PathVariable long uid) {
         return followService.getFollowingList(uid);
+    }
+
+    @GetMapping("users/{uid}/followers")
+    public List<Long> getFollowersList(@PathVariable long uid) {
+        List<Long> followersUIDs = new ArrayList<>();
+        List<Follow> followers = followService.getFollowers(uid);
+        for (Follow follow : followers) {
+            followersUIDs.add(follow.getForeignKey());
+        }
+        return followersUIDs;
     }
 
     @PutMapping("/users/{uid}/follow/update")
