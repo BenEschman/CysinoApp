@@ -3,13 +3,9 @@ package coms309.Cycino.users;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.follow.Follow;
 import coms309.Cycino.login.LoginInfo;
-import coms309.Cycino.login.LoginService;
-import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
-import coms309.Cycino.Roles;
-import jakarta.transaction.Transactional;
+import coms309.Cycino.Enums;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +20,7 @@ public class User {
     private String lastName;
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
-    private Roles role = Roles.BEGINNER;
+    private Enums.Roles role = Enums.Roles.BEGINNER;
     private String userBiography;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -41,7 +37,7 @@ public class User {
 
     public User(){}
 
-    public User(Long id, String firstName, String lastName, String phoneNumber, Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
+    public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -119,11 +115,11 @@ public class User {
         return phoneNumber;
     }
 
-    public Roles getRole(){
+    public Enums.Roles getRole(){
         return role;
     }
 
-    public void setRole(Roles role){
+    public void setRole(Enums.Roles role){
         this.role = role;
     }
 
@@ -151,7 +147,7 @@ public class User {
         return new String[]{firstName, lastName, phoneNumber};
     }
     public void updateRole(String role){
-        this.role = Roles.valueOf(role.toUpperCase());
+        this.role = Enums.Roles.valueOf(role.toUpperCase());
     }
 
     @Override
