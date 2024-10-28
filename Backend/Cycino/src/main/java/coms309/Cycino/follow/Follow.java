@@ -15,7 +15,7 @@ public class Follow {
 
     private boolean muteNotifications = false;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_user_ID")
     private User user;
 
@@ -28,6 +28,8 @@ public class Follow {
     // Getters & Setters
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
+
+    public long getForeignKey(){return user.getId();}
 
     public long getFollowingID() {return followingID;}
     public void setFollowingID(long followingID) {this.followingID = followingID;}
