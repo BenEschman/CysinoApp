@@ -1,4 +1,4 @@
-package com.example.socialpagefinal;
+package com.example.cycino;
 
 public class UserPageActivity {
 }

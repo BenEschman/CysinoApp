@@ -1,4 +1,4 @@
-package com.example.loginsignuppagefinal;
+package com.example.cycino;
 
 public class User {
     public static String username ;

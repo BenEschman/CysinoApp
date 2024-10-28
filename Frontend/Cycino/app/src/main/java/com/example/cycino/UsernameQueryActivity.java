@@ -1,4 +1,4 @@
-package com.example.loginsignuppagefinal;
+package com.example.cycino;
 
 import androidx.appcompat.app.AppCompatActivity;
 
