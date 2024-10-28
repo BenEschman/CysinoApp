@@ -61,4 +61,8 @@ public class FollowService {
         return false;
     }
 
+    public List<Follow> getFollowers(Long uid) {
+        return followRepository.getFollowersByFollowingID(uid);
+    }
+
 }
