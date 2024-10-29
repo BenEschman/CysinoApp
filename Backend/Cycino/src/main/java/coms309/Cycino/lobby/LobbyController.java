@@ -18,12 +18,12 @@ public class LobbyController {
         return service.startLobby();
     }
 
-    @PostMapping("/lobby/create")
+    @PostMapping("/lobby/create1")
     public Map<String, Object> startLobby(@RequestBody User u){
         return service.startLobby(u);
     }
 
-    @PostMapping("/lobby/create")
+    @PostMapping("/lobby/create2")
     public Map<String, Object> startLobby(@RequestBody Collection<User> users){
         return service.startLobby(users);
     }

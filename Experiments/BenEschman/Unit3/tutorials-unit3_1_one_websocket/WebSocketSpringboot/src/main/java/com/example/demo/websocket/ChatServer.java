@@ -16,20 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-/**
- * Represents a WebSocket chat server for handling real-time communication
- * between users. Each user connects to the server using their unique
- * username.
- *
- * This class is annotated with Spring's `@ServerEndpoint` and `@Component`
- * annotations, making it a WebSocket endpoint that can handle WebSocket
- * connections at the "/chat/{username}" endpoint.
- *
- * Example URL: ws://localhost:8080/chat/username
- *
- * The server provides functionality for broadcasting messages to all connected
- * users and sending messages to specific users.
- */
 @ServerEndpoint("/chat/{username}")
 @Component
 public class ChatServer {
