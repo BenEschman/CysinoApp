@@ -55,6 +55,28 @@ public class FollowController {
         return result;
     }
 
+    @PutMapping("/users/{uid}/block")
+    public Map<String, Object> blockUser(@RequestBody Follow follow, @PathVariable long uid){
+        Map<String, Object> result = new HashMap<>();
+        if (followService.blockUser(follow, uid)){
+            result.put("status", "200 OK");
+        } else {
+            result.put("status", "400 Bad Request");
+        }
+        return result;
+    }
+
+    @PutMapping("/users/{uid}/unblock")
+    public Map<String, Object> unblockUser(@RequestBody Follow follow, @PathVariable long uid){
+        Map<String, Object> result = new HashMap<>();
+        if (followService.unblockUser(follow, uid)){
+            result.put("status", "200 OK");
+        } else {
+            result.put("status", "400 Bad Request");
+        }
+        return result;
+    }
+
     @DeleteMapping("/users/{uid}/unfollow/{unfollowID}")
     public Map<String, Object> removeFromFollowList(@PathVariable long uid, @PathVariable long unfollowID){
         Map<String, Object> result = new HashMap<>();
