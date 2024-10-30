@@ -28,7 +28,7 @@ public class BlackJackLogic {
         }
     }
 
-    public Map<String, Object> hit(User u){
+    public Map<String, Object> ht(User u){
         Map<String, Object> result = new HashMap<>();
         int score = players.get(u.getId());
         if(score >= 21){
