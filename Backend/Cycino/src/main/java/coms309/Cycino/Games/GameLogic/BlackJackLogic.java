@@ -54,6 +54,35 @@ public class BlackJackLogic {
         return result;
     }
 
+//    public Map<String, Object> split(User u){
+//        Map<String, Object> response = new HashMap<>();
+//        Map<Long, ArrayList<Card>> temp = getHands(u.getId());
+//        ArrayList<ArrayList<Card>> hands = (ArrayList<ArrayList<Card>>) temp.values();
+//        int split = -1;
+//        for(int i = 0; i < hands.size(); i++){
+//            ArrayList<Card> hand = hands.get(i);
+//            if(hand.size() == 2 && hand.get(1).getValue() == hand.get(0).getValue())
+//                split = i;
+//        }
+//        if(split == -1){
+//            response.put("error", "double not possible");
+//            response.put("status", "500");
+//            return response;
+//        }
+//
+//        hand.keySet()}
+
+
+    public Map<Long,ArrayList<Card>> getHands(long id){
+        Map<Long,ArrayList<Card>> hands = new HashMap<>();
+        hands.put(id, hand.get(id));
+        for(Long l: hand.keySet()){
+            if(l / 10 == id)
+                hands.put(l, hand.get(l));
+        }
+        return hands;
+    }
+
     public boolean checkSplit(ArrayList<Card> hand, Card c){
         if(hand.size() != 1)
             return false;
