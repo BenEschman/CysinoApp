@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Integer> {
     List<Follow> findByUser(User user);
+    List<Follow> getFollowersByFollowingID(Long followingID);
 }
