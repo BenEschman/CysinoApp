@@ -3,6 +3,7 @@ package coms309.Cycino.Games.GameLogic;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.users.User;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +22,7 @@ public class BlackJackLogic {
         }
     }
 
-    public BlackJackLogic(int decks, Lobby l){
-        cards = new Deck(decks);
-        for(User u: l.getPlayers()){
-            players.put(u.getId(), 0);
-        }
-    }
-
-    public Map<String, Object> ht(User u){
+    public static Map<String, Object> hit(Map<Long, Integer> players,  Map<Long, ArrayList<Card>> hand, Deck cards, User u){
         Map<String, Object> result = new HashMap<>();
         int score = players.get(u.getId());
         if(score >= 21){
@@ -73,7 +67,7 @@ public class BlackJackLogic {
 //        hand.keySet()}
 
 
-    public Map<Long,ArrayList<Card>> getHands(long id){
+    public static  Map<Long,ArrayList<Card>> getHands(Map<Long, ArrayList<Card>> hand , long id){
         Map<Long,ArrayList<Card>> hands = new HashMap<>();
         hands.put(id, hand.get(id));
         for(Long l: hand.keySet()){
@@ -83,7 +77,7 @@ public class BlackJackLogic {
         return hands;
     }
 
-    public boolean checkSplit(ArrayList<Card> hand, Card c){
+    public static boolean checkSplit(ArrayList<Card> hand, Card c){
         if(hand.size() != 1)
             return false;
         if(hand.get(0).getValue() == c.getValue())
@@ -91,7 +85,7 @@ public class BlackJackLogic {
         return false;
     }
 
-    private int checkAce(ArrayList<Card> hand, int score, Card c){
+    private static int checkAce(ArrayList<Card> hand, int score, Card c){
         if(c.getNumber().equals("ACE")){
             if(score <= 10)
                 return score + 11;
