@@ -5,6 +5,7 @@ import coms309.Cycino.users.User;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -13,24 +14,20 @@ public class UserStats {
     @Id
     private String userStatsId;
 
-    private long userId;
+    private long user_Id;
     private String game;
     private int wins;
     private int losses;
     private double percentage;
     private double net;
-    @ManyToMany
-    @JoinTable(
-            name = "user_userStats",
-            joinColumns = @JoinColumn(name = "userStatsId"),
-            inverseJoinColumns = @JoinColumn(name = "userId")
-    )
-    private Set<User> users = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Id")
+    private User users;
 
     public UserStats(){}
 
     public UserStats(long userId, Enums.GameEnums game){
-        this.userId = userId;
+        this.user_Id = userId;
         this.userStatsId = userId + game.toString();
         this.game = game.toString();
     }
@@ -71,10 +68,11 @@ public class UserStats {
     }
 
     public long getUserId(){
-        return userId;
+        return user_Id;
     }
 
     public String getGame() {
         return game;
     }
+
 }

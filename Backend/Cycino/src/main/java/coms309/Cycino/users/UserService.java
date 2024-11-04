@@ -2,20 +2,22 @@ package coms309.Cycino.users;
 
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.login.LoginService;
+import coms309.Cycino.stats.UserStatsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
 
     @Autowired
     private UsersRepository userRepository;
-//    @Autowired
-//    private LoginService loginService;
+    @Autowired
+    private UserStatsController statsController;
 
     public User getUser(String firstName, String lastName){
 
@@ -87,5 +89,9 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public Map<String, Object> createUserStats(String game, Long id){
+        return statsController.createStats(game, id);
     }
 }
