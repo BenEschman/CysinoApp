@@ -2,7 +2,9 @@ package coms309.Cycino.Games.GameLogic;
 
 import coms309.Cycino.Enums;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
 
     private final String value;
     private final Enums.SUIT suit;
