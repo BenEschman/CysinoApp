@@ -10,31 +10,19 @@ import java.util.Map;
 
 public class BlackJackLogic {
 
-    private Deck cards;
-
-    private Map<Long, Integer> players = new HashMap<>();
-    private Map<Long, ArrayList<Card>> hand = new HashMap<>();
-
-    public BlackJackLogic(Lobby l){
-        cards = new Deck(6);
-        for(User u: l.getPlayers()){
-            players.put(u.getId(), 0);
-        }
-    }
-
-    public static Map<String, Object> hit(Map<Long, Integer> players,  Map<Long, ArrayList<Card>> hand, Deck cards, User u){
+    public static Map<String, Object> hit(PlayerHands hand, Deck cards){
         Map<String, Object> result = new HashMap<>();
-        int score = players.get(u.getId());
+        int score = hand.getScore();
         if(score >= 21){
             result.put("error", "cannot hit. score >= 21");
             return result;
         }
         Card c = cards.draw();
-        score = checkAce(hand.get(u.getId()), score, c);
-        if(checkSplit(hand.get(u.getId()), c)){
+        score = checkAce(hand.getHand(), score, c);
+        if(checkSplit(hand.getHand(), c)){
             result.put("split", true);
         }
-        hand.get(u.getId()).add(c);
+        hand.add(c);
         if(score > 21){
             result.put("result", "bust");
             return result;
