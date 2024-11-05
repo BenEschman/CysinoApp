@@ -4,10 +4,7 @@ import coms309.Cycino.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class LobbyService {
@@ -94,7 +91,7 @@ public class LobbyService {
             response.put("error", "no lobby with that id");
             return response;
         }
-        ArrayList<User> players = l.getPlayers();
+        Set<User> players = l.getPlayers();
         response.put("status", "200 ok");
         response.put("players", players);
         return response;

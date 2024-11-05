@@ -1,12 +1,15 @@
 package coms309.Cycino.Games.GameLogic;
 
 import coms309.Cycino.Enums;
+import jakarta.persistence.Lob;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck {
+public class Deck implements Serializable {
 
+    @Lob
     private ArrayList<Card> cards = new ArrayList<>();
 
     public Deck(int decks){
