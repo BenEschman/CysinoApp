@@ -1,5 +1,6 @@
 package coms309.Cycino.Games.GameLogic;
 
+import coms309.Cycino.Games.Blackjack.BlackJack;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.users.User;
 
@@ -7,21 +8,20 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class BlackJackLogic {
 
     public static Map<String, Object> hit(PlayerHands hand, Deck cards){
         Map<String, Object> result = new HashMap<>();
         int score = hand.getScore();
+        hand.split(false);
         if(score >= 21){
             result.put("error", "cannot hit. score >= 21");
             return result;
         }
         Card c = cards.draw();
         score = checkAce(hand.getHand(), score, c);
-        if(checkSplit(hand.getHand(), c)){
-            result.put("split", true);
-        }
         hand.add(c);
         if(score > 21){
             result.put("result", "bust");
@@ -33,44 +33,26 @@ public class BlackJackLogic {
             return result;
         }
 
+        result.put("result", hand.getScore());
         return result;
     }
 
-//    public Map<String, Object> split(User u){
-//        Map<String, Object> response = new HashMap<>();
-//        Map<Long, ArrayList<Card>> temp = getHands(u.getId());
-//        ArrayList<ArrayList<Card>> hands = (ArrayList<ArrayList<Card>>) temp.values();
-//        int split = -1;
-//        for(int i = 0; i < hands.size(); i++){
-//            ArrayList<Card> hand = hands.get(i);
-//            if(hand.size() == 2 && hand.get(1).getValue() == hand.get(0).getValue())
-//                split = i;
-//        }
-//        if(split == -1){
-//            response.put("error", "double not possible");
-//            response.put("status", "500");
-//            return response;
-//        }
-//
-//        hand.keySet()}
-
-
-    public static  Map<Long,ArrayList<Card>> getHands(Map<Long, ArrayList<Card>> hand , long id){
-        Map<Long,ArrayList<Card>> hands = new HashMap<>();
-        hands.put(id, hand.get(id));
-        for(Long l: hand.keySet()){
-            if(l / 10 == id)
-                hands.put(l, hand.get(l));
+    public static void start(Set<PlayerHands> hands, BlackJack black){
+       for(int i = 0; i < 2; i ++){
+           for(PlayerHands hand: hands){
+               hand.add(black.getCards().draw());
+           }
+       }
+        for(PlayerHands hand: hands){
+            checkSplit(hand);
         }
-        return hands;
     }
 
-    public static boolean checkSplit(ArrayList<Card> hand, Card c){
-        if(hand.size() != 1)
-            return false;
-        if(hand.get(0).getValue() == c.getValue())
-            return true;
-        return false;
+
+    public static void checkSplit(PlayerHands hand){
+        if(hand.getHand().size() == 2 && hand.getHand().get(0).getValue() == hand.getHand().get(1).getValue()){
+            hand.split(true);
+        }
     }
 
     private static int checkAce(ArrayList<Card> hand, int score, Card c){
@@ -93,5 +75,62 @@ public class BlackJackLogic {
             }
         }
         return score + c.getValue();
+    }
+
+    public static Map<String, Object> stand(PlayerHands hand){
+        Map<String, Object> response = new HashMap<>();
+        hand.stand();
+        response.put("status", "200 ok");
+        response.put("hand", hand);
+        response.put("score", hand.getScore());
+        if(hand.getScore() > 21)
+            response.put("bust", true);
+        else response.put("bust", false);
+        return response;
+    }
+
+    public static Map<String, Object> doubleBJ(PlayerHands hand, Deck deck, User user){
+        Map<String, Object> response = new HashMap<>();
+        if(hand.getBet() > user.getChips()){
+            response.put("status", "500");
+            response.put("error", "not enough chips");
+            return response;
+        }
+        user.addChips(-(hand.getBet()));
+        hand.addBet(hand.getBet());
+        Card c = deck.draw();
+        hand.add(c);
+        response = check(hand);
+        response.put("card", c);
+        return response;
+    }
+
+    public static Map<String, Object> split(PlayerHands hand, BlackJack blackJack, User user){
+        Map<String, Object> response = new HashMap<>();
+        if(!hand.getSplit()){
+            response.put("status", "500");
+            response.put("error", "cannot split");
+            return response;
+        }
+        if(hand.getBet() > user.getChips()){
+            response.put("status", "500");
+            response.put("error", "not enough chips");
+            return response;
+        }
+        PlayerHands temp = new PlayerHands(hand.getPlayer(), blackJack);
+        temp.add(hand.splitHand());
+        blackJack.addHand(temp);
+        response.put("status", "200 ok");
+        return response;
+    }
+
+    private static Map<String, Object> check(PlayerHands hand){
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "200 ok");
+        if(hand.getScore() > 21){
+            response.put("bust", true);
+        } else response.put("bust", false);
+        response.put("score", hand.getScore());
+        return response;
     }
 }
