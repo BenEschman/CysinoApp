@@ -3,8 +3,6 @@ package com.example.cycino;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,7 +23,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class FriendPageActivity extends AppCompatActivity {
 
     private TextView[] followers;
     private EditText usernameQuery;
@@ -37,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_friendpage);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         notisButton = findViewById(R.id.muteNotificationsButton);
         usernameQuery = findViewById(R.id.usernameEditText);
