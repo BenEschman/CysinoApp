@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/dealerCard1"
@@ -30,10 +31,10 @@
                 android:id="@+id/dealerCard2"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:maxWidth="100dp"
+                android:padding="2dp"
                 app:srcCompat="@drawable/clubs_2" />
 
         </LinearLayout>
@@ -179,6 +180,34 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/doubleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/dealButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/splitButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/startButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button" />
 
             <Button
                 android:id="@+id/hitButton"
