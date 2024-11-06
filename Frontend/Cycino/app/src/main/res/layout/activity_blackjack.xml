@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#31A236"
+        android:background="#35654d"
         android:orientation="vertical">
 
         <LinearLayout
@@ -20,40 +20,157 @@
 
             <ImageView
                 android:id="@+id/dealerCard1"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="2dp"
                 tools:srcCompat="@drawable/diamonds_ace" />
 
             <ImageView
                 android:id="@+id/dealerCard2"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:layout_gravity="center"
                 android:layout_weight="1"
+                android:maxWidth="100dp"
                 app:srcCompat="@drawable/clubs_2" />
+
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/playerCards"
+            android:id="@+id/cardsR1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/playerCard1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:id="@+id/player1Cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/clubs_10" />
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/playerCard2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/player1Card1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_10" />
+
+                <ImageView
+                    android:id="@+id/player1Card2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_2" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/player2Cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/clubs_2" />
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
 
+                <ImageView
+                    android:id="@+id/player2Card1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_10" />
+
+                <ImageView
+                    android:id="@+id/player2Card2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_2" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cardsR2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="2dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/player3Cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/player3Card1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_10" />
+
+                <ImageView
+                    android:id="@+id/player3Card2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_2" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/player4Cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/player4Card1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_10" />
+
+                <ImageView
+                    android:id="@+id/player4Card2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:maxWidth="100dp"
+                    app:srcCompat="@drawable/clubs_2" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
