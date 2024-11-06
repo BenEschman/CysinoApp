@@ -35,6 +35,34 @@ public class FollowService {
     }
 
     @Transactional
+    public boolean blockUser(Follow follow, Long uid) {
+        boolean ok = false;
+        User user = userService.getUser(uid);
+        for (Follow item : user.getFollowList()){
+            if (item.getFollowingID() == follow.getFollowingID()){
+                item.setBlockUser(true);
+                ok = true;
+                break;
+            }
+        }
+        return ok;
+    }
+
+    @Transactional
+    public boolean unblockUser(Follow follow, Long uid) {
+        boolean ok = false;
+        User user = userService.getUser(uid);
+        for (Follow item : user.getFollowList()){
+            if (item.getFollowingID() == follow.getFollowingID()){
+                item.setBlockUser(false);
+                ok = true;
+                break;
+            }
+        }
+        return ok;
+    }
+
+    @Transactional
     public boolean addToFollowList(Follow follow, Long uid) {
         boolean ok = true;
         User user = userService.getUser(uid);
