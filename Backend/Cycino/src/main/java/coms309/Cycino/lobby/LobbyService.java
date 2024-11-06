@@ -1,7 +1,7 @@
 package coms309.Cycino.lobby;
 
 import coms309.Cycino.users.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -9,6 +9,7 @@ import java.util.*;
 @Service
 public class LobbyService {
 
+    @Autowired
     private LobbyRepo repo;
 
     public Map<String, Object> startLobby(){
@@ -94,7 +95,12 @@ public class LobbyService {
         Set<User> players = l.getPlayers();
         response.put("status", "200 ok");
         response.put("lobby", l);
+        response.put("players", players);
         return response;
+    }
+
+    public Lobby getLobby(Long id){
+        return repo.findById(id).orElse(null);
     }
 
 }

@@ -45,6 +45,11 @@ public class Blackjackcontroller {
         return bjs.deleteGame(lobby);
     }
 
+    @PutMapping("/blackjack/deal/{lobby}")
+    public Map<String, Object> deal(Long lobbyId){
+        return bjs.start(lobbyId);
+    }
+
     @GetMapping("/blackjack/getHand/{lobby}/{userId}")
     public Map<String, Object> getHand(@PathVariable Long lobby, @PathVariable Long userId){
         return bjs.getHand(lobby, userId);

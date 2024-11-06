@@ -24,6 +24,7 @@ public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private double chips;
     @Enumerated(EnumType.STRING)
     private Enums.Roles role = Enums.Roles.BEGINNER;
     private String userBiography;
@@ -151,5 +152,13 @@ public class User implements Serializable {
 
     public Set<GameHistory> getGameHistories(){
         return gameHistories;
+    }
+
+    public double getChips(){
+        return chips;
+    }
+
+    public void addChips(double chips){
+        this.chips += chips;
     }
 }
