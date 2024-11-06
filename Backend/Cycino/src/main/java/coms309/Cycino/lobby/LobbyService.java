@@ -93,7 +93,7 @@ public class LobbyService {
         }
         Set<User> players = l.getPlayers();
         response.put("status", "200 ok");
-        response.put("players", players);
+        response.put("lobby", l);
         return response;
     }
 
