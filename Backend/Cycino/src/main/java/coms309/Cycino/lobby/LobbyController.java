@@ -1,16 +1,16 @@
 package coms309.Cycino.lobby;
 
 import coms309.Cycino.users.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class LobbyController {
 
+    @Autowired
     private LobbyService service;
 
     @PostMapping("/lobby/create")

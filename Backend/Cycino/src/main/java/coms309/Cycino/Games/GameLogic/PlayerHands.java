@@ -4,10 +4,11 @@ import coms309.Cycino.Games.Blackjack.BlackJack;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @Entity
-public class PlayerHands {
+public class PlayerHands implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +17,8 @@ public class PlayerHands {
     private ArrayList<Card> hand;
     private int score;
     private boolean stand = false;
+    private double bet;
+    private boolean split = false;
 
     @ManyToOne
     @JoinColumn(name = "blackjack_id", nullable = false)
@@ -54,6 +57,26 @@ public class PlayerHands {
 
     public boolean stand(){
         return stand;
+    }
+
+    public void addBet(double bet){
+        this.bet = bet;
+    }
+
+    public double getBet(){
+        return bet;
+    }
+
+    public void split(boolean split){
+        this.split = split;
+    }
+
+    public boolean getSplit(){
+        return split;
+    }
+
+    public Card splitHand(){
+        return hand.remove(1);
     }
 
 }
