@@ -46,6 +46,7 @@ public class BlackJackLogic {
                c.setDeck(null);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                hand.add(c);
 =======
                checkAce(hand.getHand(), hand.getScore(), c);
@@ -57,6 +58,11 @@ public class BlackJackLogic {
                hand.add(c);
 
 >>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
+=======
+               checkAce(hand.getHand(), hand.getScore(), c);
+               hand.add(c);
+
+>>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
                 //c.setPlayerHand(hand);
            }
        }
