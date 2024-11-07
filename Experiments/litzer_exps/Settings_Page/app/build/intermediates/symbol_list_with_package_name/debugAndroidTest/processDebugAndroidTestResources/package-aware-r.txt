@@ -1,3 +1,0 @@
-com.example.settingspage.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
