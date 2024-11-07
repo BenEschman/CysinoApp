@@ -80,8 +80,14 @@ public class User implements Serializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public BlackJackSettings getBlackJackSettings() {return this.blackJackSettings;}
 
+=======
+    public BlackJackSettings getBlackJackSettings() {
+        return this.blackJackSettings;
+    }
+>>>>>>> 3ceb9f608fe498d31b25b105b0d36f93e0c15cfd
 =======
     public BlackJackSettings getBlackJackSettings() {
         return this.blackJackSettings;
