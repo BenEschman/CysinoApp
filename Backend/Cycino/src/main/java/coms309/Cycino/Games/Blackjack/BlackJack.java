@@ -28,14 +28,21 @@ public class BlackJack {
     @OneToOne
     private Lobby lobby;
 
+    private Long gameHist;
+
     public BlackJack(){
 
     }
 
-    public BlackJack(Lobby l, Deck d){
+    public BlackJack(Lobby l, Deck d, Long gameHist){
         cards = d;
         lobby = l;
+        this.gameHist = gameHist;
 
+    }
+
+    public Long getGameHist(){
+        return gameHist;
     }
 
     public Set<PlayerHands> getHands() {
