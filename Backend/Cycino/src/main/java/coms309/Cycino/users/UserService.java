@@ -1,5 +1,6 @@
 package coms309.Cycino.users;
 
+import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.login.LoginService;
 import coms309.Cycino.stats.UserStatsController;
@@ -57,6 +58,9 @@ public class UserService {
     public User create(LoginInfo loginInfo){
         User user = new User();
         user.setLoginInfo(loginInfo);
+        BlackJackSettings blackJackSettings = new BlackJackSettings(17, 10, 1, 6);
+        blackJackSettings.setUser(user);
+        user.setBlackJackSettings(blackJackSettings);
         userRepository.save(user);
         return user;
     }

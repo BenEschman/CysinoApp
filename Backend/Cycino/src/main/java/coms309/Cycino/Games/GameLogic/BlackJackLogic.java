@@ -16,6 +16,7 @@ public class BlackJackLogic {
         Map<String, Object> result = new HashMap<>();
         int score = hand.getScore();
         hand.split(false);
+
         if(score >= 21){
             result.put("error", "cannot hit. score >= 21");
             return result;
@@ -23,6 +24,8 @@ public class BlackJackLogic {
         Card c = cards.draw();
         score = checkAce(hand.getHand(), score, c);
         hand.add(c);
+        result.put("card", c);
+        result.put("score", hand.getScore());
         if(score > 21){
             result.put("result", "bust");
             return result;
@@ -33,19 +36,22 @@ public class BlackJackLogic {
             return result;
         }
 
-        result.put("result", hand.getScore());
         return result;
     }
 
     public static void start(Set<PlayerHands> hands, BlackJack black){
        for(int i = 0; i < 2; i ++){
            for(PlayerHands hand: hands){
-               hand.add(black.getCards().draw());
+               Card c = black.getCards().draw();
+               c.setDeck(null);
+               hand.add(c);
+                //c.setPlayerHand(hand);
            }
        }
         for(PlayerHands hand: hands){
             checkSplit(hand);
         }
+
     }
 
 
@@ -102,6 +108,7 @@ public class BlackJackLogic {
         hand.add(c);
         response = check(hand);
         response.put("card", c);
+        hand.stand();
         return response;
     }
 
@@ -120,6 +127,9 @@ public class BlackJackLogic {
         PlayerHands temp = new PlayerHands(hand.getPlayer(), blackJack);
         temp.add(hand.splitHand());
         blackJack.addHand(temp);
+        hand.split(false);
+        response.put("hand", hand);
+        response.put("hand1", temp);
         response.put("status", "200 ok");
         return response;
     }

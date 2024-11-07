@@ -18,14 +18,9 @@ public class LobbyController {
         return service.startLobby();
     }
 
-    @PostMapping("/lobby/create1")
-    public Map<String, Object> startLobby(@RequestBody User u){
-        return service.startLobby(u);
-    }
-
-    @PostMapping("/lobby/create2")
-    public Map<String, Object> startLobby(@RequestBody Collection<User> users){
-        return service.startLobby(users);
+    @PostMapping("/lobby/create1/{userId}")
+    public Map<String, Object> startLobby(@PathVariable Long userId){
+        return service.startLobby(userId);
     }
 
     @DeleteMapping("/lobby/delete/{id}")
@@ -33,14 +28,14 @@ public class LobbyController {
         return service.delete(id);
     }
 
-    @PutMapping("/lobby/add")
-    public Map<String, Object> addPlayer(@RequestBody User u, @PathVariable Long id){
-        return service.addPlayer(u, id);
+    @PutMapping("/lobby/add/{id}/{userId}")
+    public Map<String, Object> addPlayer(@PathVariable Long userId, @PathVariable Long id){
+        return service.addPlayer(userId, id);
     }
 
-    @PutMapping("/lobby/remove")
-    public Map<String, Object> removePlayer(@RequestBody User u, @PathVariable Long id){
-        return service.removePlayer(u, id);
+    @PutMapping("/lobby/remove/{id}/{userId}")
+    public Map<String, Object> removePlayer(@PathVariable Long userId, @PathVariable Long id){
+        return service.removePlayer(userId, id);
     }
 
     @GetMapping("/lobby/{id}")

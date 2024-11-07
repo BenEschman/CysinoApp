@@ -1,17 +1,32 @@
 package coms309.Cycino.Games.GameLogic;
 
 import coms309.Cycino.Enums;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+@Entity
 public class Card implements Serializable {
 
-    private final String value;
-    private final Enums.SUIT suit;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String value = null;
+    private Enums.SUIT suit = null;
     private int number;
 
+    @ManyToOne
+    private Deck deck;
 
-    public Card(String number, Enums.SUIT suit){
+    @ManyToOne
+    private PlayerHands hand = null;
+
+
+    public Card(){
+
+    }
+    public Card(String number, Enums.SUIT suit, Deck deck){
+        this.deck = deck;
         value = number;
         this.suit = suit;
         try{
@@ -43,4 +58,13 @@ public class Card implements Serializable {
     public String img(){
         return value.toLowerCase() + "_of_" + suit.toString().toLowerCase() +".png";
     }
+
+    public void setDeck(Deck d){
+        this.deck = d;
+    }
+
+    public void setPlayerHand(PlayerHands hand){
+        this.hand = hand;
+    }
+
 }

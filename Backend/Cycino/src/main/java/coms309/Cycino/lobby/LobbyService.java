@@ -1,6 +1,7 @@
 package coms309.Cycino.lobby;
 
 import coms309.Cycino.users.User;
+import coms309.Cycino.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,31 +12,34 @@ public class LobbyService {
 
     @Autowired
     private LobbyRepo repo;
+    @Autowired
+    private UserService userService;
 
     public Map<String, Object> startLobby(){
         Map<String, Object> response = new HashMap<>();
         Lobby l = new Lobby();
+        repo.save(l);
         response.put("lobbyId", l.getLobbyId());
         response.put("status", "200 ok");
-        repo.save(l);
         return response;
     }
 
-    public Map<String, Object> startLobby(User u){
+    public Map<String, Object> startLobby(Long u){
         Map<String, Object> response = new HashMap<>();
-        Lobby l = new Lobby(u);
+        User user = userService.getUser(u);
+        Lobby l = new Lobby(user);
+        repo.save(l);
         response.put("lobbyId", l.getLobbyId());
         response.put("status", "200 ok");
-        repo.save(l);
         return response;
     }
 
     public Map<String, Object> startLobby(Collection<User> users){
         Map<String, Object> response = new HashMap<>();
         Lobby l = new Lobby(users);
+        repo.save(l);
         response.put("lobbyId", l.getLobbyId());
         response.put("status", "200 ok");
-        repo.save(l);
         return response;
     }
 
@@ -51,8 +55,9 @@ public class LobbyService {
         return response;
     }
 
-    public Map<String, Object> addPlayer(User u, Long id){
+    public Map<String, Object> addPlayer(Long userId, Long id){
         Map<String, Object> response = new HashMap<>();
+        User u = userService.getUser(userId);
         Lobby l = repo.findById(id).orElse(null);
         if(l == null){
             response.put("status", "404 not found");
@@ -62,11 +67,13 @@ public class LobbyService {
         l.addPlayer(u);
         response.put("lobbyId", l.getLobbyId());
         response.put("status", "200 ok");
+        repo.save(l);
         return response;
     }
 
-    public Map<String, Object> removePlayer(User u, Long id){
+    public Map<String, Object> removePlayer(long userId, Long id){
         Map<String, Object> response = new HashMap<>();
+        User u = userService.getUser(userId);
         Lobby l = repo.findById(id).orElse(null);
         if(l == null){
             response.put("status", "404 not found");
@@ -81,6 +88,7 @@ public class LobbyService {
         l.removePlayer(u);
         response.put("lobbyId", l.getLobbyId());
         response.put("status", "200 ok");
+        repo.save(l);
         return response;
     }
 
@@ -94,13 +102,18 @@ public class LobbyService {
         }
         Set<User> players = l.getPlayers();
         response.put("status", "200 ok");
-        response.put("lobby", l);
+        //response.put("lobby", l);
         response.put("players", players);
         return response;
     }
 
     public Lobby getLobby(Long id){
         return repo.findById(id).orElse(null);
+    }
+
+    public void updateGameId(Long id, Lobby l){
+        l.setGameId(id);
+        repo.save(l);
     }
 
 }
