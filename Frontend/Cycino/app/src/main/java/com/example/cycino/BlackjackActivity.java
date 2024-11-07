@@ -1,5 +1,6 @@
 package com.example.cycino;
 
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -19,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,6 +39,10 @@ public class BlackjackActivity extends AppCompatActivity {
     private ImageView p2Card1;
     private ImageView p2Card2;
 
+    private TextView dScore;
+    private TextView pScore;
+    private TextView winStatus;
+
     private LinearLayout dCards;
     private LinearLayout p1Cards;
     private LinearLayout p2Cards;
@@ -52,8 +59,23 @@ public class BlackjackActivity extends AppCompatActivity {
 
     RequestQueue requestQueue;
 
-    private static int lobbyID = 1;
-    private static int playerID = 1;
+    private static Integer lobbyID = 52;
+    private static Integer playerID = 1;
+
+    private int dCardNum = 0;
+    private int p1CardNum = 0;
+
+    private ImageView d1x1;
+    private ImageView d1x2;
+    private ImageView d1x3;
+    private ImageView d1x4;
+    private ImageView d1x5;
+
+    private ImageView p1x1;
+    private ImageView p1x2;
+    private ImageView p1x3;
+    private ImageView p1x4;
+    private ImageView p1x5;
 
     File sdcard;
 
@@ -66,7 +88,7 @@ public class BlackjackActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(BlackjackActivity.this);
 
         int numPlayers = 1;
-        int playerNum = 1;
+        Integer playerNum = 1;
 
         dCard1 = findViewById(R.id.dealerCard1);
         dCard2 = findViewById(R.id.dealerCard2);
@@ -74,6 +96,10 @@ public class BlackjackActivity extends AppCompatActivity {
         p1Card2 = findViewById(R.id.player1Card2);
         p2Card1 = findViewById(R.id.player2Card1);
         p2Card2 = findViewById(R.id.player2Card2);
+
+        dScore = findViewById(R.id.dScore);
+        pScore = findViewById(R.id.pScore);
+        winStatus = findViewById(R.id.winStatus);
 
         dCards = findViewById(R.id.dealerCards);
         p1Cards = findViewById(R.id.player1Cards);
@@ -157,6 +183,17 @@ public class BlackjackActivity extends AppCompatActivity {
 
     private void startGame(int numPlayers, int playerNum, int lobbyID) {
 
+        p1Cards.removeView(p1x1);
+        p1Cards.removeView(p1x2);
+        p1Cards.removeView(p1x3);
+        p1Cards.removeView(p1x4);
+        p1Cards.removeView(p1x5);
+        dCards.removeView(d1x1);
+        dCards.removeView(d1x2);
+        dCards.removeView(d1x3);
+        dCards.removeView(d1x4);
+        dCards.removeView(d1x5);
+
         String cardBack = "card_back";
 
         dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
@@ -193,6 +230,20 @@ public class BlackjackActivity extends AppCompatActivity {
 
         }
 
+        JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.DELETE, url+"delete/"+lobbyID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url+"create/"+lobbyID, null, new Response.Listener<JSONObject>() {
@@ -201,6 +252,7 @@ public class BlackjackActivity extends AppCompatActivity {
                         // Handle the successful response here
                         try {
                             String status = response.getString("status") ;
+                            System.out.println(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
@@ -216,6 +268,9 @@ public class BlackjackActivity extends AppCompatActivity {
                 });
         // Add the request to the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
+
+        queue.add(jsonObjectRequest2);
+        myWait(1000);
         queue.add(jsonObjectRequest);
 
 
@@ -223,6 +278,11 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     private void deal(){
+
+        winStatus.setText("");
+
+        p1CardNum = 2;
+        dCardNum = 2;
 
                 //splitButton.setVisibility(View.VISIBLE);
                 standButton.setVisibility(View.VISIBLE);
@@ -232,13 +292,7 @@ public class BlackjackActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
-                        try {
-                            JSONObject card1 = response.getJSONObject("card1");
-                            JSONObject card2 = response.getJSONObject("card2");
 
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -248,19 +302,110 @@ public class BlackjackActivity extends AppCompatActivity {
             }
         });
 
+        JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.GET, url+"getdealer/"+lobbyID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
 
-        // Add the request to the RequestQueue
-        requestQueue.add(jsonObjectRequest);
+
+                        try {
+                            JSONObject card1 = response.getJSONObject("card1");
+                            JSONObject card2 = response.getJSONObject("card2");
+
+                            Integer score = response.getInt("score");
+                            dScore.setText("Dealer Score: "+ (score-card2.getInt("value")));
+
+                            String card1S = card1.getString("suit").toLowerCase() + "_" + card1.getString("number");
+                            String card2S = card2.getString("suit").toLowerCase() + "_" + card2.getString("number");
+
+                            dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card1S+".png")));
+                            //dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card2S+".png")));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest(Request.Method.GET, url+"gethand/"+lobbyID+"/"+playerID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+
+                        try {
+                            JSONObject card1 = response.getJSONObject("card1");
+                            JSONObject card2 = response.getJSONObject("card2");
+
+                            Integer score = response.getInt("score");
+                            pScore.setText("Your Score: "+score);
+
+                            String card1S = card1.getString("suit").toLowerCase() + "_" + card1.getString("number");
+                            String card2S = card2.getString("suit").toLowerCase() + "_" + card2.getString("number");
+
+                            p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card1S+".png")));
+                            p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card2S+".png")));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        class MyRunnable implements Runnable {
+            public synchronized void run() {
+                // Code to be executed in the new thread
+                requestQueue.add(jsonObjectRequest);
+                try {
+                    wait(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                requestQueue.add(jsonObjectRequest2);
+                requestQueue.add(jsonObjectRequest3);
+
+            }
+        }
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
+
+
 
     }
 
     private void hit(){
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+lobbyID+"/hit/"+playerID, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"hit/"+lobbyID+"/"+playerID, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
                         try {
                             JSONObject card = response.getJSONObject("card");
+                            String cardS  = card.getString("suit").toLowerCase() + "_" + card.getString("number");
+                            Integer score = response.getInt("score");
+
+                            pScore.setText("Your Score: "+score);
+
+                            System.out.println(response);
+
+                            addPlayer1Card(cardS);
+
+                            if (score >= 21) {
+                                    finishGame();
+
+                            }
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -276,17 +421,24 @@ public class BlackjackActivity extends AppCompatActivity {
 
 
         // Add the request to the RequestQueue
-        requestQueue.add(jsonObjectRequest);
+
+                requestQueue.add(jsonObjectRequest);
+
+
 
     }
 
     private void stand() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+lobbyID+"/stand/"+playerID, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"stand/"+lobbyID+"/"+playerID, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
                         try {
-                            response.getJSONObject("score");
+                            System.out.println(response);
+                            Integer score = response.getInt("score");
+                            pScore.setText("Your Score: "+score);
+
+                            finishGame();
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -303,6 +455,144 @@ public class BlackjackActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void finishGame() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"finish/"+lobbyID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+
+                        try {
+                            System.out.println(response);
+                            JSONArray dealerCards = response.getJSONArray("dealer");
+                            winStatus.setText(response.getString(playerID.toString()));
+                            Integer score = response.getInt("dscore");
+                            dScore.setText("Dealer Score: "+score);
+
+                            for (int i = 0; i < dealerCards.length(); i++) {
+                                JSONObject card = dealerCards.getJSONObject(i);
+                                if (i == 1) {
+                                    JSONObject card2 = dealerCards.getJSONObject(1);
+
+                                    String card2S = card2.getString("suit").toLowerCase() + "_" + card2.getString("number");
+                                    dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card2S+".png")));
+
+                                }
+
+                                if (i > 1) {
+                                    String cardS = card.getString("suit").toLowerCase() + "_" + card.getString("number");
+                                    addDealerCard(cardS);
+                                }
+
+                                System.out.println(card);
+
+                            }
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+        requestQueue.add(jsonObjectRequest);
+
+        standButton.setVisibility(View.GONE);
+        hitButton.setVisibility(View.GONE);
+        startButton.setVisibility(View.VISIBLE);
+
+    }
+
+    private void addDealerCard(String cardS) {
+
+        dCardNum++;
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+
+        ImageView dCardNew = new ImageView(this);
+        dCardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardS+".png")));
+        dCardNew.setLayoutParams(param);
+        dCardNew.setPadding(2,2,2,2);
+        dCards.addView(dCardNew);
+
+        switch (dCardNum){
+            case 3:
+                d1x1 = dCardNew;
+                break;
+            case 4:
+                d1x2 = dCardNew;
+                break;
+            case 5:
+                d1x3 = dCardNew;
+                break;
+            case 6:
+                d1x4 = dCardNew;
+                break;
+            case 7:
+                d1x5 = dCardNew;
+                break;
+        }
+
+    }
+    private void addPlayer1Card(String cardS) {
+
+        p1CardNum++;
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+
+        ImageView p1CardNew = new ImageView(this);
+        p1CardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardS+".png")));
+        p1CardNew.setLayoutParams(param);
+        p1CardNew.setPadding(2,2,2,2);
+        p1Cards.addView(p1CardNew);
+
+        switch (p1CardNum){
+            case 3:
+                p1x1 = p1CardNew;
+                break;
+            case 4:
+                p1x2 = p1CardNew;
+                break;
+            case 5:
+                p1x3 = p1CardNew;
+                break;
+            case 6:
+                p1x4 = p1CardNew;
+                break;
+            case 7:
+                p1x5 = p1CardNew;
+                break;
+        }
+
+    }
+
+    private void myWait(int waitTime) {
+        class MyRunnable implements Runnable {
+            public synchronized void run() {
+                // Code to be executed in the new thread
+
+                try {
+                    wait(waitTime);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
     }
 
 }
