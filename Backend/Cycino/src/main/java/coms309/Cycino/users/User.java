@@ -2,6 +2,7 @@ package coms309.Cycino.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.Enums;
+import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
 import coms309.Cycino.follow.Follow;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
@@ -9,6 +10,7 @@ import coms309.Cycino.stats.GameHistory;
 import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
 
+import coms309.Cycino.GameSettings.BlackJack.BlackJackSettingsRepository;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +30,10 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Enums.Roles role = Enums.Roles.BEGINNER;
     private String userBiography;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private BlackJackSettings blackJackSettings;
+
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_user_ID", referencedColumnName = "id")
@@ -52,9 +58,10 @@ public class User implements Serializable {
     )
     private Set<GameHistory> gameHistories;
 
+
     public User(){}
 
-    public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
+    public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo, BlackJackSettings blackJackSettings) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,8 +70,16 @@ public class User implements Serializable {
         this.userBiography = userBiography;
         this.followList = followList;
         this.loginInfo = loginInfo;
+        this.blackJackSettings = blackJackSettings;
     }
 
+    public BlackJackSettings getBlackJackSettings() {
+        return blackJackSettings;
+    }
+
+    public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
+        this.blackJackSettings = blackJackSettings;
+    }
     public List<Follow> getFollowList() {
         return followList;
     }

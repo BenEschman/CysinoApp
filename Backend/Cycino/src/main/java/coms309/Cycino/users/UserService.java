@@ -1,5 +1,6 @@
 package coms309.Cycino.users;
 
+import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.login.LoginService;
 import coms309.Cycino.stats.UserStatsController;
