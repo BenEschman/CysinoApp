@@ -5,10 +5,11 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         //int[] a = {19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
-        int[] a = {4,3,2,1,0};
+        //int[] a = {4,3,2,1,0};
         //System.out.println(next_i(a,0,2,16));
         //System.out.println(next_j(a, 19,0,19));
-        quicksort(a, a.length);
+        //quicksort(a, a.length);
+        System.out.println(fill());
     }
     public static int next_i(int[] a, int i, int l, int p)
     {
@@ -18,6 +19,35 @@ public class Main {
         }
 
         return i;
+    }
+
+    public enum SUIT{
+        HEARTS,
+        DIAMONDS,
+        SPADES,
+        CLUBS
+    }
+
+    public enum VALUE{
+        JACK,
+        QUEEN,
+        KING,
+        ACE
+
+    }
+    private static ArrayList<String> fill(){
+        ArrayList<String> list = new ArrayList<>();
+        for(int i = 0; i < 4; i++){
+            for(int j = 2; j < 11; j++){
+                String c = j + " of " + SUIT.values()[i];
+                list.add(c);
+            }
+            for(int j = 0; j < 4; j++){
+                String c = VALUE.values()[j] + " of " + SUIT.values()[i];
+                list.add(c);
+            }
+        }
+        return list;
     }
     public static int next_j(int[] a, int j, int f, int p)
     {
