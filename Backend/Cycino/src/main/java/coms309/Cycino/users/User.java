@@ -179,6 +179,10 @@ public class User implements Serializable {
         return chips;
     }
 
+    public void addGameHistory(GameHistory gameHistory){
+        gameHistories.add(gameHistory);
+    }
+
     public void addChips(double chips){
         this.chips += chips;
     }
