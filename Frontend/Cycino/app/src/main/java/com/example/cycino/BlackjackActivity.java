@@ -29,8 +29,6 @@ public class BlackjackActivity extends AppCompatActivity {
 
     String url = "http://coms-3090-052.class.las.iastate.edu:8080/blackjack/";
 
-    File sdcard = Environment.getExternalStorageDirectory();
-
     private ImageView dCard1;
     private ImageView dCard2;
     private ImageView p1Card1;
@@ -57,10 +55,13 @@ public class BlackjackActivity extends AppCompatActivity {
     private static int lobbyID = 1;
     private static int playerID = 1;
 
+    File sdcard;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blackjack);
+
+        sdcard = Environment.getExternalStorageDirectory();
 
         requestQueue = Volley.newRequestQueue(BlackjackActivity.this);
 
@@ -158,15 +159,15 @@ public class BlackjackActivity extends AppCompatActivity {
 
         String cardBack = "card_back";
 
-        dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Pictures/"+cardBack+".png")));
-        dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Pictures/"+cardBack+".png")));
+        dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
+        dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
 
         if (numPlayers > 0) {
 
             cardR1.setVisibility(View.VISIBLE);
             p1Cards.setVisibility(View.VISIBLE);
-            p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Pictures/"+cardBack+".png")));
-            p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Pictures/"+cardBack+".png")));
+            p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
+            p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
 
         }
 
@@ -175,8 +176,8 @@ public class BlackjackActivity extends AppCompatActivity {
 
             cardR2.setVisibility(View.VISIBLE);
             p2Cards.setVisibility(View.VISIBLE);
-            p2Card1.setImageURI(Uri.fromFile(new File(sdcard,"Pictures/"+cardBack+".png")));
-            p2Card2.setImageURI(Uri.fromFile(new File(sdcard,"Pictures/"+cardBack+".png")));
+            p2Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
+            p2Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
 
 
             switch (playerNum) {
@@ -303,12 +304,6 @@ public class BlackjackActivity extends AppCompatActivity {
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
     }
-
-    private void split() {
-
-    }
-
-
 
 }
 
