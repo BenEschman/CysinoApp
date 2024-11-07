@@ -48,9 +48,6 @@
             android:name="com.example.settingspage.HomePagePlaceholder"
             android:exported="false" />
         <activity
-            android:name="com.example.settingspage.UserSettings"
-            android:exported="false" />
-        <activity
             android:name="com.example.settingspage.AccountSettings"
             android:exported="false" />
 

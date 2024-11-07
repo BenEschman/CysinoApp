@@ -114,4 +114,100 @@
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp" />
 
+    <!-- Dealer Stand-On Value -->
+    <EditText
+        android:id="@+id/dealerStandOnEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Dealer Stand-On Value"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/accountSettingsButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <Button
+        android:id="@+id/updateDealerStandOnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Dealer Stand-On"
+        app:layout_constraintTop_toBottomOf="@id/dealerStandOnEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Min Bet -->
+    <EditText
+        android:id="@+id/minBetEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Minimum Bet"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/updateDealerStandOnButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <Button
+        android:id="@+id/updateMinBetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Min Bet"
+        app:layout_constraintTop_toBottomOf="@id/minBetEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Max Bet -->
+    <EditText
+        android:id="@+id/maxBetEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Maximum Bet"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/updateMinBetButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <Button
+        android:id="@+id/updateMaxBetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Max Bet"
+        app:layout_constraintTop_toBottomOf="@id/maxBetEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Number of Decks -->
+    <EditText
+        android:id="@+id/numberOfDecksEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Number of Decks"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/updateMaxBetButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <Button
+        android:id="@+id/updateNumberOfDecksButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Number of Decks"
+        app:layout_constraintTop_toBottomOf="@id/numberOfDecksEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

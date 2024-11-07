@@ -14,6 +14,7 @@ id btnChangeLastName
 id btnChangePassword
 id btnChangePhoneNumber
 id btnChangeUsername
+id dealerStandOnEdit
 id deleteAccountButton
 id editFirstName
 id editLastName
@@ -22,10 +23,17 @@ id editPhoneNumber
 id editUsername
 id homePageTextView
 id logOutButton
+id maxBetEdit
+id minBetEdit
 id notificationsSwitch
+id numberOfDecksEdit
 id onlineStatusSwitch
 id pageTitle
 id resetLeaderboardButton
+id updateDealerStandOnButton
+id updateMaxBetButton
+id updateMinBetButton
+id updateNumberOfDecksButton
 layout activity_account_settings
 layout activity_homepageplaceholder
 layout activity_main

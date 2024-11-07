@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-47:12
-INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-47:12
+ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-43:12
+INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:2:1-43:12
 MERGED from [com.android.volley:volley:1.2.1] C:\Users\evan\.gradle\caches\transforms-4\ae4702cbd19450e93ca91167f2f78432\transformed\volley-1.2.1\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\evan\.gradle\caches\transforms-4\af0154a9064a003e9bba165a6ef9d017\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\evan\.gradle\caches\transforms-4\5985c5af3da74b285998d90c9ba4ff3a\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -67,8 +67,8 @@ ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_
 	android:name
 		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:7:22-70
 application
-ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:10:5-45:19
-INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:10:5-45:19
+ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:10:5-41:19
+INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:10:5-41:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\evan\.gradle\caches\transforms-4\af0154a9064a003e9bba165a6ef9d017\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\evan\.gradle\caches\transforms-4\af0154a9064a003e9bba165a6ef9d017\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\evan\.gradle\caches\transforms-4\5985c5af3da74b285998d90c9ba4ff3a\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -131,18 +131,12 @@ ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_
 		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:35:13-37
 	android:name
 		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:34:13-48
-activity#com.example.settingspage.UserSettings
+activity#com.example.settingspage.AccountSettings
 ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:37:9-39:40
 	android:exported
 		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:39:13-37
 	android:name
-		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:38:13-41
-activity#com.example.settingspage.AccountSettings
-ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:41:9-43:40
-	android:exported
-		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:43:13-37
-	android:name
-		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:42:13-44
+		ADDED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml:38:13-44
 uses-sdk
 INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\src\main\AndroidManifest.xml

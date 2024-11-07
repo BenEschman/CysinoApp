@@ -260,7 +260,7 @@ public class AccountSettings extends AppCompatActivity {
 
     private void updateFirstName(final String newFirstName)
     {
-        String url = "NO FUCKING CLUE!"; //////////////////////////////////////////////////////////////////////////////////////////////////
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -302,7 +302,7 @@ public class AccountSettings extends AppCompatActivity {
 
     private void updateLastName(final String newLastName)
     {
-        String url = "NO FUCKING CLUE!"; //////////////////////////////////////////////////////////////////////////////////////////////////
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
 
         JSONObject jsonBody = new JSONObject();
         try {
@@ -344,7 +344,7 @@ public class AccountSettings extends AppCompatActivity {
 
     private void updatePhoneNumber(final int newPhoneNumber)
     {
-        String url = "NO FUCKING CLUE!"; //////////////////////////////////////////////////////////////////////////////////////////////////
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
 
         JSONObject jsonBody = new JSONObject();
         try {

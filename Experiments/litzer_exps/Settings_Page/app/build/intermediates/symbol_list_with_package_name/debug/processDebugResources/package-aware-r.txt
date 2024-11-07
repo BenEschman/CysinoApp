@@ -3244,6 +3244,7 @@ id custom
 id customPanel
 id cut
 id date_picker_actions
+id dealerStandOnEdit
 id decelerate
 id decelerateAndComplete
 id decor_content_parent
@@ -3381,8 +3382,10 @@ id material_timepicker_ok_button
 id material_timepicker_view
 id material_value_index
 id matrix
+id maxBetEdit
 id message
 id middle
+id minBetEdit
 id mini
 id month_grid
 id month_navigation_bar
@@ -3434,6 +3437,7 @@ id notification_background
 id notification_main_column
 id notification_main_column_container
 id notificationsSwitch
+id numberOfDecksEdit
 id off
 id on
 id onInterceptTouchReturnSwipe
@@ -3599,6 +3603,10 @@ id unchecked
 id uniform
 id unlabeled
 id up
+id updateDealerStandOnButton
+id updateMaxBetButton
+id updateMinBetButton
+id updateNumberOfDecksButton
 id useLogo
 id vertical_only
 id view_offset_helper

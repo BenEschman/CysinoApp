@@ -1,9 +1,9 @@
 package com.example.settingspage;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,13 +15,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button backButton;
     private Button logOutButton;
     private SeekBar brightnessDial;
     private TextView brightnessLabel;
-    private SharedPreferences sharedPreferences;
     private Switch notificationsSwitch;
     private Button accountSettingsButton;
     private Switch onlineStatusSwitch;
@@ -42,22 +49,14 @@ public class MainActivity extends AppCompatActivity {
         onlineStatusSwitch = findViewById(R.id.onlineStatusSwitch);
         resetLeaderboardButton = findViewById(R.id.resetLeaderboardButton); // Added
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE);
-        int savedBrightnessLevel = sharedPreferences.getInt("BrightnessLevel", 50); // Default to 50%
-        boolean savedNotificationsEnabled = sharedPreferences.getBoolean("NotificationsEnabled", true);
-        boolean savedOnlineStatus = sharedPreferences.getBoolean("OnlineStatus", true);
-
         // Set the initial brightness level for this activity
+        int savedBrightnessLevel = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE)
+                .getInt("BrightnessLevel", 50); // Default to 50%
         setActivityBrightness(savedBrightnessLevel);
 
         // Set the SeekBar to the saved brightness level
         brightnessDial.setProgress(savedBrightnessLevel);
         brightnessLabel.setText("Brightness: " + savedBrightnessLevel);
-
-        // Set the Switches to the saved states
-        notificationsSwitch.setChecked(savedNotificationsEnabled);
-        onlineStatusSwitch.setChecked(savedOnlineStatus);
 
         // Set listeners for buttons
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -85,34 +84,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Set a listener to track changes in the online status Switch state
-        onlineStatusSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                handleOnlineStatusSwitchChange(isChecked);
-            }
-        });
-
-        // Set a listener to track changes in the notification Switch state
-        notificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                handleNotificationsSwitchChange(isChecked);
-            }
-        });
-
         // Set a listener for the Reset Leaderboard button
         resetLeaderboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Placeholder action for resetting the leaderboard
-
-
-               // Set everything in user stats table to 0
-
-
-
-
                 Toast.makeText(MainActivity.this, "Leaderboard has been reset", Toast.LENGTH_SHORT).show();
             }
         });
@@ -124,9 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 setSystemBrightness(progress);
 
                 // Update the brightness label
-
-
-
                 brightnessLabel.setText("Brightness: " + progress);
             }
 
@@ -139,34 +112,73 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // Save the brightness value to SharedPreferences when the user stops changing the value
                 int brightnessLevel = seekBar.getProgress();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("BrightnessLevel", brightnessLevel);
-                editor.apply();
-
-
+                getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE)
+                        .edit()
+                        .putInt("BrightnessLevel", brightnessLevel)
+                        .apply();
 
                 // Update the brightness in a userSettings MySQL table
-                // Show a confirmation message
                 Toast.makeText(MainActivity.this, "Brightness saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        onlineStatusSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                handleOnlineStatusSwitchChange(isChecked);
+            }
+        });
+
+        notificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                handleNotificationsSwitchChange(isChecked);
             }
         });
     }
 
     private void handleNotificationsSwitchChange(boolean isEnabled) {
         if (isEnabled) {
-            // Actions to take when the switch is turned on
+            String url = "http://coms-3090-052.class.las.iastate.edu:8080/" ;  //Add user settings endpoint
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("isEnabled", isEnabled);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("AccountSettings", "Server Response: " + response.toString());
+                            try {
+                                String status = response.getString("status");
+                                if (status.equals("200 ok")) {
+                                    Toast.makeText(getApplicationContext(), "Notification preference has been updated.", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null && error.networkResponse.data != null) {
+                                String errorMsg = new String(error.networkResponse.data);
+                                Log.e("VolleyError", errorMsg);
+                            }
+                            Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                            error.printStackTrace();
+                        }
+                    }) {
+            };
             Toast.makeText(MainActivity.this, "Notifications are enabled", Toast.LENGTH_SHORT).show();
         } else {
-            // Actions to take when the switch is turned off
             Toast.makeText(MainActivity.this, "Notifications are disabled", Toast.LENGTH_SHORT).show();
         }
-
-        // Save the state in SharedPreferences and in a UserSettings MySQL table.
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("NotificationsEnabled", isEnabled);
-        editor.apply();
-
-        // Update in user settings database table.
     }
 
     private void setActivityBrightness(int brightnessLevel) {
@@ -193,18 +205,47 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleOnlineStatusSwitchChange(boolean isEnabled) {
         if (isEnabled) {
-            // Actions to take when the switch is turned on
-            Toast.makeText(MainActivity.this, "Online status is visible", Toast.LENGTH_SHORT).show();
+            String url = "http://coms-3090-052.class.las.iastate.edu:8080/" ;  //Add user settings endpoint
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("isEnabled", isEnabled);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("AccountSettings", "Server Response: " + response.toString());
+                            try {
+                                String status = response.getString("status");
+                                if (status.equals("200 ok")) {
+                                    Toast.makeText(getApplicationContext(), "Online Status preference has been updated.", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null && error.networkResponse.data != null) {
+                                String errorMsg = new String(error.networkResponse.data);
+                                Log.e("VolleyError", errorMsg);
+                            }
+                            Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                            error.printStackTrace();
+                        }
+                    }) {
+            };
+            Toast.makeText(MainActivity.this, "Notifications are enabled", Toast.LENGTH_SHORT).show();
         } else {
-            // Actions to take when the switch is turned off
-            Toast.makeText(MainActivity.this, "Online status is hidden", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Notifications are disabled", Toast.LENGTH_SHORT).show();
         }
-
-        // Save the state in SharedPreferences
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("OnlineStatus", isEnabled);
-        editor.apply();
+    }
 
         // Update in user settings database table if needed.
     }
-}
