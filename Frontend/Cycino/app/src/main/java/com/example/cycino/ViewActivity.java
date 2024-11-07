@@ -27,7 +27,7 @@ import org.json.JSONObject;
 public class ViewActivity extends AppCompatActivity {
 
     private Button viewButton;
-    private Button lbButton;
+    private Button fPageButton;
     RequestQueue requestQueue;
     LinearLayout viewLayout;
 
@@ -36,18 +36,20 @@ public class ViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
-
+        fPageButton.findViewById(R.id.fPage);
         viewButton = findViewById(R.id.returnButton);
-        lbButton = findViewById(R.id.lbButton);
         viewLayout = findViewById(R.id.layout_view);
 
 
         requestQueue = Volley.newRequestQueue(ViewActivity.this);
         viewButton.setText("Edit Profile");
-        lbButton.setText("View Leaderboard");
+        fPageButton.setText("Return to Friends Page");
+
+        Intent intent = getIntent();
 
 
-         Integer userID = 4;
+
+         Integer userID = intent.getIntExtra("UUID",-1);
 
 
         getOneUser(userID);
@@ -63,13 +65,14 @@ public class ViewActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        lbButton.setOnClickListener(new View.OnClickListener() {
+        fPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ViewActivity.this, LeaderboardActivity.class);
+                Intent intent = new Intent(ViewActivity.this, FriendPageActivity.class);
                 startActivity(intent);
             }
         });
+
     }
 
     private void showOneUser(JSONObject user) {
@@ -143,7 +146,7 @@ public class ViewActivity extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
 
-                                showOneUser(response);
+
                         }
                     }, new Response.ErrorListener() {
                 @Override

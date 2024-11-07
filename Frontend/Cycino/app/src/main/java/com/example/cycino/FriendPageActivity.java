@@ -2,7 +2,9 @@ package com.example.cycino;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class FriendPageActivity extends AppCompatActivity {
     String currUserName = "FUCKED";
 
     JSONArray friends;
+    Integer[] friendsID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +65,48 @@ public class FriendPageActivity extends AppCompatActivity {
                 findViewById(R.id.friend4Profile),
         };
 
+        friendsID = new Integer[4];
+
         int userID = 1;
         getFollowerList(userID);
-        //userName.setText(getUserName(userID));
+        //getUserName(userID);
 
+        profileButton[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                intent.putExtra("UUID",friendsID[0]);
+                startActivity(intent);
+
+            }
+        });
+        profileButton[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                intent.putExtra("UUID",friendsID[1]);
+                startActivity(intent);
+
+            }
+        });
+        profileButton[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                intent.putExtra("UUID",friendsID[2]);
+                startActivity(intent);
+
+            }
+        });
+        profileButton[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                intent.putExtra("UUID",friendsID[3]);
+                startActivity(intent);
+
+            }
+        });
 
 
 
@@ -83,7 +124,9 @@ public class FriendPageActivity extends AppCompatActivity {
                             friends = response;
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject follower = response.getJSONObject(i);
-                                int followingId = follower.getInt("followingID");
+                                Integer followingId = follower.getInt("followingID");
+                                friendsID[i] = followingId;
+                                followerName[i].setText(followingId.toString());
 
                                 //followerName[i].setText(getUserName(followingId));
 
@@ -234,7 +277,7 @@ public class FriendPageActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private String getUserName(Integer id) {
+    private void getUserName(Integer id) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
         String out = null;
@@ -246,10 +289,11 @@ public class FriendPageActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
 
                         try {
-                           currUserName = response.getString("firstName") + " " + response.getString("lastName");
+                            userName.setText(response.getString("firstName") + " " + response.getString("lastName"));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
 
 
                     }
@@ -263,7 +307,5 @@ public class FriendPageActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
-
-        return currUserName;
     }
 }
