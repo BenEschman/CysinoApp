@@ -39,9 +39,13 @@ public class BlackJackSettings {
     public void setUser(User user) {
         this.user = user;
     }
-
+/*
     public User getUser() {
         return user;
+    }
+*/
+    public Long getUserId() {
+        return this.user.getId();
     }
 
     public int getDealerStandOn() {
