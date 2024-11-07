@@ -20,16 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProfilePage"
         android:usesCleartextTraffic="true"
-<<<<<<< HEAD
+
         tools:targetApi="31">
-A
+
         <service
             android:name=".WebSocketService"
             android:enabled="true"
+            tools:targetApi="35"
             android:exported="true"></service>
-=======
-        tools:targetApi="35">
->>>>>>> 33-blackjack-game-view
+
         <activity
             android:name=".EditActivity"
             android:exported="true">
@@ -71,41 +70,30 @@ A
             android:name=".GameChatActivity"
             android:exported="true">
 
-<<<<<<< HEAD
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity
             android:name=".MainActivity"
-<<<<<<< HEAD
+
             android:exported="true">
-=======
->>>>>>> 33-blackjack-game-view
-=======
-            android:exported="true">    
->>>>>>> 3b90935582b0046afb0db3d04871b08d8f6c5bec
+
 
         </activity>
         <activity
             android:name=".MainActivity2"
             android:exported="true">   
 
-<<<<<<< HEAD
-=======
         </activity>
         <activity
             android:name=".BlackjackActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
->>>>>>> 33-blackjack-game-view
+
         </activity>
 
         <activity android:name=".AccountSettingsActivity"
