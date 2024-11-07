@@ -13,6 +13,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 //@ComponentScan(basePackages = {"com.example.demo.websocket"})
 =======
 >>>>>>> origin/main
@@ -20,6 +21,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 >>>>>>> 3ceb9f608fe498d31b25b105b0d36f93e0c15cfd
 =======
 >>>>>>> 3ceb9f608fe498d31b25b105b0d36f93e0c15cfd
+=======
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 =======
 >>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 @ComponentScan(basePackages = "coms309.Cycino")

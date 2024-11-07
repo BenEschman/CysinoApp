@@ -29,8 +29,25 @@ public class BlackJack {
     private Lobby lobby;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+    public BlackJack(){
+=======
+    private Long gameHist;
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
+
     public BlackJack(){
 
+    }
+
+    public BlackJack(Lobby l, Deck d, Long gameHist){
+        cards = d;
+        lobby = l;
+        this.gameHist = gameHist;
+
+    }
+
+    public Long getGameHist(){
+        return gameHist;
     }
 
     public BlackJack(Lobby l, Deck d){

@@ -26,6 +26,11 @@ public class BlackjackService {
     @Autowired
     private DeckService ds;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    @Autowired
+    private GameHistoryService histService;
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 =======
     @Autowired
     private GameHistoryService histService;
@@ -49,7 +54,12 @@ public class BlackjackService {
         Lobby l = (Lobby) lobbyService.getLobby(lobbyId);
         Deck d = ds.start(decks);
 <<<<<<< HEAD
+<<<<<<< HEAD
         BlackJack blackJack = new BlackJack(l, d);
+=======
+        Long i = histService.startGame("Blackjack", l.getPlayers());
+        BlackJack blackJack = new BlackJack(l, d, i);
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 =======
         Long i = histService.startGame("Blackjack", l.getPlayers());
         BlackJack blackJack = new BlackJack(l, d, i);
@@ -87,6 +97,10 @@ public class BlackjackService {
         blj.deleteHands();
         blackJackRepo.save(blj);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        histService.endGame(blj.getGameHist());
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 =======
         histService.endGame(blj.getGameHist());
 >>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
