@@ -2,6 +2,7 @@ package coms309.Cycino.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.Enums;
+import coms309.Cycino.Games.GameLogic.PlayerHands;
 import coms309.Cycino.follow.Follow;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
@@ -10,7 +11,9 @@ import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -43,6 +46,9 @@ public class User implements Serializable {
 
     @ManyToOne
     private Lobby lobby;
+
+    @OneToMany
+    private Set<PlayerHands> hands = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
