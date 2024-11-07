@@ -44,7 +44,9 @@ public class BlackJackLogic {
            for(PlayerHands hand: hands){
                Card c = black.getCards().draw();
                c.setDeck(null);
+               checkAce(hand.getHand(), hand.getScore(), c);
                hand.add(c);
+
                 //c.setPlayerHand(hand);
            }
        }
@@ -65,6 +67,7 @@ public class BlackJackLogic {
         if(c.getNumber().equals("ACE")){
             if(score <= 10)
                 return score + 11;
+            c.setNumber(1);
             return score + 1;
         }
         if(score + c.getValue() > 21) {
@@ -77,6 +80,7 @@ public class BlackJackLogic {
                     nas += card.getValue();
             }
             if(aces > 0 && nas + aces < score){
+                c.setNumber(1);
                 return score + c.getValue() - 10;
             }
         }
