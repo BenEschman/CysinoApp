@@ -70,15 +70,19 @@ public class Card implements Serializable {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
 =======
 >>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
+=======
+>>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
     public void setNumber(int i){
         number = i;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
@@ -86,4 +90,6 @@ public class Card implements Serializable {
 >>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
 =======
 >>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
+=======
+>>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
 }
