@@ -186,8 +186,11 @@ public class BlackjackService {
         }
         response.put("status", "200 ok");
         PlayerHands hand = blj.getHand(user);
-        response.put("card1", hand.getHand().get(0));
-        response.put("card2", hand.getHand().get(1));
+        int i = 0;
+        for(Card c: hand.getHand()){
+            response.put("card" + (i + 1), hand.getHand().get(i));
+            i++;
+        }
         return response;
     }
 
@@ -213,7 +216,7 @@ public class BlackjackService {
         return response;
     }
 
-    public Map<String, Object> getDealer(Long lobbyId, Long userId){
+    public Map<String, Object> getDealer(Long lobbyId){
         Map<String, Object> response = new HashMap<>();
         Lobby l = lobbyService.getLobby(lobbyId);
         if(l == null){
@@ -229,8 +232,11 @@ public class BlackjackService {
         }
         for(PlayerHands hand: bj.getHands()){
             if(hand.getPlayer() == null) {
-                response.put("card1", hand.getHand().get(0));
-                response.put("card2", hand.getHand().get(1));
+                int i = 0;
+                for(Card c: hand.getHand()){
+                    response.put("card" + (i + 1), hand.getHand().get(i));
+                    i++;
+                }
                 response.put("score", hand.getScore());
             }
         }
