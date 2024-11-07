@@ -74,7 +74,7 @@ public class User implements Serializable {
     }
 
     public BlackJackSettings getBlackJackSettings() {
-        return blackJackSettings;
+        return this.blackJackSettings;
     }
 
     public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
