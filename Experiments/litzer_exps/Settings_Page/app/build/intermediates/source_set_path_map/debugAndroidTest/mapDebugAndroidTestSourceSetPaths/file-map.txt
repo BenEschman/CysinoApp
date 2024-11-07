@@ -1,0 +1,5 @@
+com.example.settingspage.test.app-core-1.6.1-0 C:\Users\evan\.gradle\caches\transforms-4\30c711544809a83387dd7cdf75494796\transformed\core-1.6.1\res
+com.example.settingspage.test.app-androidTest-1 C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\build\generated\res\resValues\androidTest\debug
+com.example.settingspage.test.app-mergeDebugAndroidTestResources-2 C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.example.settingspage.test.app-mergeDebugAndroidTestResources-3 C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.example.settingspage.test.app-debugAndroidTest-4 C:\Users\evan\OneDrive\Documents\CS309\3_swarna_5\Experiments\litzer_exps\Settings_Page\app\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources
