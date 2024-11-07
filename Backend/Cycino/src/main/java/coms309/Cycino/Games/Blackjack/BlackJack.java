@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,26 +19,41 @@ public class BlackJack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Lob
+    @OneToOne(cascade = CascadeType.ALL)
     private Deck cards;
 
-    @OneToMany(mappedBy = "id")
-    private Set<PlayerHands> hands;
+    @OneToMany(mappedBy = "blackJack", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<PlayerHands> hands = new HashSet<>();
 
     @OneToOne
     private Lobby lobby;
 
-    public BlackJack(int decks, Lobby l){
-        cards = new Deck(decks);
+   // private Long gameHist;
+
+    public BlackJack(){
 
     }
+
+    public BlackJack(Lobby l, Deck d){
+        cards = d;
+        lobby = l;
+        //this.gameHist = gameHist;
+
+    }
+
+//    public Long getGameHist(){
+//        return gameHist;
+//    }
 
     public Set<PlayerHands> getHands() {
         return hands;
     }
 
     public PlayerHands getHand(User u){
+        System.out.println(hands);
         for(PlayerHands hand: hands){
+            if(hand.getPlayer() == null)
+                continue;
             if(hand.getPlayer().getId() == u.getId() && !hand.stand())
                 return hand;
         }
@@ -53,6 +69,15 @@ public class BlackJack {
     }
 
     public void setHands(Set<PlayerHands> hands){
-        this.hands = hands;
+        this.hands.addAll(hands);
+    }
+
+    public long getId(){
+        return id;
+    }
+
+    public void deleteHands(){
+        hands.clear();
+        cards = null;
     }
 }

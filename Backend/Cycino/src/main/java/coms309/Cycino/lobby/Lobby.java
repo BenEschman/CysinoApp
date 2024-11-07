@@ -3,6 +3,7 @@ package coms309.Cycino.lobby;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,7 +14,7 @@ public class Lobby {
     private long lobbyId;
 
     @OneToMany
-    private Set<User> players;
+    private Set<User> players = new HashSet<>();
 
     private Long gameId;
 

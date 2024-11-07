@@ -22,37 +22,51 @@ public class Blackjackcontroller {
         return bjs.createGame(deck, lobby);
     }
 
-    @PutMapping("/blackjack/{lobby}/hit/{userId}")
+    @PutMapping("/blackjack/hit/{lobby}/{userId}")
     public Map<String, Object> hit(@PathVariable Long lobby, @PathVariable Long userId){
         return bjs.hit(lobby, userId);
     }
-    @PutMapping("/blackjack/{lobby}/stand")
+    @PutMapping("/blackjack/stand/{lobby}/{userId}")
     public Map<String, Object> stand(@PathVariable Long lobby, @PathVariable Long userId){
         return bjs.stand(lobby, userId);
     }
 
-    @PutMapping("/blackjack/{lobby}/double")
+    @PutMapping("/blackjack/double/{lobby}/{userId}")
     public Map<String, Object> doubleBlackJack(@PathVariable Long lobby, @PathVariable Long userId){
         return bjs.dou(lobby, userId);
     }
-    @PutMapping("/blackjack/{lobby}/split")
+    @PutMapping("/blackjack/split/{lobby}/{userId}")
     public Map<String, Object> Split(@PathVariable Long lobby, @PathVariable Long userId){
         return bjs.split(lobby, userId);
     }
 
     @DeleteMapping("/blackjack/delete/{lobby}")
-    public Map<String, Object> delete(Long lobby){
+    public Map<String, Object> delete(@PathVariable Long lobby){
         return bjs.deleteGame(lobby);
     }
 
     @PutMapping("/blackjack/deal/{lobby}")
-    public Map<String, Object> deal(Long lobbyId){
-        return bjs.start(lobbyId);
+    public Map<String, Object> deal(@PathVariable Long lobby){
+        return bjs.start(lobby);
     }
 
-    @GetMapping("/blackjack/getHand/{lobby}/{userId}")
+    @PutMapping("/blackjack/finish/{lobby}")
+    public Map<String, Object> finish(@PathVariable Long lobby){
+        return bjs.finish(lobby);
+    }
+
+    @GetMapping("/blackjack/gethand/{lobby}/{userId}")
     public Map<String, Object> getHand(@PathVariable Long lobby, @PathVariable Long userId){
         return bjs.getHand(lobby, userId);
+    }
+
+    @GetMapping("/blackjack/getdealer/{lobby}")
+    public Map<String, Object> getDealer(@PathVariable Long lobby){
+        return bjs.getDealer(lobby);
+    }
+    @GetMapping("/blackjack/gethands/{lobby}")
+    public Map<String, Object> gethands(@PathVariable Long lobby){
+        return bjs.getHands(lobby);
     }
 
 
