@@ -3,6 +3,8 @@ package coms309.Cycino.Games.Blackjack;
 import coms309.Cycino.Games.GameLogic.*;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.lobby.LobbyService;
+import coms309.Cycino.stats.GameHistory;
+import coms309.Cycino.stats.GameHistoryService;
 import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,11 @@ public class BlackjackService {
     private UserService userService;
     @Autowired
     private DeckService ds;
+<<<<<<< HEAD
+=======
+    @Autowired
+    private GameHistoryService histService;
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 
     public HashSet<PlayerHands> saveRepo(Lobby l, BlackJack bj){
         HashSet<PlayerHands> hands = new HashSet<>();
@@ -41,7 +48,12 @@ public class BlackjackService {
         Map<String, Object> response = new HashMap<>();
         Lobby l = (Lobby) lobbyService.getLobby(lobbyId);
         Deck d = ds.start(decks);
+<<<<<<< HEAD
         BlackJack blackJack = new BlackJack(l, d);
+=======
+        Long i = histService.startGame("Blackjack", l.getPlayers());
+        BlackJack blackJack = new BlackJack(l, d, i);
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
         blackJackRepo.save(blackJack);
         l.setGameId(blackJack.getId());
         blackJack.setHands(saveRepo(l, blackJack));
@@ -74,6 +86,10 @@ public class BlackjackService {
         ds.delete(blj.getCards());
         blj.deleteHands();
         blackJackRepo.save(blj);
+<<<<<<< HEAD
+=======
+        histService.endGame(blj.getGameHist());
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
         blackJackRepo.delete(blj);
         lobbyService.updateGameId(null, l);
         response.put("status", "200 ok");

@@ -65,4 +65,8 @@ public class GameHistory {
         duration = Duration.between(startTime,endTime);
     }
 
+    public long getId(){
+        return id;
+    }
+
 }

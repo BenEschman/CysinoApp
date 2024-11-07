@@ -28,6 +28,7 @@ public class BlackJack {
     @OneToOne
     private Lobby lobby;
 
+<<<<<<< HEAD
     public BlackJack(){
 
     }
@@ -35,7 +36,23 @@ public class BlackJack {
     public BlackJack(Lobby l, Deck d){
         cards = d;
         lobby = l;
+=======
+    private Long gameHist;
+>>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 
+    public BlackJack(){
+
+    }
+
+    public BlackJack(Lobby l, Deck d, Long gameHist){
+        cards = d;
+        lobby = l;
+        this.gameHist = gameHist;
+
+    }
+
+    public Long getGameHist(){
+        return gameHist;
     }
 
     public Set<PlayerHands> getHands() {
