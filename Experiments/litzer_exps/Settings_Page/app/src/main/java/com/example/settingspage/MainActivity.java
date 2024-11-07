@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
     private Button accountSettingsButton;
     private Switch onlineStatusSwitch;
     private Button resetLeaderboardButton;
+    private Button updateDealerStandsOnButton;
+    private Button updateMinBetButton;
+    private Button updateMaxBetButton;
+    private Button updateNumberOfDecksButton;
+    private EditText dealerStandsOnEdit;
+    private EditText minBetEdit;
+    private EditText maxBetEdit;
+    private EditText numberOfDecksEdit;
+    private int userID = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
         accountSettingsButton = findViewById(R.id.accountSettingsButton);
         onlineStatusSwitch = findViewById(R.id.onlineStatusSwitch);
         resetLeaderboardButton = findViewById(R.id.resetLeaderboardButton); // Added
+        updateDealerStandsOnButton = findViewById(R.id.updateDealerStandOnButton);
+        updateMinBetButton = findViewById(R.id.updateMinBetButton);
+        updateMaxBetButton = findViewById(R.id.updateMaxBetButton);
+        updateNumberOfDecksButton = findViewById(R.id.updateNumberOfDecksButton);
+        updateDealerStandsOnButton = findViewById(R.id.updateDealerStandOnButton);
+        dealerStandsOnEdit = findViewById(R.id.dealerStandOnEdit);
+        minBetEdit = findViewById(R.id.minBetEdit);
+        maxBetEdit = findViewById(R.id.maxBetEdit);
+        numberOfDecksEdit = findViewById(R.id.numberOfDecksEdit);
+
 
         // Set the initial brightness level for this activity
         int savedBrightnessLevel = getSharedPreferences("AppSettingsPrefs", MODE_PRIVATE)
@@ -122,6 +143,91 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        updateNumberOfDecksButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numberOfDecksValue = numberOfDecksEdit.getText().toString();
+                if (!numberOfDecksValue.isEmpty()) {
+                    try {
+                        int value = Integer.parseInt(numberOfDecksValue);
+                        if (value >= 1) {
+                            //updateDealerStandsOn(value);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Please enter a value between 15 and 21", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(MainActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Please enter a value", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        updateMaxBetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String minBetValue = minBetEdit.getText().toString();
+                if (!minBetValue.isEmpty()) {
+                    try {
+                        int value = Integer.parseInt(minBetValue);
+                        if (value >= 1) {
+                            //updateDealerStandsOn(value);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Please enter a value greater than zero", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(MainActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Please enter a value", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        updateMinBetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String minBetValue = minBetEdit.getText().toString();
+                if (!minBetValue.isEmpty()) {
+                    try {
+                        int value = Integer.parseInt(minBetValue);
+                        if (value >= 1) {
+                            updateMinBetValue(value);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(MainActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Please enter a value", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        updateDealerStandsOnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String dealerStandOnValue = dealerStandsOnEdit.getText().toString();
+                if (!dealerStandOnValue.isEmpty()) {
+                    try {
+                        int value = Integer.parseInt(dealerStandOnValue);
+                        if (value >= 15 && value <= 21) {
+                            updateDealerStandOn(value);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Please enter a value between 15 and 21", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(MainActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Please enter a value", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
         onlineStatusSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -135,11 +241,13 @@ public class MainActivity extends AppCompatActivity {
                 handleNotificationsSwitchChange(isChecked);
             }
         });
+
     }
+
 
     private void handleNotificationsSwitchChange(boolean isEnabled) {
         if (isEnabled) {
-            String url = "http://coms-3090-052.class.las.iastate.edu:8080/" ;  //Add user settings endpoint
+            String url = "http://coms-3090-052.class.las.iastate.edu:8080/";  //Add user settings endpoint
             JSONObject jsonBody = new JSONObject();
             try {
                 jsonBody.put("isEnabled", isEnabled);
@@ -205,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleOnlineStatusSwitchChange(boolean isEnabled) {
         if (isEnabled) {
-            String url = "http://coms-3090-052.class.las.iastate.edu:8080/" ;  //Add user settings endpoint
+            String url = "http://coms-3090-052.class.las.iastate.edu:8080/";  //Add user settings endpoint
             JSONObject jsonBody = new JSONObject();
             try {
                 jsonBody.put("isEnabled", isEnabled);
@@ -247,5 +355,83 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-        // Update in user settings database table if needed.
+    // Update in user settings database table if needed.
+
+    private void updateDealerStandOn(final int newDealerStandOn) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080//gameSettings/blackjack/user/" + userID + "/update";
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("dealerStandOn", newDealerStandOn);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("AccountSettings", "Server Response: " + response.toString());
+                        try {
+                            String status = response.getString("status");
+                            if (status.equals("200 ok")) {
+                                Toast.makeText(getApplicationContext(), "Phone number has been updated.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            String errorMsg = new String(error.networkResponse.data);
+                            Log.e("VolleyError", errorMsg);
+                        }
+                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }) {
+        };
     }
+
+    private void updateMinBetValue(final int newMinBetValue) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080//gameSettings/blackjack/user/" + userID + "/update";
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("minBet", newMinBetValue);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("AccountSettings", "Server Response: " + response.toString());
+                        try {
+                            String status = response.getString("status");
+                            if (status.equals("200 ok")) {
+                                Toast.makeText(getApplicationContext(), "Phone number has been updated.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            String errorMsg = new String(error.networkResponse.data);
+                            Log.e("VolleyError", errorMsg);
+                        }
+                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }) {
+        };
+    }
+}
