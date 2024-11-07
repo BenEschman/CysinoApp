@@ -25,41 +25,8 @@ public class BlackjackService {
     private UserService userService;
     @Autowired
     private DeckService ds;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     @Autowired
     private GameHistoryService histService;
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-    @Autowired
-    private GameHistoryService histService;
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-    @Autowired
-    private GameHistoryService histService;
->>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
-=======
-    @Autowired
-    private GameHistoryService histService;
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
-    @Autowired
-    private GameHistoryService histService;
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
-    @Autowired
-    private GameHistoryService histService;
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
-    @Autowired
-    private GameHistoryService histService;
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
 
     public HashSet<PlayerHands> saveRepo(Lobby l, BlackJack bj){
         HashSet<PlayerHands> hands = new HashSet<>();
@@ -78,64 +45,12 @@ public class BlackjackService {
         Map<String, Object> response = new HashMap<>();
         Lobby l = (Lobby) lobbyService.getLobby(lobbyId);
         Deck d = ds.start(decks);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        BlackJack blackJack = new BlackJack(l, d);
-=======
-        Long i = histService.startGame("Blackjack", l.getPlayers());
-        BlackJack blackJack = new BlackJack(l, d, i);
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-        Long i = histService.startGame("Blackjack", l.getPlayers());
-        BlackJack blackJack = new BlackJack(l, d, i);
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-        Long i = histService.startGame("Blackjack", l.getPlayers());
-        BlackJack blackJack = new BlackJack(l, d, i);
->>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
-        blackJackRepo.save(blackJack);
-        l.setGameId(blackJack.getId());
-        blackJack.setHands(saveRepo(l, blackJack));
-        System.out.println(blackJack.getHands());
-        blackJackRepo.save(blackJack);
-        System.out.println(blackJack.getHands());
-=======
         //Long i = histService.startGame("Blackjack", l.getPlayers());
         BlackJack blackJack = new BlackJack(l, d);
         blackJackRepo.save(blackJack);
         l.setGameId(blackJack.getId());
         blackJack.setHands(saveRepo(l, blackJack));
         blackJackRepo.save(blackJack);
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
-        //Long i = histService.startGame("Blackjack", l.getPlayers());
-        BlackJack blackJack = new BlackJack(l, d);
-        blackJackRepo.save(blackJack);
-        l.setGameId(blackJack.getId());
-        blackJack.setHands(saveRepo(l, blackJack));
-        blackJackRepo.save(blackJack);
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
-        //Long i = histService.startGame("Blackjack", l.getPlayers());
-        BlackJack blackJack = new BlackJack(l, d);
-        blackJackRepo.save(blackJack);
-        l.setGameId(blackJack.getId());
-        blackJack.setHands(saveRepo(l, blackJack));
-        blackJackRepo.save(blackJack);
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
-        //Long i = histService.startGame("Blackjack", l.getPlayers());
-        BlackJack blackJack = new BlackJack(l, d);
-        blackJackRepo.save(blackJack);
-        l.setGameId(blackJack.getId());
-        blackJack.setHands(saveRepo(l, blackJack));
-        blackJackRepo.save(blackJack);
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
         response.put("status", "200 ok");
         response.put("blackjack", blackJackRepo.findById(blackJack.getId()));
         return response;
@@ -162,34 +77,7 @@ public class BlackjackService {
         ds.delete(blj.getCards());
         blj.deleteHands();
         blackJackRepo.save(blj);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        histService.endGame(blj.getGameHist());
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-        histService.endGame(blj.getGameHist());
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-        histService.endGame(blj.getGameHist());
->>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
-=======
         //histService.endGame(blj.getGameHist());
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
-        //histService.endGame(blj.getGameHist());
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
-        //histService.endGame(blj.getGameHist());
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
-        //histService.endGame(blj.getGameHist());
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
         blackJackRepo.delete(blj);
         lobbyService.updateGameId(null, l);
         response.put("status", "200 ok");
@@ -307,22 +195,7 @@ public class BlackjackService {
             response.put("card" + (i + 1), hand.getHand().get(i));
             i++;
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
         response.put("score", hand.getScore());
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
-        response.put("score", hand.getScore());
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
-        response.put("score", hand.getScore());
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
-        response.put("score", hand.getScore());
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
         return response;
     }
 
@@ -390,20 +263,6 @@ public class BlackjackService {
             return response;
         }
         response.put("status", "200 ok");
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        System.out.println(blj.getId());
-        System.out.println(blj.getHands());
-=======
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
         Set<PlayerHands> hands = blj.getHands();
         response.put("hands", hands);
         return response;
@@ -440,36 +299,12 @@ public class BlackjackService {
         for(PlayerHands hand: blj.getHands()){
             if(hand == playerHands)
                 continue;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if(hand.getScore() > 21 || hand.getScore() < playerHands.getScore()) response.put(hand.getPlayer().getId() + "", "lose");
-            else if(hand.getScore() > playerHands.getScore())response.put(hand.getPlayer().getId() + "", "win");
-            else if(hand.getScore() == playerHands.getScore()) response.put(hand.getPlayer().getId() + "", "push");
-=======
-=======
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
             if(hand.getScore() > 21 || hand.getScore() < playerHands.getScore() && playerHands.getScore() <= 21)
                 response.put(hand.getPlayer().getId() + "", "lose");
             else if(hand.getScore() > playerHands.getScore())
                 response.put(hand.getPlayer().getId() + "", "win");
             else if(hand.getScore() == playerHands.getScore())
                 response.put(hand.getPlayer().getId() + "", "push");
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
         }
         return response;
     }

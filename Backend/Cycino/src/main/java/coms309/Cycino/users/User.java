@@ -79,62 +79,9 @@ public class User implements Serializable {
         this.blackJackSettings = blackJackSettings;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public BlackJackSettings getBlackJackSettings() {return this.blackJackSettings;}
-
-=======
     public BlackJackSettings getBlackJackSettings() {
         return this.blackJackSettings;
     }
->>>>>>> 3ceb9f608fe498d31b25b105b0d36f93e0c15cfd
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> 3ceb9f608fe498d31b25b105b0d36f93e0c15cfd
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
-    public BlackJackSettings getBlackJackSettings() {
-        return this.blackJackSettings;
-    }
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
 
     public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
         this.blackJackSettings = blackJackSettings;

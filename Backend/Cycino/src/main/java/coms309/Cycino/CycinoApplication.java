@@ -9,39 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @SpringBootApplication
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-//@ComponentScan(basePackages = {"com.example.demo.websocket"})
-=======
->>>>>>> origin/main
-=======
->>>>>>> 3ceb9f608fe498d31b25b105b0d36f93e0c15cfd
-=======
->>>>>>> 3ceb9f608fe498d31b25b105b0d36f93e0c15cfd
-=======
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
->>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
-=======
->>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
-=======
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
 @ComponentScan(basePackages = "coms309.Cycino")
-@ComponentScan(basePackages = "coms309.Cycino.WebSocketConfig")
 public class CycinoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CycinoApplication.class, args);

@@ -35,10 +35,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".UserSettings"
-            android:exported="false" />
-
-        <activity
             android:name=".AccountSettings"
             android:exported="false" />
 

@@ -44,31 +44,9 @@ public class BlackJackLogic {
            for(PlayerHands hand: hands){
                Card c = black.getCards().draw();
                c.setDeck(null);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-               hand.add(c);
-=======
                checkAce(hand.getHand(), hand.getScore(), c);
                hand.add(c);
 
->>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
-=======
-               checkAce(hand.getHand(), hand.getScore(), c);
-               hand.add(c);
-
->>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
-=======
-               checkAce(hand.getHand(), hand.getScore(), c);
-               hand.add(c);
-
->>>>>>> b1d5e45cf85089300a3c78542073b0179e96731f
-=======
-               checkAce(hand.getHand(), hand.getScore(), c);
-               hand.add(c);
-
->>>>>>> 6b53d5c330ebe1f1d80c69426d6fe4832c15fe2e
                 //c.setPlayerHand(hand);
            }
        }
