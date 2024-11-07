@@ -60,9 +60,9 @@ public class Blackjackcontroller {
         return bjs.getHand(lobby, userId);
     }
 
-    @GetMapping("/blackjack/getdealer/{lobby}/{userId}")
-    public Map<String, Object> getDealer(@PathVariable Long lobby, @PathVariable Long userId){
-        return bjs.getDealer(lobby, userId);
+    @GetMapping("/blackjack/getdealer/{lobby}")
+    public Map<String, Object> getDealer(@PathVariable Long lobby){
+        return bjs.getDealer(lobby);
     }
     @GetMapping("/blackjack/gethands/{lobby}")
     public Map<String, Object> gethands(@PathVariable Long lobby){
