@@ -45,12 +45,18 @@ public class BlackJackLogic {
                Card c = black.getCards().draw();
                c.setDeck(null);
 <<<<<<< HEAD
+<<<<<<< HEAD
                hand.add(c);
 =======
                checkAce(hand.getHand(), hand.getScore(), c);
                hand.add(c);
 
 >>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
+=======
+               checkAce(hand.getHand(), hand.getScore(), c);
+               hand.add(c);
+
+>>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
                 //c.setPlayerHand(hand);
            }
        }

@@ -68,10 +68,16 @@ public class Card implements Serializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
     public void setNumber(int i){
         number = i;
     }
 
+<<<<<<< HEAD
 >>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
+=======
+>>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
 }

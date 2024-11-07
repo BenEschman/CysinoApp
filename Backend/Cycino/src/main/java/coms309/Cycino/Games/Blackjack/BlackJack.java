@@ -32,6 +32,7 @@ public class BlackJack {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public BlackJack(){
 =======
     private Long gameHist;
@@ -85,6 +86,14 @@ public class BlackJack {
 >>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
     }
 
+=======
+   // private Long gameHist;
+
+    public BlackJack(){
+
+    }
+
+>>>>>>> 2c2459bc3ce318e346129b7e6dd1ed0d3138f307
     public BlackJack(Lobby l, Deck d){
         cards = d;
         lobby = l;
