@@ -27,6 +27,7 @@ public class BlackjackService {
     private DeckService ds;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     @Autowired
     private GameHistoryService histService;
@@ -35,6 +36,10 @@ public class BlackjackService {
     @Autowired
     private GameHistoryService histService;
 >>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
+=======
+    @Autowired
+    private GameHistoryService histService;
+>>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
 
     public HashSet<PlayerHands> saveRepo(Lobby l, BlackJack bj){
         HashSet<PlayerHands> hands = new HashSet<>();
@@ -55,6 +60,7 @@ public class BlackjackService {
         Deck d = ds.start(decks);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         BlackJack blackJack = new BlackJack(l, d);
 =======
         Long i = histService.startGame("Blackjack", l.getPlayers());
@@ -64,6 +70,10 @@ public class BlackjackService {
         Long i = histService.startGame("Blackjack", l.getPlayers());
         BlackJack blackJack = new BlackJack(l, d, i);
 >>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
+=======
+        Long i = histService.startGame("Blackjack", l.getPlayers());
+        BlackJack blackJack = new BlackJack(l, d, i);
+>>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
         blackJackRepo.save(blackJack);
         l.setGameId(blackJack.getId());
         blackJack.setHands(saveRepo(l, blackJack));
@@ -98,12 +108,16 @@ public class BlackjackService {
         blackJackRepo.save(blj);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         histService.endGame(blj.getGameHist());
 >>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
 =======
         histService.endGame(blj.getGameHist());
 >>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
+=======
+        histService.endGame(blj.getGameHist());
+>>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
         blackJackRepo.delete(blj);
         lobbyService.updateGameId(null, l);
         response.put("status", "200 ok");

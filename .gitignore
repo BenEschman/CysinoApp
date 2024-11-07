@@ -1,6 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,android,maven
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,android,maven
 
+# Test
+Experiments/litzer_exps/Settings_Page/app/build/
+/Experiments/litzer_exps/Settings_Page/app/build/
+
+
 ### Android ###
 # Gradle files
 .gradle/

@@ -30,10 +30,14 @@ public class BlackJack {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public BlackJack(){
 =======
     private Long gameHist;
 >>>>>>> 47a8e53f595138108cedba48c49442e76e6cd5ae
+=======
+    private Long gameHist;
+>>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
 
     public BlackJack(){
 
@@ -48,6 +52,7 @@ public class BlackJack {
 
     public Long getGameHist(){
         return gameHist;
+<<<<<<< HEAD
     }
 
     public BlackJack(Lobby l, Deck d){
@@ -70,6 +75,8 @@ public class BlackJack {
 
     public Long getGameHist(){
         return gameHist;
+=======
+>>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
     }
 
     public Set<PlayerHands> getHands() {
