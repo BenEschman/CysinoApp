@@ -1,6 +1,7 @@
 package coms309.Cycino.Games.GameLogic;
 
 import coms309.Cycino.Enums;
+<<<<<<< HEAD
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -27,6 +28,17 @@ public class Card implements Serializable {
     }
     public Card(String number, Enums.SUIT suit, Deck deck){
         this.deck = deck;
+=======
+
+public class Card {
+
+    private final String value;
+    private final Enums.SUIT suit;
+    private int number;
+
+
+    public Card(String number, Enums.SUIT suit){
+>>>>>>> 33-blackjack-game-view
         value = number;
         this.suit = suit;
         try{
@@ -58,6 +70,7 @@ public class Card implements Serializable {
     public String img(){
         return value.toLowerCase() + "_of_" + suit.toString().toLowerCase() +".png";
     }
+<<<<<<< HEAD
 
     public void setDeck(Deck d){
         this.deck = d;
@@ -71,4 +84,6 @@ public class Card implements Serializable {
         number = i;
     }
 
+=======
+>>>>>>> 33-blackjack-game-view
 }
