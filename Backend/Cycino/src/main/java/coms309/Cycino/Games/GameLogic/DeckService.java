@@ -43,7 +43,7 @@ public class DeckService {
                 deck.addCard(c);
 
             }
-            for(int j = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
                 Card c = new Card(Enums.VALUE.values()[j].toString(), Enums.SUIT.values()[i], deck);
                 list.add(c);
                 repo.save(c);

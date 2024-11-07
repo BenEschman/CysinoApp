@@ -3,6 +3,8 @@ package coms309.Cycino.Games.Blackjack;
 import coms309.Cycino.Games.GameLogic.*;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.lobby.LobbyService;
+import coms309.Cycino.stats.GameHistory;
+import coms309.Cycino.stats.GameHistoryService;
 import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class BlackjackService {
     private UserService userService;
     @Autowired
     private DeckService ds;
+    @Autowired
+    private GameHistoryService histService;
 
     public HashSet<PlayerHands> saveRepo(Lobby l, BlackJack bj){
         HashSet<PlayerHands> hands = new HashSet<>();
@@ -41,7 +45,8 @@ public class BlackjackService {
         Map<String, Object> response = new HashMap<>();
         Lobby l = (Lobby) lobbyService.getLobby(lobbyId);
         Deck d = ds.start(decks);
-        BlackJack blackJack = new BlackJack(l, d);
+        Long i = histService.startGame("Blackjack", l.getPlayers());
+        BlackJack blackJack = new BlackJack(l, d, i);
         blackJackRepo.save(blackJack);
         l.setGameId(blackJack.getId());
         blackJack.setHands(saveRepo(l, blackJack));
@@ -74,6 +79,7 @@ public class BlackjackService {
         ds.delete(blj.getCards());
         blj.deleteHands();
         blackJackRepo.save(blj);
+        histService.endGame(blj.getGameHist());
         blackJackRepo.delete(blj);
         lobbyService.updateGameId(null, l);
         response.put("status", "200 ok");
@@ -186,8 +192,11 @@ public class BlackjackService {
         }
         response.put("status", "200 ok");
         PlayerHands hand = blj.getHand(user);
-        response.put("card1", hand.getHand().get(0));
-        response.put("card2", hand.getHand().get(1));
+        int i = 0;
+        for(Card c: hand.getHand()){
+            response.put("card" + (i + 1), hand.getHand().get(i));
+            i++;
+        }
         return response;
     }
 
@@ -213,7 +222,7 @@ public class BlackjackService {
         return response;
     }
 
-    public Map<String, Object> getDealer(Long lobbyId, Long userId){
+    public Map<String, Object> getDealer(Long lobbyId){
         Map<String, Object> response = new HashMap<>();
         Lobby l = lobbyService.getLobby(lobbyId);
         if(l == null){
@@ -229,8 +238,11 @@ public class BlackjackService {
         }
         for(PlayerHands hand: bj.getHands()){
             if(hand.getPlayer() == null) {
-                response.put("card1", hand.getHand().get(0));
-                response.put("card2", hand.getHand().get(1));
+                int i = 0;
+                for(Card c: hand.getHand()){
+                    response.put("card" + (i + 1), hand.getHand().get(i));
+                    i++;
+                }
                 response.put("score", hand.getScore());
             }
         }
