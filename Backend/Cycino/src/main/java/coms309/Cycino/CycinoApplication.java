@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @SpringBootApplication
-@ServletComponentScan
+//@ComponentScan(basePackages = {"com.example.demo.websocket"})
 @ComponentScan(basePackages = "coms309.Cycino")
 @ComponentScan(basePackages = "coms309.Cycino.WebSocketConfig")
 public class CycinoApplication {
