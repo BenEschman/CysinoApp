@@ -67,4 +67,8 @@ public class Card implements Serializable {
         this.hand = hand;
     }
 
+    public void setNumber(int i){
+        number = i;
+    }
+
 }
