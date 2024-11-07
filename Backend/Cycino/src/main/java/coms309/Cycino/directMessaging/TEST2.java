@@ -1,4 +1,10 @@
-package coms309.Cycino;
+package coms309.Cycino.directMessaging;
+
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -9,12 +15,6 @@ import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
-import jakarta.websocket.server.PathParam;
-import jakarta.websocket.server.ServerEndpoint;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * Represents a WebSocket chat server for handling real-time communication
@@ -30,47 +30,48 @@ import org.springframework.stereotype.Component;
  * The server provides functionality for broadcasting messages to all connected
  * users and sending messages to specific users.
  */
-@ServerEndpoint("/chat/{username}")
+@ServerEndpoint("/test2/{user1}/{user2}")
 @Component
-public class ChatServer {
+public class TEST2 {
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
-    private static Map < Session, String > sessionUsernameMap = new Hashtable < > ();
-    private static Map < String, Session > usernameSessionMap = new Hashtable < > ();
+    private static Map<Session, String> sessionDmMap = new Hashtable<>();
+    private static Map<String, Session> dmSessionMap = new Hashtable<>();
 
     // server side logger
-    private final Logger logger = LoggerFactory.getLogger(ChatServer.class);
+    private final Logger logger = LoggerFactory.getLogger(DirectMessagingServer.class);
 
     /**
      * This method is called when a new WebSocket connection is established.
      *
      * @param session represents the WebSocket session for the connected user.
-     * @param username username specified in path parameter.
+     * @param user1 username of user 1 specified in path parameter.
+     * @param user2 username of user 2 specified in path parameter.
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) throws IOException {
-
+    public void onOpen(Session session, @PathParam("user1") String user1, @PathParam("user2") String user2) throws IOException {
+        String dm = user1+"_"+user2;
         // server side log
-        logger.info("[onOpen] " + username);
+        logger.info("[onOpen] " + dm);
 
         // Handle the case of a duplicate username
-        if (usernameSessionMap.containsKey(username)) {
-            session.getBasicRemote().sendText("Username already exists");
+        if (dmSessionMap.containsKey(dm)) {
+            session.getBasicRemote().sendText("This dm connection is already opened somewhere else!");
             session.close();
         }
         else {
             // map current session with username
-            sessionUsernameMap.put(session, username);
+            sessionDmMap.put(session, dm);
 
             // map current username with session
-            usernameSessionMap.put(username, session);
+            dmSessionMap.put(dm, session);
 
             // send to the user joining in
-            sendMessageToPArticularUser(username, "Welcome to the chat server, "+username);
+            sendMessageToParticularUser(dm, "Welcome to the chat server, "+ dm);
 
             // send to everyone in the chat
-            broadcast("User: " + username + " has Joined the Chat");
+            broadcast("User: " + dm + " has Joined the Chat");
         }
     }
 
@@ -83,31 +84,19 @@ public class ChatServer {
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
 
-        // get the username by session
-        String username = sessionUsernameMap.get(session);
+        // get the dm by session
+        String dm = sessionDmMap.get(session);
+        // get user1 & user2
+        String user1 = dm.split("_")[0];
+        String user2 = dm.split("_")[1];
 
         // server side log
-        logger.info("[onMessage] " + username + ": " + message);
+        logger.info("[onMessage] " + dm + ": " + message);
 
-        // Direct message to a user using the format "@username <message>"
-        if (message.startsWith("@")) {
-
-            // split by space
-            String[] split_msg =  message.split("\\s+");
-
-            // Combine the rest of message
-            StringBuilder actualMessageBuilder = new StringBuilder();
-            for (int i = 1; i < split_msg.length; i++) {
-                actualMessageBuilder.append(split_msg[i]).append(" ");
-            }
-            String destUserName = split_msg[0].substring(1);    //@username and get rid of @
-            String actualMessage = actualMessageBuilder.toString();
-            sendMessageToPArticularUser(destUserName, "[DM from " + username + "]: " + actualMessage);
-            sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
-        }
-        else { // Message to whole chat
-            broadcast(username + ": " + message);
-        }
+        // Direct message to a user using the dm & user1/user2 information
+        String destination = user2+"_"+user1;
+        sendMessageToParticularUser(destination, user1 + ": " + message);
+        sendMessageToParticularUser(dm,user1 + ": " + message);
     }
 
     /**
@@ -119,17 +108,17 @@ public class ChatServer {
     public void onClose(Session session) throws IOException {
 
         // get the username from session-username mapping
-        String username = sessionUsernameMap.get(session);
+        String username = sessionDmMap.get(session);
 
         // server side log
         logger.info("[onClose] " + username);
 
         // remove user from memory mappings
-        sessionUsernameMap.remove(session);
-        usernameSessionMap.remove(username);
+        sessionDmMap.remove(session);
+        dmSessionMap.remove(username);
 
         // send the message to chat
-        broadcast(username + " had to go and has disconnected");
+        broadcast(username + " disconnected");
     }
 
     /**
@@ -142,7 +131,7 @@ public class ChatServer {
     public void onError(Session session, Throwable throwable) {
 
         // get the username from session-username mapping
-        String username = sessionUsernameMap.get(session);
+        String username = sessionDmMap.get(session);
 
         // do error handling here
         logger.info("[onError]" + username + ": " + throwable.getMessage());
@@ -151,14 +140,25 @@ public class ChatServer {
     /**
      * Sends a message to a specific user in the chat (DM).
      *
-     * @param username The username of the recipient.
+     * @param dm The dm connection of the recipient.
      * @param message  The message to be sent.
      */
-    private void sendMessageToPArticularUser(String username, String message) {
-        try {
-            usernameSessionMap.get(username).getBasicRemote().sendText(message);
-        } catch (IOException e) {
-            logger.info("[DM Exception] " + e.getMessage());
+    private void sendMessageToParticularUser(String dm, String message) {
+        Session session = dmSessionMap.get(dm);
+        if (session != null) {
+            try {
+                dmSessionMap.get(dm).getBasicRemote().sendText(message);
+            } catch (IOException e) {
+                logger.info("[DM Exception] " + e.getMessage());
+            }
+        }
+        else {
+            logger.info("[DM Exception] " + dm + ": " + message + " [ERROR]: dm session not found");
+            // Let the sender know that the receiver is not connected to the chat at the moment.
+            // This is because the receiver has yet to open the correct chat.
+            String user1 = dm.split("_")[0];
+            String user2 = dm.split("_")[1];
+            sendMessageToParticularUser(user2+"_"+user1, "\""+user1+"\""+" is not currently connected to the chat");
         }
     }
 
@@ -168,7 +168,7 @@ public class ChatServer {
      * @param message The message to be broadcasted to all users.
      */
     private void broadcast(String message) {
-        sessionUsernameMap.forEach((session, username) -> {
+        sessionDmMap.forEach((session, username) -> {
             try {
                 session.getBasicRemote().sendText(message);
             } catch (IOException e) {
