@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class PlayerHands implements Serializable {
@@ -13,22 +15,41 @@ public class PlayerHands implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "hand_id", nullable = true)
     private User player;
-    private ArrayList<Card> hand;
+    @OneToMany
+    private Set<Card> hand;
     private int score;
     private boolean stand = false;
     private double bet;
     private boolean split = false;
+    private boolean dealer = false;
 
-    @ManyToOne
-    @JoinColumn(name = "blackjack_id", nullable = false)
+    @ManyToOne(optional = true) // Allow null
+    @JoinColumn(name = "blackjack_id", nullable = true) // Allow null in the database
     private BlackJack blackJack;
 
 
+
+    public PlayerHands(){
+
+    }
     public PlayerHands(User player, BlackJack blackJack){
         this.player = player;
         this.blackJack = blackJack;
-        hand = new ArrayList<>();
+        hand = new HashSet<>();
+    }
+
+    public PlayerHands(BlackJack b){
+        this.blackJack = b;
+        hand = new HashSet<>();
+        dealer = true;
+    }
+
+    public void setBlackJack(BlackJack bj){
+        blackJack = bj;
     }
 
     public int getScore(){
@@ -40,7 +61,7 @@ public class PlayerHands implements Serializable {
     }
 
     public ArrayList<Card> getHand(){
-        return hand;
+        return new ArrayList<>(hand);
     }
 
     public void add(Card c){
@@ -76,7 +97,13 @@ public class PlayerHands implements Serializable {
     }
 
     public Card splitHand(){
-        return hand.remove(1);
+        ArrayList<Card> hand = new ArrayList<>(this.hand);
+        Card c = hand.remove(1);
+        this.hand.remove(c);
+        return c;
     }
 
+    public boolean isDealer(){
+        return dealer;
+    }
 }
