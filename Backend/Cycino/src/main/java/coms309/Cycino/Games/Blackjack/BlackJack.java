@@ -31,6 +31,7 @@ public class BlackJack {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public BlackJack(){
 =======
     private Long gameHist;
@@ -38,6 +39,11 @@ public class BlackJack {
 =======
     private Long gameHist;
 >>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
+=======
+   // private Long gameHist;
+
+    public BlackJack(){
+>>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
 
     public BlackJack(){
 
@@ -78,6 +84,17 @@ public class BlackJack {
 =======
 >>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
     }
+
+    public BlackJack(Lobby l, Deck d){
+        cards = d;
+        lobby = l;
+        //this.gameHist = gameHist;
+
+    }
+
+//    public Long getGameHist(){
+//        return gameHist;
+//    }
 
     public Set<PlayerHands> getHands() {
         return hands;

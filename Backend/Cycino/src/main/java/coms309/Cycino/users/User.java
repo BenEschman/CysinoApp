@@ -84,6 +84,7 @@ public class User implements Serializable {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public BlackJackSettings getBlackJackSettings() {return this.blackJackSettings;}
 
 =======
@@ -111,6 +112,11 @@ public class User implements Serializable {
         return this.blackJackSettings;
     }
 >>>>>>> 3c1ad4b9af669384c9c557ef14089f9628fb63e4
+=======
+    public BlackJackSettings getBlackJackSettings() {
+        return this.blackJackSettings;
+    }
+>>>>>>> fb22897a593f79f28db15feb863178a21fc992f6
 
     public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
         this.blackJackSettings = blackJackSettings;
