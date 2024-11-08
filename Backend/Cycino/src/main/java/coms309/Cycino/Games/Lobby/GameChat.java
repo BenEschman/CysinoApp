@@ -45,10 +45,10 @@ public class GameChat {
             usernameSession.put(username, session);
 
             // send to the user joining in
-            sendMessageToPArticularUser(username, ANSIConstants.GREEN_FG + "Welcome to the chat server, "+username);
+            sendMessageToPArticularUser(username, "Welcome to the chat server, "+username);
 
             // send to everyone in the chat
-            broadcast(ANSIConstants.GREEN_FG + "User: " + username + " has Joined the Chat");
+            broadcast("User: " + username + " has Joined the Chat");
         }
     }
 
@@ -78,7 +78,7 @@ public class GameChat {
             sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
         }
         else { // Message to whole chat
-            broadcast(ANSIConstants.CYAN_FG+  username + ": "+ ANSIConstants.DEFAULT_FG + message);
+            broadcast(username + ": " + message);
         }
     }
 
@@ -96,7 +96,7 @@ public class GameChat {
         usernameSession.remove(username);
 
         // send the message to chat
-        broadcast(ANSIConstants.RED_FG + username + " disconnected");
+        broadcast(username + " disconnected");
     }
 
     @OnError

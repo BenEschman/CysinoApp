@@ -1,19 +1,35 @@
 package coms309.Cycino.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import coms309.Cycino.Enums;
+import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
+import coms309.Cycino.Games.GameLogic.PlayerHands;
 import coms309.Cycino.follow.Follow;
+import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
+<<<<<<< HEAD
+import coms309.Cycino.stats.GameHistory;
+import coms309.Cycino.stats.UserStats;
+import jakarta.persistence.*;
+
+import coms309.Cycino.GameSettings.BlackJack.BlackJackSettingsRepository;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+=======
 import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
 import coms309.Cycino.Enums;
 
 import java.util.HashSet;
 import java.util.List;
+>>>>>>> 33-blackjack-game-view
 import java.util.Set;
 
 @Entity
 @Table(name = "users") // escaping using double quotes for H2 SQL compatibility
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +38,47 @@ public class User {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private double chips;
     @Enumerated(EnumType.STRING)
     private Enums.Roles role = Enums.Roles.BEGINNER;
     private String userBiography;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private BlackJackSettings blackJackSettings;
+
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_user_ID", referencedColumnName = "id")
     private List<Follow> followList;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private List<UserStats> userStatslist;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<UserStats> userStatslist;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private LoginInfo loginInfo;
 
+<<<<<<< HEAD
+    @ManyToOne
+    private Lobby lobby;
+
+    @OneToMany
+    private Set<PlayerHands> hands = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_game_history",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_history_id")
+    )
+    private Set<GameHistory> gameHistories;
+
+
+    public User(){}
+
+    public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo, BlackJackSettings blackJackSettings) {
+=======
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
     private Set<UserStats> userStats = new HashSet<>();
@@ -45,6 +86,7 @@ public class User {
     public User(){}
 
     public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
+>>>>>>> 33-blackjack-game-view
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,42 +95,16 @@ public class User {
         this.userBiography = userBiography;
         this.followList = followList;
         this.loginInfo = loginInfo;
-    }
-/*
-    public User(String firstName, String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.blackJackSettings = blackJackSettings;
     }
 
-    public User(long id, String firstName, String lastName){
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-    public User(long id, String first, String last, String phoneNumber){
-        this.id = id;
-        this.firstName = first;
-        this.lastName = last;
-        this.phoneNumber = phoneNumber;
-    }
-    public User(long id, String first, String last, String phoneNumber, String role){
-        this.id = id;
-        this.firstName = first;
-        this.lastName = last;
-        this.phoneNumber = phoneNumber;
-        this.role = Roles.valueOf(role.toUpperCase());
+    public BlackJackSettings getBlackJackSettings() {
+        return this.blackJackSettings;
     }
 
-    public User(long id, String first, String last, String phoneNumber, String role, List<follow> followList){
-        this.id = id;
-        this.firstName = first;
-        this.lastName = last;
-        this.phoneNumber = phoneNumber;
-        this.role = Roles.valueOf(role.toUpperCase());
-        this.followList = followList;
+    public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
+        this.blackJackSettings = blackJackSettings;
     }
-*/
-
     public List<Follow> getFollowList() {
         return followList;
     }
@@ -171,5 +187,22 @@ public class User {
     }
     public void setId(long id){
         this.id=id;
+    }
+
+
+    public Set<GameHistory> getGameHistories(){
+        return gameHistories;
+    }
+
+    public double getChips(){
+        return chips;
+    }
+
+    public void addGameHistory(GameHistory gameHistory){
+        gameHistories.add(gameHistory);
+    }
+
+    public void addChips(double chips){
+        this.chips += chips;
     }
 }
