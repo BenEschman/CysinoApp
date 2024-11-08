@@ -85,7 +85,7 @@ public class MainSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle back button click
-                Intent intent = new Intent(MainSettingsActivity.this, MainActivity.class);
+                Intent intent = new Intent(MainSettingsActivity.this, HomePageActivity.class);
                 startActivity(intent); // Start the HomePagePlaceholder activity
             }
         });

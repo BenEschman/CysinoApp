@@ -1,16 +1,22 @@
 package com.example.cycino;
 
-import android.media.Image;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,17 +71,18 @@ public class BlackjackActivity extends AppCompatActivity {
     private int dCardNum = 0;
     private int p1CardNum = 0;
 
-    private ImageView d1x1;
-    private ImageView d1x2;
-    private ImageView d1x3;
-    private ImageView d1x4;
-    private ImageView d1x5;
+    private ImageView d1x1, d1x2, d1x3, d1x4, d1x5;
 
-    private ImageView p1x1;
-    private ImageView p1x2;
-    private ImageView p1x3;
-    private ImageView p1x4;
-    private ImageView p1x5;
+    private ImageView p1x1, p1x2, p1x3, p1x4, p1x5;
+
+    private Button sendBtn, chatToggleBtn, backBtn;
+    private EditText msgEtx;
+    private TextView msgTv;
+    private ScrollView chatArea;
+
+    private boolean chatOpen = true;
+    private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/";
+    private String username;
 
     File sdcard;
 
@@ -86,6 +93,8 @@ public class BlackjackActivity extends AppCompatActivity {
         sdcard = Environment.getExternalStorageDirectory();
 
         requestQueue = Volley.newRequestQueue(BlackjackActivity.this);
+
+        String serverUrl = serverURL + "/" + lobbyID + "/" + username;
 
         int numPlayers = 1;
         Integer playerNum = 1;
@@ -115,6 +124,13 @@ public class BlackjackActivity extends AppCompatActivity {
         dealButton = findViewById(R.id.dealButton);
         doubleButton = findViewById(R.id.doubleButton);
 
+        sendBtn = (Button) findViewById(R.id.sendBtn);
+        chatToggleBtn = (Button) findViewById(R.id.backMainBtn);
+        msgEtx = (EditText) findViewById(R.id.msgEdt);
+        msgTv = (TextView) findViewById(R.id.tx1);
+        chatArea = findViewById(R.id.chatView);
+        backBtn = findViewById(R.id.backButton);
+
         hitButton.setText("HIT");
         hitButton.setTextColor(0xFFFFFFFF);
         hitButton.setBackgroundColor(0xFFFF0000);
@@ -143,6 +159,62 @@ public class BlackjackActivity extends AppCompatActivity {
         startButton.setText("START GAME");
         startButton.setTextColor(0xFFFFFFFF);
         startButton.setBackgroundColor(0xFFFF0000);
+
+        Intent serviceIntent = new Intent(this, WebSocketService.class);
+        serviceIntent.setAction("CONNECT");
+        serviceIntent.putExtra("key", "chat1");
+        serviceIntent.putExtra("url", serverUrl);
+        startService(serviceIntent);
+
+        sendBtn.setOnClickListener(v -> {
+
+            String msgStr = msgEtx.getText().toString();
+
+            if (!(msgStr.isEmpty())) {
+
+                // broadcast this message to the WebSocketService
+                // tag it with the key - to specify which WebSocketClient (connection) to send
+                // in this case: "chat1"
+                Intent intent = new Intent("SendWebSocketMessage");
+                intent.putExtra("key", "chat1");
+                intent.putExtra("message", msgStr);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                msgEtx.setText("");
+
+            }
+
+
+        });
+
+        /* back button listener */
+        chatToggleBtn.setOnClickListener(view -> {
+
+                    if (chatOpen) {
+                        sendBtn.setVisibility(View.GONE);
+                        msgEtx.setVisibility(View.GONE);
+                        chatArea.setVisibility(View.GONE);
+                        chatToggleBtn.setText("Open Chat");
+
+                        chatOpen = false;
+                    } else {
+
+                        sendBtn.setVisibility(View.VISIBLE);
+                        msgEtx.setVisibility(View.VISIBLE);
+                        chatArea.setVisibility(View.VISIBLE);
+                        chatToggleBtn.setText("Close Chat");
+
+                        chatOpen = true;
+
+                    }
+                });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(BlackjackActivity.this,HomePageActivity.class);
+                startActivity(i);
+            }
+        });
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -594,6 +666,40 @@ public class BlackjackActivity extends AppCompatActivity {
         Thread thread = new Thread(new MyRunnable());
         thread.start();
     }
+
+        private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String key = intent.getStringExtra("key");
+                if ("chat1".equals(key)) {
+                    String message = intent.getStringExtra("message");
+                    runOnUiThread(() -> {
+                        String s = msgTv.getText().toString();
+                        msgTv.setText(s + message + "\n");
+                        chatArea.fullScroll(View.FOCUS_DOWN);
+
+
+
+                    });
+                }
+
+            }
+        };
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+            LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver,
+                    new IntentFilter("WebSocketMessageReceived"));
+        }
+
+        @Override
+        protected void onStop() {
+            super.onStop();
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
+        }
+
+
 
 }
 
