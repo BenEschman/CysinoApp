@@ -20,7 +20,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.cycino.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,7 +84,7 @@ public class MainSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle back button click
-                Intent intent = new Intent(MainSettingsActivity.this, MainActivity.class);
+                Intent intent = new Intent(MainSettingsActivity.this, FriendsPage_old.class);
                 startActivity(intent); // Start the HomePagePlaceholder activity
             }
         });
