@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#35654D">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,20 +15,23 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text="TextView"
+            android:textColor="@color/white"
             android:textSize="30sp" />
 
         <LinearLayout
             android:id="@+id/friend1LL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/friend1Name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/friend1Profile"
@@ -49,14 +53,16 @@
             android:id="@+id/friend2LL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/friend2Name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/friend2Profile"
@@ -77,14 +83,16 @@
             android:id="@+id/friend3LL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/friend3Name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/friend3Profile"
@@ -100,32 +108,35 @@
                 android:layout_weight="1"
                 android:text="Chat" />
         </LinearLayout>
+
         <LinearLayout
-        android:id="@+id/friend4LL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/friend4Name"
-            android:layout_width="wrap_content"
+            android:id="@+id/friend4LL"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="8"
-            android:text="TextView" />
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-        <Button
-            android:id="@+id/friend4Profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Profile" />
+            <TextView
+                android:id="@+id/friend4Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:text="TextView"
+                android:textColor="@color/white" />
 
-        <Button
-            android:id="@+id/friend4Chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Chat" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/friend4Profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Profile" />
+
+            <Button
+                android:id="@+id/friend4Chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Chat" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

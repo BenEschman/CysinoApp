@@ -92,9 +92,11 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("LoginActivity", "Server Response: " + response.toString());
                         try {
                             String status = response.getString("status");
+                            Integer userID = response.getInt("Id");
                             if (status.equals("200 ok")) {
                                 Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                                 intent.putExtra("USERNAME", username);
+                                intent.putExtra("UUID",userID);
                                 startActivity(intent);
                                 Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_SHORT).show();
                             } else {

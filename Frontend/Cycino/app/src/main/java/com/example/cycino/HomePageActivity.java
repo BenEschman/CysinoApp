@@ -33,6 +33,7 @@ public class HomePageActivity extends AppCompatActivity {
     private Button lobby,leaderboard,friends,settings;
 
     private String username;
+    private Integer UUID;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,7 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         username = intent.getStringExtra("USERNAME");
+        UUID = intent.getIntExtra("UUID",-1);
 
         lobby = findViewById(R.id.lobbyButton);
         leaderboard = findViewById(R.id.leaderboardButton);
@@ -51,6 +53,7 @@ public class HomePageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(HomePageActivity.this,BlackjackActivity.class);
                 i.putExtra("USERNAME",username);
+                i.putExtra("UUID",UUID);
                 startActivity(i);
 
             }
@@ -60,6 +63,7 @@ public class HomePageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(HomePageActivity.this,LeaderboardActivity.class);
                 i.putExtra("USERNAME",username);
+                i.putExtra("UUID",UUID);
                 startActivity(i);
 
             }
@@ -69,6 +73,7 @@ public class HomePageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(HomePageActivity.this,FriendPageActivity.class);
                 i.putExtra("USERNAME",username);
+                i.putExtra("UUID",UUID);
                 startActivity(i);
 
             }
@@ -78,6 +83,7 @@ public class HomePageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(HomePageActivity.this,MainSettingsActivity.class);
                 i.putExtra("USERNAME",username);
+                i.putExtra("UUID",UUID);
                 startActivity(i);
 
             }

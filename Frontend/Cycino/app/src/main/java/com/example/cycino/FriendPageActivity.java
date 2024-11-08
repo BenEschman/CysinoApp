@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +32,12 @@ public class FriendPageActivity extends AppCompatActivity {
     private TextView userName;
     private Button[] chatButton;
     private Button[] profileButton;
+    private LinearLayout[] profileContainer;
     private EditText usernameQuery;
     private RequestQueue requestQueue;
 
-    String currUserName = "FUCKED";
-
     JSONArray friends;
     Integer[] friendsID;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +64,22 @@ public class FriendPageActivity extends AppCompatActivity {
                 findViewById(R.id.friend4Profile),
         };
 
+        profileContainer = new LinearLayout[] {
+                findViewById(R.id.friend1LL),
+                findViewById(R.id.friend2LL),
+                findViewById(R.id.friend3LL),
+                findViewById(R.id.friend4LL),
+        };
+
+        userName = findViewById(R.id.userName);
+
         friendsID = new Integer[4];
 
-        int userID = 1;
+        Intent intent = getIntent();
+
+
+        int userID = intent.getIntExtra("UUID",-1);
+        userName.setText(intent.getStringExtra("USERNAME"));
         getFollowerList(userID);
         //getUserName(userID);
 
@@ -122,6 +134,7 @@ public class FriendPageActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         try {
                             friends = response;
+                            showUserEntries(response.length());
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject follower = response.getJSONObject(i);
                                 Integer followingId = follower.getInt("followingID");
@@ -308,5 +321,12 @@ public class FriendPageActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void showUserEntries(int numEntries) {
+        for (int i = 0; i < numEntries; i++) {
+            profileContainer[i].setVisibility(View.VISIBLE);
+
+        }
     }
 }

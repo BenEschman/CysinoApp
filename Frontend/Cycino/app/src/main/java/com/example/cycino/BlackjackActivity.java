@@ -91,10 +91,11 @@ public class BlackjackActivity extends AppCompatActivity {
         setContentView(R.layout.activity_blackjack);
 
         sdcard = Environment.getExternalStorageDirectory();
-
         requestQueue = Volley.newRequestQueue(BlackjackActivity.this);
 
-        String serverUrl = serverURL + "/" + lobbyID + "/" + username;
+        Intent inIntent = getIntent();
+        username = inIntent.getStringExtra("USERNAME");
+        String serverUrl = serverURL + "/1" + null + "/" + username;
 
         int numPlayers = 1;
         Integer playerNum = 1;
