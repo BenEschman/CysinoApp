@@ -256,8 +256,15 @@
                 android:id="@+id/msgEdt"
                 android:layout_width="320dp"
                 android:layout_height="50dp"
+                android:layout_weight="1"
                 android:hint="message"
                 android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/imageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Image" />
 
             <Button
                 android:id="@+id/sendBtn"

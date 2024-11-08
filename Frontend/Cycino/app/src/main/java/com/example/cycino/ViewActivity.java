@@ -1,10 +1,15 @@
 package com.example.cycino;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -26,10 +31,10 @@ import org.json.JSONObject;
 
 public class ViewActivity extends AppCompatActivity {
 
-    private Button viewButton;
     private Button friendsButton;
     RequestQueue requestQueue;
     private LinearLayout viewLayout;
+    private TextView nameText, biographyText;
 
 
 
@@ -37,40 +42,39 @@ public class ViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
         friendsButton = findViewById(R.id.fPage);
-        viewButton = findViewById(R.id.returnButton);
         viewLayout = findViewById(R.id.layout_view);
+        nameText = findViewById(R.id.userNameText);
+        biographyText = findViewById(R.id.biographyText);
 
 
         requestQueue = Volley.newRequestQueue(ViewActivity.this);
-        viewButton.setText("Edit Profile");
         friendsButton.setText("Return to Friends Page");
 
         Intent intent = getIntent();
         Integer userID = intent.getIntExtra("UUID",0);
+        Integer loggedInUser = intent.getIntExtra("lUUID",0);
+        String userName = intent.getStringExtra("USERNAME");
 
         System.out.println(userID);
 
 
         getOneUser(userID);
+
+
         //getAllUsers();
 
 
 
-        viewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ViewActivity.this, EditActivity.class);
-                intent.putExtra("UID",userID);
-                startActivity(intent);
-            }
-        });
         friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ViewActivity.this, FriendPageActivity.class);
+                intent.putExtra("UUID",loggedInUser);
+                intent.putExtra("USERNAME",userName);
                 startActivity(intent);
             }
         });
+
 
     }
 
@@ -85,55 +89,16 @@ public class ViewActivity extends AppCompatActivity {
         try {
 
             String out = user.getString("firstName") + " " + user.getString("lastName");
+            String biography = user.getString("userBiography");
 
-            nameOut.setText(out);
-            phoneNumOut.setText(user.getString("phoneNumber"));
+            nameText.setText(out);
+            biographyText.setText(biography);
+
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
-
-
-        viewLayout.addView(nameOut);
-        viewLayout.addView(phoneNumOut);
-
-
     }
-
-    private void showAllUsers(JSONArray users) throws JSONException {
-
-        for (int i = 0; i < users.length(); i++) {
-            TextView nameOut = new TextView(this);
-            TextView phoneNumOut = new TextView(this);
-            TextView SPACE = new TextView(this);
-            nameOut.setTextSize(18);
-            phoneNumOut.setTextSize(16);
-
-            SPACE.setText("X");
-            SPACE.setTextColor(0xFFFFFFFF);
-
-            JSONObject user = users.getJSONObject(i);
-
-            try {
-
-                String out = user.getString("firstName") + " " + user.getString("lastName");
-
-                nameOut.setText(out);
-                phoneNumOut.setText(user.getString("phoneNumber"));
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-
-            viewLayout.addView(nameOut);
-            viewLayout.addView(phoneNumOut);
-            viewLayout.addView(SPACE);
-
-        }
-
-    }
-
-
-
 
         private void getOneUser(Integer id) {
             //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
@@ -145,6 +110,7 @@ public class ViewActivity extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
 
+                            showOneUser(response);
 
                         }
                     }, new Response.ErrorListener() {
@@ -159,29 +125,4 @@ public class ViewActivity extends AppCompatActivity {
             requestQueue.add(jsonObjectRequest);
         }
 
-        private void getAllUsers() {
-            String url = "http://coms-3090-052.class.las.iastate.edu:8080/users";
-
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-
-                            try {
-                                showAllUsers(response);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"view failed", Toast.LENGTH_LONG).show();
-                }
-            });
-            requestQueue.add(jsonArrayRequest);
-
-        }
 }

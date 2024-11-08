@@ -9,8 +9,14 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,7 +81,7 @@ public class BlackjackActivity extends AppCompatActivity {
 
     private ImageView p1x1, p1x2, p1x3, p1x4, p1x5;
 
-    private Button sendBtn, chatToggleBtn, backBtn;
+    private Button sendBtn, chatToggleBtn, backBtn, imageBtn;
     private EditText msgEtx;
     private TextView msgTv;
     private ScrollView chatArea;
@@ -131,6 +137,7 @@ public class BlackjackActivity extends AppCompatActivity {
         msgTv = (TextView) findViewById(R.id.tx1);
         chatArea = findViewById(R.id.chatView);
         backBtn = findViewById(R.id.backButton);
+        imageBtn = findViewById(R.id.imageBtn);
 
         hitButton.setText("HIT");
         hitButton.setTextColor(0xFFFFFFFF);
@@ -161,6 +168,18 @@ public class BlackjackActivity extends AppCompatActivity {
         startButton.setTextColor(0xFFFFFFFF);
         startButton.setBackgroundColor(0xFFFF0000);
 
+        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        Log.d("PhotoPicker", "Selected URI: " + uri);
+
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
+                    }
+                });
+
         Intent serviceIntent = new Intent(this, WebSocketService.class);
         serviceIntent.setAction("CONNECT");
         serviceIntent.putExtra("key", "chat1");
@@ -185,6 +204,15 @@ public class BlackjackActivity extends AppCompatActivity {
             }
 
 
+        });
+
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickMedia.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
+            }
         });
 
         /* back button listener */
@@ -674,14 +702,19 @@ public class BlackjackActivity extends AppCompatActivity {
                 String key = intent.getStringExtra("key");
                 if ("chat1".equals(key)) {
                     String message = intent.getStringExtra("message");
-                    runOnUiThread(() -> {
-                        String s = msgTv.getText().toString();
-                        msgTv.setText(s + message + "\n");
-                        chatArea.fullScroll(View.FOCUS_DOWN);
+
+                    if (message.contains("IMG")) {
+
+                    }
+                    else {
+                        runOnUiThread(() -> {
+                            String s = msgTv.getText().toString();
+                            msgTv.setText(s + message + "\n");
+                            chatArea.fullScroll(View.FOCUS_DOWN);
 
 
-
-                    });
+                        });
+                    }
                 }
 
             }

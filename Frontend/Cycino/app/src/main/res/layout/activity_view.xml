@@ -12,11 +12,32 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/returnButton"
+        <TextView
+            android:id="@+id/userNameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:paddingTop="40dp"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/biographyTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Biography"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/biographyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="penis"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/fPage"

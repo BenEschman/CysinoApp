@@ -79,7 +79,8 @@ public class FriendPageActivity extends AppCompatActivity {
 
 
         int userID = intent.getIntExtra("UUID",-1);
-        userName.setText(intent.getStringExtra("USERNAME"));
+        String username = intent.getStringExtra("USERNAME");
+        userName.setText(username);
         getFollowerList(userID);
         //getUserName(userID);
 
@@ -88,6 +89,8 @@ public class FriendPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
                 intent.putExtra("UUID",friendsID[0]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
                 startActivity(intent);
 
             }
@@ -97,6 +100,8 @@ public class FriendPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
                 intent.putExtra("UUID",friendsID[1]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
                 startActivity(intent);
 
             }
@@ -106,6 +111,8 @@ public class FriendPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
                 intent.putExtra("UUID",friendsID[2]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
                 startActivity(intent);
 
             }
@@ -115,6 +122,8 @@ public class FriendPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
                 intent.putExtra("UUID",friendsID[3]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
                 startActivity(intent);
 
             }
@@ -139,7 +148,7 @@ public class FriendPageActivity extends AppCompatActivity {
                                 JSONObject follower = response.getJSONObject(i);
                                 Integer followingId = follower.getInt("followingID");
                                 friendsID[i] = followingId;
-                                followerName[i].setText(followingId.toString());
+                                getUserName(followingId,i);
 
                                 //followerName[i].setText(getUserName(followingId));
 
@@ -291,7 +300,7 @@ public class FriendPageActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void getUserName(Integer id) {
+    private void getUserName(Integer id, Integer loopI) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
         String out = null;
@@ -303,7 +312,7 @@ public class FriendPageActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
 
                         try {
-                            userName.setText(response.getString("firstName") + " " + response.getString("lastName"));
+                            followerName[loopI].setText(response.getString("firstName") + " " + response.getString("lastName"));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
