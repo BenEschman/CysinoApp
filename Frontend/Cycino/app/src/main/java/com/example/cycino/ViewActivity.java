@@ -27,29 +27,28 @@ import org.json.JSONObject;
 public class ViewActivity extends AppCompatActivity {
 
     private Button viewButton;
-    private Button fPageButton;
+    private Button friendsButton;
     RequestQueue requestQueue;
-    LinearLayout viewLayout;
+    private LinearLayout viewLayout;
 
 
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
-        fPageButton.findViewById(R.id.fPage);
+        friendsButton = findViewById(R.id.fPage);
         viewButton = findViewById(R.id.returnButton);
         viewLayout = findViewById(R.id.layout_view);
 
 
         requestQueue = Volley.newRequestQueue(ViewActivity.this);
         viewButton.setText("Edit Profile");
-        fPageButton.setText("Return to Friends Page");
+        friendsButton.setText("Return to Friends Page");
 
         Intent intent = getIntent();
+        Integer userID = intent.getIntExtra("UUID",0);
 
-
-
-         Integer userID = intent.getIntExtra("UUID",-1);
+        System.out.println(userID);
 
 
         getOneUser(userID);
@@ -65,7 +64,7 @@ public class ViewActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        fPageButton.setOnClickListener(new View.OnClickListener() {
+        friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ViewActivity.this, FriendPageActivity.class);

@@ -131,6 +131,7 @@ public class FriendPageActivity extends AppCompatActivity {
                                 //followerName[i].setText(getUserName(followingId));
 
                             }
+                            System.out.println(friendsID);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(), "Error parsing JSON data", Toast.LENGTH_LONG).show();
