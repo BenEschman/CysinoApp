@@ -47,6 +47,7 @@ public class LeaderboardActivity extends AppCompatActivity{
     private TextView titleText;
     RequestQueue requestQueue;
 
+
     int items;
     final int numLines = 2;
     List<String> userNames = new ArrayList<String>();
@@ -256,10 +257,10 @@ public class LeaderboardActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
                 }
             });
-
-
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
     }
+
+
 
 }
