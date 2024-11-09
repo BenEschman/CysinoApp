@@ -41,6 +41,16 @@ public class ImageController {
         return Files.readAllBytes(imageFile.toPath());
     }
 
+    @GetMapping(value = "/images/local/banana", produces = MediaType.IMAGE_JPEG_VALUE)
+    byte[] getBananaImage() throws IOException {
+        ClassPathResource classPathResource = new ClassPathResource("/images/2.jpg");
+        File imageFile = new File(classPathResource.getFile().getAbsolutePath());
+        System.out.println(imageFile);
+        System.out.println(imageFile.toPath());
+        return Files.readAllBytes(imageFile.toPath());
+    }
+
+
     @PostMapping("/images")
     public String handleFileUpload(@RequestParam("image") MultipartFile imageFile)  {
         System.out.println("handleFileUpload");
