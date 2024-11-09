@@ -7,6 +7,7 @@ import coms309.Cycino.Games.GameLogic.PlayerHands;
 import coms309.Cycino.follow.Follow;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
+<<<<<<< HEAD
 import coms309.Cycino.stats.GameHistory;
 import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
@@ -16,6 +17,14 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+=======
+import coms309.Cycino.stats.UserStats;
+import jakarta.persistence.*;
+import coms309.Cycino.Enums;
+
+import java.util.HashSet;
+import java.util.List;
+>>>>>>> 33-blackjack-game-view
 import java.util.Set;
 
 @Entity
@@ -50,6 +59,7 @@ public class User implements Serializable {
     @JsonIgnore
     private LoginInfo loginInfo;
 
+<<<<<<< HEAD
     @ManyToOne
     private Lobby lobby;
 
@@ -68,6 +78,15 @@ public class User implements Serializable {
     public User(){}
 
     public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo, BlackJackSettings blackJackSettings) {
+=======
+    @ManyToMany(mappedBy = "users")
+    @JsonIgnore
+    private Set<UserStats> userStats = new HashSet<>();
+
+    public User(){}
+
+    public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
+>>>>>>> 33-blackjack-game-view
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
