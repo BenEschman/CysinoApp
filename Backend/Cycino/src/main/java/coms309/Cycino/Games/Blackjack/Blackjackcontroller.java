@@ -1,5 +1,6 @@
 package coms309.Cycino.Games.Blackjack;
 
+<<<<<<< HEAD
 import coms309.Cycino.Games.GameLogic.BlackJackLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -70,4 +71,7 @@ public class Blackjackcontroller {
     }
 
 
+=======
+public class Blackjackcontroller {
+>>>>>>> 33-blackjack-game-view
 }

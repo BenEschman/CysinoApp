@@ -26,8 +26,9 @@ public class GameChatActivity extends AppCompatActivity {
     private ScrollView chatArea;
 
     private boolean chatOpen = true;
-    private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/1/";
-    private String username = "Sam";
+    private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/";
+    private Integer lobbyID;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
