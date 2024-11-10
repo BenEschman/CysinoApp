@@ -55,11 +55,6 @@ public class LoginService {
         return loginRepository.findById(id).orElse(null);
     }
 
-//    public coms309.Cycino.users.User makeUser(String username){
-//
-//        return new User("10", "BenEsch", "BEschman3905!", "Ben", "Eschman", "815-528-3105", "Admin" );
-//
-//    }
     public Map<String, Object> containsUser(String username){
 
         Map<String, Object> response = new HashMap<>();
@@ -67,6 +62,7 @@ public class LoginService {
         for(LoginInfo u : users){
             if(u.getUsername().equalsIgnoreCase(username)){
                 response.put("status", "200 ok");
+                response.put("user", u.getUser());
                 return response;
             }
         }
