@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller      // this is needed for this to be an endpoint to springboot
-@ServerEndpoint(value = "/chat/{username}")  // this is Websocket url
+@ServerEndpoint(value = "/directMessaging/{username}")  // this is Websocket url
 public class DirectMessagingSocket {
 
     // cannot autowire static directly (instead we do it by the below
@@ -42,7 +42,7 @@ public class DirectMessagingSocket {
     private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
     private static Map<String, Session> usernameSessionMap = new Hashtable<>();
 
-    private final Logger logger = LoggerFactory.getLogger(DirectMessaging.class);
+    private final Logger logger = LoggerFactory.getLogger(DirectMessagingSocket.class);
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username)
