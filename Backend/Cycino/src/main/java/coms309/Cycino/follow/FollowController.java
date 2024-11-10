@@ -36,12 +36,7 @@ public class FollowController {
 
     @GetMapping("users/{uid}/followers")
     public List<Long> getFollowersList(@PathVariable long uid) {
-        List<Long> followersUIDs = new ArrayList<>();
-        List<Follow> followers = followService.getFollowers(uid);
-        for (Follow follow : followers) {
-            followersUIDs.add(follow.getForeignKey());
-        }
-        return followersUIDs;
+        return followService.getFollowers(uid);
     }
 
     @PutMapping("/users/{uid}/follow/update")
