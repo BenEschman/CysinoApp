@@ -111,7 +111,6 @@ public class BlackJackLogic {
             if(score <= 10)
                 return score + 11;
             c.setNumber(1);
-=======
 //    public Map<String, Object> split(User u){
 //        Map<String, Object> response = new HashMap<>();
 //        Map<Long, ArrayList<Card>> temp = getHands(u.getId());
