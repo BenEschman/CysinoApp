@@ -23,8 +23,7 @@ import org.springframework.stereotype.Controller;
 @ServerEndpoint(value = "/directMessaging/{userID}")  // this is Websocket url
 public class DirectMessagingSocket {
 
-    // cannot autowire static directly (instead we do it by the below
-    // method
+    // cannot autowire static directly (instead we do it by the below method)
     private static MessageRepository msgRepo;
     private UserService userService;
 
