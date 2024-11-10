@@ -20,7 +20,7 @@ public class Message {
     private Long id;
 
     @Column
-    private String userName;
+    private long uid;
 
     @Lob
     private String content;
@@ -32,8 +32,8 @@ public class Message {
 
     public Message() {};
 
-    public Message(String userName, String content) {
-        this.userName = userName;
+    public Message(Long uid, String content) {
+        this.uid = uid;
         this.content = content;
     }
 
@@ -45,12 +45,12 @@ public class Message {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public Long getUid() {
+        return this.uid;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUid(String uid) {
+        this.uid = this.uid;
     }
 
     public String getContent() {
