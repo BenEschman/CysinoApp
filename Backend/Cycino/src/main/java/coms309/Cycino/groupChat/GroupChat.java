@@ -17,12 +17,29 @@ public class GroupChat {
     @ManyToMany(mappedBy = "groupChats")
     private Set<User> users = new HashSet<>();
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long id) {this.id = id;}
+    public Long getId() {return id;}
+
+    public void addUser(User user) {
+        this.users.add(user);
+        user.getGroupChats().add(this);
     }
 
-    public Long getId() {
-        return id;
+    public void removeUser(User user) {
+        this.users.remove(user);
+        user.getGroupChats().remove(this);
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
 }

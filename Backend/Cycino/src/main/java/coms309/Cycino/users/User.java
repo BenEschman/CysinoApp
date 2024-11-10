@@ -87,6 +87,16 @@ public class User implements Serializable {
         this.blackJackSettings = blackJackSettings;
     }
 
+    public void addGroupChat(GroupChat groupChat){
+        this.groupChats.add(groupChat);
+        groupChat.getUsers().add(this);
+    }
+
+    public void removeGroupChat(GroupChat groupChat){
+        this.groupChats.remove(groupChat);
+        groupChat.getUsers().remove(this);
+    }
+
     public Set<GroupChat> getGroupChats() {
         return groupChats;
     }
