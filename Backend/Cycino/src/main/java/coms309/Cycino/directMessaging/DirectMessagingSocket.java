@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import coms309.Cycino.follow.FollowService;
 import coms309.Cycino.users.UserService;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
@@ -17,15 +18,19 @@ import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Controller;
 
+@Configurable
 @Controller      // this is needed for this to be an endpoint to springboot
 @ServerEndpoint(value = "/directMessaging/{userID}")  // this is Websocket url
 public class DirectMessagingSocket {
 
     // cannot autowire static directly (instead we do it by the below method)  
     private static MessageRepository msgRepo;
-    private UserService userService;
+
+    
+    private static FollowService followService;
 
     /*
      * Grabs the MessageRepository singleton from the Spring Application
@@ -38,6 +43,9 @@ public class DirectMessagingSocket {
     public void setMessageRepository(MessageRepository repo) {
         msgRepo = repo;  // we are setting the static variable
     }
+
+    @Autowired
+    public void setFollowService(FollowService followService) {this.followService = followService;}
 
     // Store all socket session and their corresponding username.
     private static Map<Session, Long> sessionUserMap = new Hashtable<>();
@@ -79,14 +87,19 @@ public class DirectMessagingSocket {
         if (message.startsWith("@")) {
             // Figure out the recipient of the message
             Long recipient = Long.parseLong(message.split(" ")[0].substring(1));
-            // Isolate the content of the message
-            String messageContent = message.split(" ", 2)[1];
-            // send the message to the sender and receiver
-            sendMessageToParticularUser(recipient, "[DM] " + user + ": " + message);
-            sendMessageToParticularUser(user, "[DM] " + user + ": " + message);
+            if (isRecipientFollowingSender(user, recipient)) {
+                // Isolate the content of the message
+                String messageContent = message.split(" ", 2)[1];
+                // send the message to the sender and receiver
+                sendMessageToParticularUser(recipient, "[DM] " + user + ": " + message);
+                sendMessageToParticularUser(user, "[DM] " + user + ": " + message);
 
-            // Saving message to message repository
-            msgRepo.save(new Message(user, recipient, messageContent));
+                // Saving message to message repository
+                msgRepo.save(new Message(user, recipient, messageContent));
+            } else {
+                // Don't send the message if the recipient is not following the user
+                sendMessageToParticularUser(user, "The recipient of your message is not following you, please try again.");
+            }
         }
         else { // broadcast
             sendMessageToParticularUser(user, "Your message is lacking a recipient, please try again.");
@@ -163,8 +176,12 @@ public class DirectMessagingSocket {
         return sb.toString();
     }
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public boolean isRecipientFollowingSender(Long sender, Long recipient) {
+        List<Long> followersOfSender = followService.getFollowers(sender);
+        if (followersOfSender.contains(recipient)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 } // end of Class
