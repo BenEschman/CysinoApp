@@ -62,7 +62,7 @@ public class Message {
     public void setRecipient(long recipient) {this.recipient = recipient;}
 
     public String getContent() {
-        return content;
+        return this.content;
     }
 
     public void setContent(String content) {
