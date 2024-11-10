@@ -28,7 +28,7 @@ public class BlackJack {
     @OneToOne
     private Lobby lobby;
 
-   // private Long gameHist;
+    // private Long gameHist;
 
     public BlackJack(){
 
