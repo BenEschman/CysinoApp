@@ -5,9 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserService;
-import coms309.Cycino.users.UsersRepository;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -61,7 +59,7 @@ public class DirectMessagingSocket {
         userSessionMap.put(user, session);
 
         //Send chat history to the newly connected user
-        sendMessageToPArticularUser(user, getChatHistory());
+        sendMessageToParticularUser(user, getChatHistory());
 
         // broadcast that new user joined
         String message = "User:" + user + " has Joined the Chat";
@@ -74,23 +72,27 @@ public class DirectMessagingSocket {
 
         // Handle new messages
         logger.info("Entered into Message: Got Message:" + message);
+
+        // Get user from the session
         Long user = sessionUserMap.get(session);
 
         // Direct message to a user using the format "@username <message>"
         if (message.startsWith("@")) {
-            String destUsername = message.split(" ")[0].substring(1);
-
+            // Figure out the recipient of the message
+            Long recipient = Long.parseLong(message.split(" ")[0].substring(1));
+            // Isolate the content of the message
+            String messageContent = message.split(" ", 2)[1];
             // send the message to the sender and receiver
-            sendMessageToPArticularUser(Long.parseLong(destUsername), "[DM] " + user + ": " + message);
-            sendMessageToPArticularUser(user, "[DM] " + user + ": " + message);
+            sendMessageToParticularUser(recipient, "[DM] " + user + ": " + message);
+            sendMessageToParticularUser(user, "[DM] " + user + ": " + message);
 
+            // Saving message to message repository
+            msgRepo.save(new Message(user, recipient, messageContent));
         }
         else { // broadcast
-            broadcast(user + ": " + message);
+            sendMessageToParticularUser(user, "Your message is lacking a recipient, please try again.");
+            //broadcast(user + ": " + message);
         }
-
-        // Saving chat history to repository
-        msgRepo.save(new Message(user, message));
     }
 
 
@@ -117,13 +119,18 @@ public class DirectMessagingSocket {
     }
 
 
-    private void sendMessageToPArticularUser(Long user, String message) {
-        try {
-            userSessionMap.get(user).getBasicRemote().sendText(message);
-        }
-        catch (IOException e) {
-            logger.info("Exception: " + e.getMessage().toString());
-            e.printStackTrace();
+    private void sendMessageToParticularUser(Long user, String message) {
+        Session session = userSessionMap.get(user);
+        if (session != null) {
+            try {
+                session.getBasicRemote().sendText(message);
+            }
+            catch (IOException e) {
+                logger.info("Exception: " + e.getMessage().toString());
+                e.printStackTrace();
+            }
+        } else {
+          logger.info("Session for recipient is null");
         }
     }
 

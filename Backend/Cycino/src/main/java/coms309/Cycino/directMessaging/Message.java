@@ -22,6 +22,9 @@ public class Message {
     @Column
     private long uid;
 
+    @Column
+    private long recipient;
+
     @Lob
     private String content;
 
@@ -32,8 +35,9 @@ public class Message {
 
     public Message() {};
 
-    public Message(Long uid, String content) {
+    public Message(Long uid, Long recipient, String content) {
         this.uid = uid;
+        this.recipient = recipient;
         this.content = content;
     }
 
@@ -49,9 +53,13 @@ public class Message {
         return this.uid;
     }
 
-    public void setUid(String uid) {
-        this.uid = this.uid;
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
+
+    public long getRecipient() {return this.recipient;}
+
+    public void setRecipient(long recipient) {this.recipient = recipient;}
 
     public String getContent() {
         return content;
