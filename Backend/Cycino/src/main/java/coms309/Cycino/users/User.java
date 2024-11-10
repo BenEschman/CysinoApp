@@ -5,6 +5,7 @@ import coms309.Cycino.Enums;
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
 import coms309.Cycino.Games.GameLogic.PlayerHands;
 import coms309.Cycino.follow.Follow;
+import coms309.Cycino.groupChat.GroupChat;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.stats.GameHistory;
@@ -64,6 +65,13 @@ public class User implements Serializable {
     )
     private Set<GameHistory> gameHistories;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_groupchat",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "groupChat_id")
+    )
+    private Set<GroupChat> groupChats = new HashSet<>();
 
     public User(){}
 
@@ -77,6 +85,14 @@ public class User implements Serializable {
         this.followList = followList;
         this.loginInfo = loginInfo;
         this.blackJackSettings = blackJackSettings;
+    }
+
+    public Set<GroupChat> getGroupChats() {
+        return groupChats;
+    }
+
+    public void setGroupChats(Set<GroupChat> groupChats) {
+        this.groupChats = groupChats;
     }
 
     public BlackJackSettings getBlackJackSettings() {
