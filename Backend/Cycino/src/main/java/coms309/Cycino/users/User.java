@@ -65,7 +65,7 @@ public class User implements Serializable {
     )
     private Set<GameHistory> gameHistories;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_groupchat",
             joinColumns = @JoinColumn(name = "user_id"),
