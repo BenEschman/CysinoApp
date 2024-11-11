@@ -38,13 +38,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private EditText editPhoneNumber;
 
     //testing
-    private String username = "mike";
-    private String password = "123" ;
+    private String userUsername = "mike";
+    private String userPassword = "123" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account_settings);
+        setContentView(R.layout.activity_accountsettings);
 
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
@@ -74,9 +74,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newUsername = editUsername.getText().toString();
                 if (newUsername.matches("^[a-zA-Z0-9_]+$")) {
-
-                    changeUsername(newUsername, password) ;
-                    username = newUsername ;
+                    updateLogin(newUsername, userPassword) ;
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid username. Only letters, numbers, and underscores are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -88,8 +86,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newPassword = editPassword.getText().toString();
                 if (!newPassword.contains(" ")) {
-                    updateUserPassword(username, newPassword);
-                    password = newPassword ;
+                    updateUserPassword(userUsername, newPassword);
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid password. No spaces are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -150,16 +147,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                deleteAccount(username);
-
+               // deleteAccount(username);
                 Toast.makeText(AccountSettingsActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void deleteAccount(final String username) {
-
+    private void deleteAccount(String username) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/delete/" + username;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
@@ -170,7 +164,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             String status = response.getString("status");
                             if (status.equals("200 ok")) {
                                 Toast.makeText(AccountSettingsActivity.this, "Account has been deleted.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(AccountSettingsActivity.this, MainSettingsActivity.class); // CHANGE TO SIGNUP PAGE!!!!!
+                                Intent intent = new Intent(AccountSettingsActivity.this, SignupActivity.class); // CHANGE TO SIGNUP PAGE!!!!!
                                 startActivity(intent);
                             }
                         } catch (JSONException e) {
@@ -197,12 +191,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     }
 
-    private void changeUsername(final String username, final String password) {
+    private void updateLogin(String username, String password) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + username ;
-        // MIGHT NOT BE RIGHT ENDPONT!!!!
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject userData = new JSONObject();
-
         try {
             userData.put("username", username);
             userData.put("password", password);
@@ -215,12 +207,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 (Request.Method.PUT, url, userData, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "Username has been changed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Login information has been updated", Toast.LENGTH_LONG).show();
+                        userUsername = username ;
+                        userPassword = password ;
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Failed to update username", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Failed to update login information", Toast.LENGTH_SHORT).show();
                         Log.e("UsernamePassword", "Error: " + error.getMessage());
                     }
                 });
