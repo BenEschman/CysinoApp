@@ -5,6 +5,7 @@ import coms309.Cycino.Enums;
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
 import coms309.Cycino.Games.GameLogic.PlayerHands;
 import coms309.Cycino.follow.Follow;
+import coms309.Cycino.groupChat.GroupChat;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.stats.GameHistory;
@@ -13,10 +14,7 @@ import jakarta.persistence.*;
 
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettingsRepository;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users") // escaping using double quotes for H2 SQL compatibility
@@ -65,6 +63,13 @@ public class User implements Serializable {
     )
     private Set<GameHistory> gameHistories;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_groupchat",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "groupChat_id")
+    )
+    private Set<GroupChat> groupChats = new HashSet<>();
 
     public User(){}
 
@@ -79,6 +84,24 @@ public class User implements Serializable {
         this.loginInfo = loginInfo;
         this.blackJackSettings = blackJackSettings;
         this.username = loginInfo.getUsername();
+    }
+
+    public void addGroupChat(GroupChat groupChat){
+        this.groupChats.add(groupChat);
+        groupChat.getUsers().add(this);
+    }
+
+    public void removeGroupChat(GroupChat groupChat){
+        this.groupChats.remove(groupChat);
+        groupChat.getUsers().remove(this);
+    }
+
+    public Set<GroupChat> getGroupChats() {
+        return groupChats;
+    }
+
+    public void setGroupChats(Set<GroupChat> groupChats) {
+        this.groupChats = groupChats;
     }
 
     public BlackJackSettings getBlackJackSettings() {

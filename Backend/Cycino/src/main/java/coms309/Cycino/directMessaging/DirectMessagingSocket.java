@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import coms309.Cycino.follow.FollowService;
+import coms309.Cycino.groupChat.GroupChat;
+import coms309.Cycino.groupChat.GroupChatService;
+import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserService;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
@@ -28,9 +32,9 @@ public class DirectMessagingSocket {
 
     // cannot autowire static directly (instead we do it by the below method)  
     private static MessageRepository msgRepo;
-
-    
     private static FollowService followService;
+    private static UserService userService;
+    private static GroupChatService groupChatService;
 
     /*
      * Grabs the MessageRepository singleton from the Spring Application
@@ -43,9 +47,12 @@ public class DirectMessagingSocket {
     public void setMessageRepository(MessageRepository repo) {
         msgRepo = repo;  // we are setting the static variable
     }
-
     @Autowired
     public void setFollowService(FollowService followService) {this.followService = followService;}
+    @Autowired
+    public void setGroupChatService(GroupChatService groupChatService) {this.groupChatService = groupChatService;}
+    @Autowired
+    public void setUserService(UserService userService) {this.userService = userService;}
 
     // Store all socket session and their corresponding username.
     private static Map<Session, Long> sessionUserMap = new Hashtable<>();
@@ -65,12 +72,15 @@ public class DirectMessagingSocket {
         sessionUserMap.put(session, user);
         userSessionMap.put(user, session);
 
+        /*
         //Send chat history to the newly connected user
         sendMessageToParticularUser(user, getChatHistory());
+
 
         // broadcast that new user joined
         String message = "User:" + user + " has Joined the Chat";
         broadcast(message);
+        */
     }
 
 
@@ -85,23 +95,10 @@ public class DirectMessagingSocket {
 
         // Direct message to a user using the format "@username <message>"
         if (message.startsWith("@")) {
-            // Figure out the recipient of the message
-            Long recipient = Long.parseLong(message.split(" ")[0].substring(1));
-            if (isRecipientFollowingSender(user, recipient)) {
-                // Isolate the content of the message
-                String messageContent = message.split(" ", 2)[1];
-                // send the message to the sender and receiver
-                sendMessageToParticularUser(recipient, "[DM] " + user + ": " + message);
-                sendMessageToParticularUser(user, "[DM] " + user + ": " + message);
-
-                // Saving message to message repository
-                msgRepo.save(new Message(user, recipient, messageContent));
-            } else {
-                // Don't send the message if the recipient is not following the user
-                sendMessageToParticularUser(user, "The recipient of your message is not following you, please try again.");
-            }
-        }
-        else { // broadcast
+            directMessage(message, user);
+        } else if (message.startsWith("#")) {
+            groupMessage(message, user);
+        } else { // broadcast
             sendMessageToParticularUser(user, "Your message is lacking a recipient, please try again.");
             //broadcast(user + ": " + message);
         }
@@ -182,6 +179,46 @@ public class DirectMessagingSocket {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void directMessage(String message, Long user ){
+        // Figure out the recipient of the message
+        Long recipient = Long.parseLong(message.split(" ")[0].substring(1));
+        if (isRecipientFollowingSender(user, recipient)) {
+            // Isolate the content of the message
+            String messageContent = message.split(" ", 2)[1];
+            // send the message to the sender and receiver
+            sendMessageToParticularUser(recipient, "[DM] " + user + ": " + message);
+            sendMessageToParticularUser(user, "[DM] " + user + ": " + message);
+
+            // Saving message to message repository
+            msgRepo.save(new Message(user, recipient, messageContent));
+        } else {
+            // Don't send the message if the recipient is not following the user
+            sendMessageToParticularUser(user, "The recipient of your message is not following you, please try again.");
+        }
+    }
+
+    public void groupMessage(String message, Long uid) {
+        // Get the sending user
+        User user = userService.getUser(uid);
+        // Figure out the receiving group of message
+        Long groupID = Long.parseLong(message.split(" ")[0].substring(1));
+        // Isolate the content of the message
+        String messageContent = message.split(" ", 2)[1];
+        // Get the members of the group
+        Set<User> groupMembers = groupChatService.getUsersInGroupChat(groupID);
+
+        // See if sender is a member in said group
+        if (groupChatService.isUserInGroupChat(uid, groupID)) {
+            // Get the group object so we can retrieve its name
+            GroupChat groupChat = groupChatService.getGroupChat(groupID);
+            for (User member : groupMembers) {
+                sendMessageToParticularUser(member.getId(), "Group:" + groupChat.getGroupName() + " | " + user.getFirstName() + " " + user.getLastName() + ": " + messageContent);
+            }
+        } else {
+            sendMessageToParticularUser(uid, "You are not part of the group you are trying to send to. Please try again.");
         }
     }
 } // end of Class
