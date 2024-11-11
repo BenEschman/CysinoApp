@@ -1,5 +1,6 @@
 package coms309.Cycino.groupChat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import coms309.Cycino.users.User;
 
@@ -15,6 +16,7 @@ public class GroupChat {
     private String groupName;
 
     @ManyToMany(mappedBy = "groupChats")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public void setId(Long id) {this.id = id;}
@@ -41,5 +43,7 @@ public class GroupChat {
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
-
+    public String getGroupName() {
+        return groupName;
+    }
 }
