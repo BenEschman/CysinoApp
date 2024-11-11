@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Username Input -->
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter username"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background"
+        android:inputType="text"
+        android:layout_alignParentTop="true" />
+
+    <!-- Add User and Remove User Buttons -->
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextUsername"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/buttonAddUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add User"
+            android:padding="12dp"
+            android:backgroundTint="@android:color/holo_green_light"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonRemoveUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Remove User"
+            android:padding="12dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- User List in ScrollView (Adjusted Height) -->
+    <ScrollView
+        android:id="@+id/scrollViewUserList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/button_container"
+        android:layout_above="@id/buttonStartGame"
+        android:fillViewport="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/userListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+            <!-- Placeholder TextViews for Users -->
+            <!-- Dynamically added TextViews will go here. -->
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Start Game Button -->
+    <Button
+        android:id="@+id/buttonStartGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Game"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:layout_above="@id/buttonDeleteLobby"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#228B22"/>
+
+
+    <!-- Delete Lobby Button -->
+    <Button
+        android:id="@+id/buttonDeleteLobby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Lobby"
+        android:textSize="14sp"
+        android:padding="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <!-- Back to Home Button -->
+    <Button
+        android:id="@+id/buttonBackToHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back to Home"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#8B4513" />
+
+
+    <!-- Change Settings Button -->
+    <Button
+        android:id="@+id/buttonChangeSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change Settings"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@android:color/darker_gray"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+</RelativeLayout>

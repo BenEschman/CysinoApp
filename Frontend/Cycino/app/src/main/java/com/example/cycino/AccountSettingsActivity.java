@@ -154,7 +154,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
     private void deleteAccount(String username) {
-
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/delete/" + username;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
