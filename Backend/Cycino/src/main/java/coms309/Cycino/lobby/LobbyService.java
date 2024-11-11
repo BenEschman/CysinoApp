@@ -15,8 +15,6 @@ public class LobbyService {
     private LobbyRepo repo;
     @Autowired
     private UserService userService;
-    @Autowired
-    private BlackjackService bs;
 
     public Map<String, Object> startLobby(){
         Map<String, Object> response = new HashMap<>();
@@ -52,7 +50,6 @@ public class LobbyService {
             response.put("status", "404 not found");
             return response;
         }
-        bs.deleteGame(id);
         repo.deleteById(id);
         response.put("lobbyId", id);
         response.put("status", "200 ok");

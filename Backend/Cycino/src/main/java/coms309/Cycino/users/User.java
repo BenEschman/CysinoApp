@@ -26,6 +26,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    private String username;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -77,10 +78,16 @@ public class User implements Serializable {
         this.followList = followList;
         this.loginInfo = loginInfo;
         this.blackJackSettings = blackJackSettings;
+        this.username = loginInfo.getUsername();
     }
 
     public BlackJackSettings getBlackJackSettings() {
         return this.blackJackSettings;
+    }
+
+    public String getUsername(){
+        username = loginInfo.getUsername();
+        return username;
     }
 
     public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
@@ -100,6 +107,7 @@ public class User implements Serializable {
     }
 
     public long getId(){
+        this.username = loginInfo.getUsername();
         return id;
     }
 
