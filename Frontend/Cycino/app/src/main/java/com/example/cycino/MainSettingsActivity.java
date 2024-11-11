@@ -16,14 +16,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.cycino.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainSettingsActivity extends AppCompatActivity {
 
@@ -43,13 +49,20 @@ public class MainSettingsActivity extends AppCompatActivity {
     private EditText minBetEdit;
     private EditText maxBetEdit;
     private EditText numberOfDecksEdit;
-    private int userID = 2;
-
+    private TextView dealerStandOnTV ;
+    private TextView minBetTV ;
+    private TextView maxBetTV ;
+    private TextView deckNumberTV ;
+    private int userID = 7;
+    private int dealerStandOn ;
+    private int minBet ;
+    private int maxBet ;
+    private int numberOfDecks ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_settings); // Link the XML layout to this Java file
+        setContentView(R.layout.activity_mainsettings); // Link the XML layout to this Java file
 
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
@@ -69,6 +82,15 @@ public class MainSettingsActivity extends AppCompatActivity {
         minBetEdit = findViewById(R.id.minBetEdit);
         maxBetEdit = findViewById(R.id.maxBetEdit);
         numberOfDecksEdit = findViewById(R.id.numberOfDecksEdit);
+        dealerStandOnTV = findViewById(R.id.dealerStandOnDisplay);
+        minBetTV = findViewById(R.id.minBetDisplay);
+        maxBetTV = findViewById(R.id.maxBetDisplay);
+        deckNumberTV = findViewById(R.id.numberOfDecksDisplay);
+
+        // EVENTUALLY GET THE USER ID, FOR NOW JUST USE GLOBAL VARIABLE FOR TESTING!!!!!!!!
+
+        getSettings(userID) ; // Sets the user settings (global vars)
+        updateSettingsDisplay(dealerStandOn, minBet, maxBet, numberOfDecks);
 
 
         // Set the initial brightness level for this activity
@@ -85,7 +107,7 @@ public class MainSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle back button click
-                Intent intent = new Intent(MainSettingsActivity.this, HomePageActivity.class);
+                Intent intent = new Intent(MainSettingsActivity.this, MainActivity.class);
                 startActivity(intent); // Start the HomePagePlaceholder activity
             }
         });
@@ -151,10 +173,11 @@ public class MainSettingsActivity extends AppCompatActivity {
                 if (!numberOfDecksValue.isEmpty()) {
                     try {
                         int value = Integer.parseInt(numberOfDecksValue);
-                        if (value >= 1) {
-                            //updateDealerStandsOn(value);
+                        if (value >= 1 && value <= 5) {
+                            updateGameSettings(dealerStandOn, maxBet, minBet, value, userID);
+                            numberOfDecks = value ;
                         } else {
-                            Toast.makeText(MainSettingsActivity.this, "Please enter a value between 15 and 21", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainSettingsActivity.this, "Please enter a value between 1 and 5 decks.", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NumberFormatException e) {
                         Toast.makeText(MainSettingsActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
@@ -168,14 +191,15 @@ public class MainSettingsActivity extends AppCompatActivity {
         updateMaxBetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String minBetValue = minBetEdit.getText().toString();
-                if (!minBetValue.isEmpty()) {
+                String maxBetValue = maxBetEdit.getText().toString();
+                if (!maxBetValue.isEmpty()) {
                     try {
-                        int value = Integer.parseInt(minBetValue);
-                        if (value >= 1) {
-                            //updateDealerStandsOn(value);
+                        int value = Integer.parseInt(maxBetValue);
+                        if (value >= 1 && value > minBet) {
+                            updateGameSettings(dealerStandOn, value, minBet, numberOfDecks, userID);
+                            maxBet = value ;
                         } else {
-                            Toast.makeText(MainSettingsActivity.this, "Please enter a value greater than zero", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainSettingsActivity.this, "Please enter a valid maxBet size", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NumberFormatException e) {
                         Toast.makeText(MainSettingsActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
@@ -193,10 +217,11 @@ public class MainSettingsActivity extends AppCompatActivity {
                 if (!minBetValue.isEmpty()) {
                     try {
                         int value = Integer.parseInt(minBetValue);
-                        if (value >= 1) {
-                            updateMinBetValue(value);
+                        if (value >= 1 && value < maxBet) {
+                            updateGameSettings(dealerStandOn, maxBet, value, numberOfDecks, userID);
+                            minBet = value ;
                         } else {
-                            Toast.makeText(MainSettingsActivity.this, "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainSettingsActivity.this, "Please enter a valid minBet size", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NumberFormatException e) {
                         Toast.makeText(MainSettingsActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
@@ -215,9 +240,10 @@ public class MainSettingsActivity extends AppCompatActivity {
                     try {
                         int value = Integer.parseInt(dealerStandOnValue);
                         if (value >= 15 && value <= 21) {
-                            updateDealerStandOn(value);
+                            updateGameSettings(value, maxBet, minBet, numberOfDecks ,userID);
+                            dealerStandOn = value ;
                         } else {
-                            Toast.makeText(MainSettingsActivity.this, "Please enter a value between 15 and 21", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainSettingsActivity.this, "Please enter a value inclusively between 15 and 21", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NumberFormatException e) {
                         Toast.makeText(MainSettingsActivity.this, "Invalid input. Please enter a valid number.", Toast.LENGTH_SHORT).show();
@@ -247,8 +273,8 @@ public class MainSettingsActivity extends AppCompatActivity {
 
 
     private void handleNotificationsSwitchChange(boolean isEnabled) {
+        String url = "" ;
         if (isEnabled) {
-            String url = "http://coms-3090-052.class.las.iastate.edu:8080/";  //Add user settings endpoint
             JSONObject jsonBody = new JSONObject();
             try {
                 jsonBody.put("isEnabled", isEnabled);
@@ -358,11 +384,14 @@ public class MainSettingsActivity extends AppCompatActivity {
 
     // Update in user settings database table if needed.
 
-    private void updateDealerStandOn(final int newDealerStandOn) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080//gameSettings/blackjack/user/" + userID + "/update";
+    private void updateGameSettings(int dealerStandOn, int maxBet, int minBet, int amountOfDecks, int userID) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/gameSettings/blackjack/user/" + userID + "/update";
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("dealerStandOn", newDealerStandOn);
+            jsonBody.put("dealerStandOn", dealerStandOn);
+            jsonBody.put("maxBet", maxBet);  // example values for other fields
+            jsonBody.put("minBet", minBet);
+            jsonBody.put("amountOfDecks", amountOfDecks);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
@@ -375,8 +404,12 @@ public class MainSettingsActivity extends AppCompatActivity {
                         Log.d("AccountSettings", "Server Response: " + response.toString());
                         try {
                             String status = response.getString("status");
-                            if (status.equals("200 ok")) {
-                                Toast.makeText(getApplicationContext(), "Phone number has been updated.", Toast.LENGTH_SHORT).show();
+                            if (status.equals("200 OK")) {
+                                Toast.makeText(getApplicationContext(), "Settings have been updated successfully.", Toast.LENGTH_SHORT).show();
+                                updateSettingsDisplay(dealerStandOn, minBet, maxBet, numberOfDecks) ;
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), "Unexpected status: " + status, Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -388,51 +421,67 @@ public class MainSettingsActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
                             String errorMsg = new String(error.networkResponse.data);
-                            Log.e("VolleyError", errorMsg);
+                            Log.e("VolleyError", "Error message: " + errorMsg);
+                        }
+                        else {
+                            Log.e("VolleyError", "Unknown network error", error);
                         }
                         Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
-                    }
+                        }
                 }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
         };
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(jsonObjectRequest);
     }
 
-    private void updateMinBetValue(final int newMinBetValue) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080//gameSettings/blackjack/user/" + userID + "/update";
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("minBet", newMinBetValue);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
+    private void getSettings(int userID)
+    {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/gameSettings/blackjack/user/" + userID  ;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("AccountSettings", "Server Response: " + response.toString());
                         try {
-                            String status = response.getString("status");
-                            if (status.equals("200 ok")) {
-                                Toast.makeText(getApplicationContext(), "Phone number has been updated.", Toast.LENGTH_SHORT).show();
-                            }
+                            dealerStandOn = response.getInt("dealerStandOn") ;
+                            maxBet = response.getInt("maxBet");
+                            minBet = response.getInt("minBet");
+                            numberOfDecks = response.getInt("amountOfDecks");
+                            updateSettingsDisplay(dealerStandOn, minBet, maxBet, numberOfDecks) ;
+                            Toast.makeText(getApplicationContext(), "Settings loaded successfully", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Error parsing settings", Toast.LENGTH_LONG).show();
                         }
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                            String errorMsg = new String(error.networkResponse.data);
-                            Log.e("VolleyError", errorMsg);
-                        }
-                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
-                    }
-                }) {
-        };
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Get did not work!", Toast.LENGTH_LONG).show();
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(jsonObjectRequest);
+    }
+
+
+    private void updateSettingsDisplay(int dealerStandOn, int minBet, int maxBet, int numberOfDecks) {
+        // Update each TextView with the new values
+        dealerStandOnTV.setText("Dealer Stand-On Value: " + dealerStandOn);
+        minBetTV.setText("Minimum Bet: " + minBet);
+        maxBetTV.setText("Maximum Bet: " + maxBet);
+        deckNumberTV.setText("Number of Decks: " + numberOfDecks);
     }
 }
+
+
+
+
+
+
