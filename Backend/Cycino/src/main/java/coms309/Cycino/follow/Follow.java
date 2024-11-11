@@ -15,7 +15,9 @@ public class Follow {
 
     private boolean muteNotifications = false;
 
-    @ManyToOne
+    private boolean blockUser = false;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_user_ID")
     private User user;
 
@@ -29,11 +31,16 @@ public class Follow {
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
 
+    public long getForeignKey(){return user.getId();}
+
     public long getFollowingID() {return followingID;}
     public void setFollowingID(long followingID) {this.followingID = followingID;}
 
     public boolean isMuteNotifications() {return muteNotifications;}
     public void setMuteNotifications(boolean muteNotifications) {this.muteNotifications = muteNotifications;}
+
+    public boolean isBlockUser() {return blockUser;}
+    public void setBlockUser(boolean blockUser) {this.blockUser = blockUser;}
 
     @Override
     public String toString() {

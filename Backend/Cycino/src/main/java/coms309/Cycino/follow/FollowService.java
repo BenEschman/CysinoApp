@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +30,34 @@ public class FollowService {
             if (item.getFollowingID() == follow.getFollowingID()){
                 item.setMuteNotifications(!(item.isMuteNotifications()));
                 ok = true;
+            }
+        }
+        return ok;
+    }
+
+    @Transactional
+    public boolean blockUser(Follow follow, Long uid) {
+        boolean ok = false;
+        User user = userService.getUser(uid);
+        for (Follow item : user.getFollowList()){
+            if (item.getFollowingID() == follow.getFollowingID()){
+                item.setBlockUser(true);
+                ok = true;
+                break;
+            }
+        }
+        return ok;
+    }
+
+    @Transactional
+    public boolean unblockUser(Follow follow, Long uid) {
+        boolean ok = false;
+        User user = userService.getUser(uid);
+        for (Follow item : user.getFollowList()){
+            if (item.getFollowingID() == follow.getFollowingID()){
+                item.setBlockUser(false);
+                ok = true;
+                break;
             }
         }
         return ok;
@@ -59,6 +88,15 @@ public class FollowService {
             }
         }
         return false;
+    }
+
+    public List<Long> getFollowers(Long uid) {
+        List<Long> followersUIDs = new ArrayList<>();
+        List<Follow> followers = followRepository.getFollowersByFollowingID(uid);
+        for (Follow follow : followers) {
+            followersUIDs.add(follow.getForeignKey());
+        }
+        return followersUIDs;
     }
 
 }

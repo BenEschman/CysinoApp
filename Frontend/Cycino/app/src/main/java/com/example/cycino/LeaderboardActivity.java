@@ -32,6 +32,8 @@ import java.util.Map;
 
 public class LeaderboardActivity extends AppCompatActivity{
 
+
+
     Gravity gravity = new Gravity();
 
     final private String[] names = {"name1","name2","name3","name5","name4"};

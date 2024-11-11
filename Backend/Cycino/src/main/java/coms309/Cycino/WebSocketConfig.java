@@ -1,19 +1,17 @@
 package coms309.Cycino;
 
+import coms309.Cycino.directMessaging.DirectMessagingSocket;
+import coms309.Cycino.follow.FollowService;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-/**
- *
- * What happens here is that the serverendpoint -- in this case it is
- * the /chat endpoint handler is registered with SPRING
- * so that requests to ws:// will be honored.
- */
+@Configurable
 @Configuration
 public class WebSocketConfig {
     @Bean
-    public ServerEndpointExporter serverEndpointExporter(){
+    public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
     }
 }

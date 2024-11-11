@@ -1,8 +1,12 @@
 package coms309.Cycino.stats;
 
-import coms309.Cycino.GameEnums;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import coms309.Cycino.Enums;
+import coms309.Cycino.users.User;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Entity
 public class UserStats {
@@ -10,17 +14,20 @@ public class UserStats {
     @Id
     private String userStatsId;
 
-    private long userId;
+    private long user_Id;
     private String game;
     private int wins;
     private int losses;
     private double percentage;
     private double net;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Id")
+    private User users;
 
     public UserStats(){}
 
-    public UserStats(long userId, GameEnums game){
-        this.userId = userId;
+    public UserStats(long userId, Enums.GameEnums game){
+        this.user_Id = userId;
         this.userStatsId = userId + game.toString();
         this.game = game.toString();
     }
@@ -61,10 +68,11 @@ public class UserStats {
     }
 
     public long getUserId(){
-        return userId;
+        return user_Id;
     }
 
     public String getGame() {
         return game;
     }
+
 }
