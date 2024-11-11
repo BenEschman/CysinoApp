@@ -17,21 +17,17 @@ public class GroupChatController {
     GroupChatRepository groupChatRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    GroupChatService groupChatService;
 
     @GetMapping("/directMessaging/{uid}/groupChats")
     public Set<GroupChat> groupChat(@PathVariable Long uid) {
-        User user = userService.getUser(uid);
-        return user.getGroupChats();
+        return groupChatService.getUsersGroupChats(uid);
     }
 
     @GetMapping("directMessaging/groupChats/{groupchatID}")
-    public Set<User> groupChats(@PathVariable Long groupchatID) {
-        Optional<GroupChat> groupChat = groupChatRepository.findById(groupchatID);
-        if (groupChat.isPresent()) {
-            return groupChat.get().getUsers();
-        } else {
-            return null;
-        }
+    public Set<User> usersInGroupChat(@PathVariable Long groupchatID) {
+        return groupChatService.getUsersInGroupChat(groupchatID);
     }
 
     @Transactional
