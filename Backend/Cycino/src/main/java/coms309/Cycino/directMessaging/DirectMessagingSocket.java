@@ -72,12 +72,15 @@ public class DirectMessagingSocket {
         sessionUserMap.put(session, user);
         userSessionMap.put(user, session);
 
+        /*
         //Send chat history to the newly connected user
         sendMessageToParticularUser(user, getChatHistory());
+
 
         // broadcast that new user joined
         String message = "User:" + user + " has Joined the Chat";
         broadcast(message);
+        */
     }
 
 
