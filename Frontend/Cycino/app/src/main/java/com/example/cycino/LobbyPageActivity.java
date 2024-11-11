@@ -40,7 +40,7 @@ public class LobbyPageActivity extends AppCompatActivity {
     private ScrollView scrollViewUserList;
     private LinearLayout userListContainer;
     private int lobbyID = 52 ; // FOR TESTING PURPOSES!!!!!!!!!!!
-    private int hostID = 10 ;
+    private int hostID = 3 ;
     private ArrayList<JSONObject> userList = new ArrayList<>();
 
     @Override
