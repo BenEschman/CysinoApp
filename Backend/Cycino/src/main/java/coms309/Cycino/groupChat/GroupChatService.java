@@ -41,4 +41,16 @@ public class GroupChatService {
             return null;
         }
     }
+
+    public boolean isUserInGroupChat(Long userID, Long groupchatID) {
+        Optional<GroupChat> groupChat = groupChatRepository.findById(groupchatID);
+        if (groupChat.isPresent()) {
+            for (User member : groupChat.get().getUsers()) {
+                if (member.getId() == userID) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

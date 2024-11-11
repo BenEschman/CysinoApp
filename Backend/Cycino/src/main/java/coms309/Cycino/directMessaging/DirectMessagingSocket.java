@@ -201,18 +201,24 @@ public class DirectMessagingSocket {
     }
 
     public void groupMessage(String message, Long uid) {
+        // Get the sending user
+        User user = userService.getUser(uid);
         // Figure out the receiving group of message
         Long groupID = Long.parseLong(message.split(" ")[0].substring(1));
         // Isolate the content of the message
         String messageContent = message.split(" ", 2)[1];
         // Get the members of the group
         Set<User> groupMembers = groupChatService.getUsersInGroupChat(groupID);
-        // Get the group object so we can retrieve its name
-        GroupChat groupChat = groupChatService.getGroupChat(groupID);
-        // Get the sending user
-        User user = userService.getUser(uid);
-        for (User member : groupMembers) {
-            sendMessageToParticularUser(member.getId(), "Group:" + groupChat.getGroupName() + " | " + user.getFirstName() + " " + user.getLastName() + ": " + messageContent);
+
+        // See if sender is a member in said group
+        if (groupChatService.isUserInGroupChat(uid, groupID)) {
+            // Get the group object so we can retrieve its name
+            GroupChat groupChat = groupChatService.getGroupChat(groupID);
+            for (User member : groupMembers) {
+                sendMessageToParticularUser(member.getId(), "Group:" + groupChat.getGroupName() + " | " + user.getFirstName() + " " + user.getLastName() + ": " + messageContent);
+            }
+        } else {
+            sendMessageToParticularUser(uid, "You are not part of the group you are trying to send to. Please try again.");
         }
     }
 } // end of Class

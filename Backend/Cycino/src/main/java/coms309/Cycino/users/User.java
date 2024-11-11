@@ -14,10 +14,7 @@ import jakarta.persistence.*;
 
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettingsRepository;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users") // escaping using double quotes for H2 SQL compatibility
