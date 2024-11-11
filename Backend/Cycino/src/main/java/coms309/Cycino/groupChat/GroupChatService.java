@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 import java.util.Set;
 
+
 @Service
 public class GroupChatService {
 
@@ -27,6 +28,15 @@ public class GroupChatService {
         Optional<GroupChat> groupChat = groupChatRepository.findById(groupchatID);
         if (groupChat.isPresent()) {
             return groupChat.get().getUsers();
+        } else {
+            return null;
+        }
+    }
+
+    public GroupChat getGroupChat(Long groupchatID) {
+        Optional<GroupChat> groupChat = groupChatRepository.findById(groupchatID);
+        if (groupChat.isPresent()) {
+            return groupChat.get();
         } else {
             return null;
         }

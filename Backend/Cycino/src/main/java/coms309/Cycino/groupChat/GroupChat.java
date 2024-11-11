@@ -15,7 +15,7 @@ public class GroupChat {
 
     private String groupName;
 
-    @ManyToMany(mappedBy = "groupChats")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "groupChats")
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
