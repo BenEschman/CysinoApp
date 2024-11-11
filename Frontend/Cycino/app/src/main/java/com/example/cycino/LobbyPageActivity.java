@@ -39,8 +39,8 @@ public class LobbyPageActivity extends AppCompatActivity {
     private Button buttonChangeSettings;
     private ScrollView scrollViewUserList;
     private LinearLayout userListContainer;
-    private int lobbyID = 52 ; // FOR TESTING PURPOSES!!!!!!!!!!!
-    private int hostID = 3 ;
+    private int lobbyID = 53 ; // FOR TESTING PURPOSES!!!!!!!!!!!
+    private int currentUser = 4 ;
     private ArrayList<JSONObject> userList = new ArrayList<>();
 
     @Override
@@ -59,7 +59,8 @@ public class LobbyPageActivity extends AppCompatActivity {
         scrollViewUserList = findViewById(R.id.scrollViewUserList);
         userListContainer = findViewById(R.id.userListContainer);
 
-        // loadUsersInLobby(lobbyID);
+        loadUsersInLobby(lobbyID);
+
 
 
         // Set up click listeners for buttons
@@ -378,7 +379,6 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-    ///////////////////////////// WAITING FOR ENDPOINT!!!!!!!!!!!
     private void loadUsersInLobby(int lobbyID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/" + lobbyID;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -423,12 +423,4 @@ public class LobbyPageActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
     }
-
-
-
-
-
-
-
-
 }
