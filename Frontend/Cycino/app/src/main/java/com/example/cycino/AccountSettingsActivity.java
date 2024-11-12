@@ -38,22 +38,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private EditText editPhoneNumber;
 
     //testing
-<<<<<<< HEAD
-    private String username = "mike";
-    private String password = "123" ;
-=======
     private String userUsername = "mike";
     private String userPassword = "123" ;
->>>>>>> 37-settingspage-dealer-stand
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-        setContentView(R.layout.activity_account_settings);
-=======
         setContentView(R.layout.activity_accountsettings);
->>>>>>> 37-settingspage-dealer-stand
 
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
@@ -83,13 +75,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newUsername = editUsername.getText().toString();
                 if (newUsername.matches("^[a-zA-Z0-9_]+$")) {
-<<<<<<< HEAD
-
-                    changeUsername(newUsername, password) ;
-                    username = newUsername ;
-=======
                     updateLogin(newUsername, userPassword) ;
->>>>>>> 37-settingspage-dealer-stand
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid username. Only letters, numbers, and underscores are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -101,12 +87,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newPassword = editPassword.getText().toString();
                 if (!newPassword.contains(" ")) {
-<<<<<<< HEAD
-                    updateUserPassword(username, newPassword);
-                    password = newPassword ;
-=======
-                    updateUserPassword(userUsername, newPassword);
->>>>>>> 37-settingspage-dealer-stand
+                    updateLogin(userUsername, newPassword);
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid password. No spaces are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -167,24 +148,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
-
-                deleteAccount(username);
-
-=======
-               // deleteAccount(username);
->>>>>>> 37-settingspage-dealer-stand
+                deleteAccount(userUsername);
                 Toast.makeText(AccountSettingsActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-<<<<<<< HEAD
-    private void deleteAccount(final String username) {
-=======
-    private void deleteAccount(String username) {
->>>>>>> 37-settingspage-dealer-stand
 
+    private void deleteAccount(final String username) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/delete/" + username;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
@@ -195,11 +166,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                             String status = response.getString("status");
                             if (status.equals("200 ok")) {
                                 Toast.makeText(AccountSettingsActivity.this, "Account has been deleted.", Toast.LENGTH_SHORT).show();
-<<<<<<< HEAD
-                                Intent intent = new Intent(AccountSettingsActivity.this, MainSettingsActivity.class); // CHANGE TO SIGNUP PAGE!!!!!
-=======
                                 Intent intent = new Intent(AccountSettingsActivity.this, SignupActivity.class); // CHANGE TO SIGNUP PAGE!!!!!
->>>>>>> 37-settingspage-dealer-stand
                                 startActivity(intent);
                             }
                         } catch (JSONException e) {
@@ -226,19 +193,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     }
 
-<<<<<<< HEAD
-    private void changeUsername(final String username, final String password) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + username ;
-        // MIGHT NOT BE RIGHT ENDPONT!!!!
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JSONObject userData = new JSONObject();
-
-=======
     private void updateLogin(String username, String password) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + username ;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject userData = new JSONObject();
->>>>>>> 37-settingspage-dealer-stand
         try {
             userData.put("username", username);
             userData.put("password", password);
@@ -251,22 +209,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 (Request.Method.PUT, url, userData, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-<<<<<<< HEAD
-                        Toast.makeText(getApplicationContext(), "Username has been changed", Toast.LENGTH_LONG).show();
-=======
                         Toast.makeText(getApplicationContext(), "Login information has been updated", Toast.LENGTH_LONG).show();
                         userUsername = username ;
                         userPassword = password ;
->>>>>>> 37-settingspage-dealer-stand
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-<<<<<<< HEAD
-                        Toast.makeText(getApplicationContext(), "Failed to update username", Toast.LENGTH_SHORT).show();
-=======
                         Toast.makeText(getApplicationContext(), "Failed to update login information", Toast.LENGTH_SHORT).show();
->>>>>>> 37-settingspage-dealer-stand
                         Log.e("UsernamePassword", "Error: " + error.getMessage());
                     }
                 });

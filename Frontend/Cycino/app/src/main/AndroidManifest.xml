@@ -23,15 +23,14 @@
 
         tools:targetApi="31">
 
-<<<<<<< HEAD
         <service
             android:name=".WebSocketService"
             android:enabled="true"
             tools:targetApi="35"
-            android:exported="true"></service>
+            android:exported="true">
 
-=======
->>>>>>> 37-settingspage-dealer-stand
+        </service>
+
         <activity
             android:name=".EditActivity"
             android:exported="true">
@@ -40,10 +39,20 @@
         <activity
             android:name=".ViewActivity"
             android:exported="true">
-<<<<<<< HEAD
 
-=======
->>>>>>> 37-settingspage-dealer-stand
+        </activity>
+
+        <activity android:name=".AccountSettingsActivity"
+            android:exported="true" />
+
+
+        <activity android:name=".MainSettingsActivity"
+            android:exported="true" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -57,22 +66,15 @@
         </activity>
 
         <activity
-<<<<<<< HEAD
+
         android:name=".SignupActivity"
         android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
 
-=======
-            android:name=".MainSettingsActivity"
-            android:exported="true">
->>>>>>> 37-settingspage-dealer-stand
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-<<<<<<< HEAD
+
+
 
         </activity>
         <activity
@@ -87,40 +89,7 @@
         <activity
             android:name=".HomePageActivity"
             android:exported="false" />
-=======
-        </activity>
 
-        <activity
-            android:name=".AccountSettingsActivity"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".SignupActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".UsernameQueryActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".ResetPasswordActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".WelcomeActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-        </activity>
-
->>>>>>> 37-settingspage-dealer-stand
         <activity
             android:name=".GameChatActivity"
             android:exported="true"/>
@@ -133,17 +102,12 @@
         <activity
             android:name=".BlackjackActivity"
             android:exported="true">
-<<<<<<< HEAD
 
-=======
->>>>>>> 37-settingspage-dealer-stand
+
+
+
+
         </activity>
-
-        <activity android:name=".AccountSettingsActivity"
-            android:exported="true" />
-
-        <activity android:name=".MainSettingsActivity"
-            android:exported="true" />
 
     </application>
 
