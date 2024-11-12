@@ -16,7 +16,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-<<<<<<< HEAD
         <service
             android:name=".WebSocketService"
             android:enabled="true"
@@ -33,27 +32,6 @@
         <activity
             android:name=".SignupActivity"
             android:exported="false" />
-=======
-        <activity
-            android:name=".EditActivity"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".ViewActivity"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".LeaderboardActivity"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".LeaderboardInteractionActivity"
-            android:exported="true">
-        </activity>
-
         <activity
             android:name=".LobbyPageActivity"
             android:exported="true">
@@ -74,11 +52,6 @@
         </activity>
 
         <activity
-            android:name=".SignupActivity"
-            android:exported="false" />
-
->>>>>>> 71ce412e8da542363e30896392df4fb808c9216f
-        <activity
             android:name=".LoginActivity"
             android:exported="false" />
 
@@ -91,7 +64,6 @@
             android:exported="false" />
 
         <activity
-<<<<<<< HEAD
             android:name=".HomePageActivity"
             android:exported="false" />
         <activity
@@ -103,27 +75,7 @@
         <activity
             android:name=".BlackjackActivity"
             android:exported="true"/>
-        <activity
-            android:name=".AccountSettingsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MainSettingsActivity"
-            android:exported="true" />
 
-=======
-            android:name=".WelcomeActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".MainActivity2"
-            android:exported="true">
-        </activity>
->>>>>>> 71ce412e8da542363e30896392df4fb808c9216f
     </application>
 
 </manifest>
