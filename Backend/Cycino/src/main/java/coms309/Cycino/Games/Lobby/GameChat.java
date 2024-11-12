@@ -1,6 +1,5 @@
 package coms309.Cycino.Games.Lobby;
 
-import ch.qos.logback.core.pattern.color.ANSIConstants;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -12,8 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,110 +24,114 @@ import java.util.Map;
 @Component
 public class GameChat {
 
-    private static Map<Session, String> sessionUsername = new HashMap<>();
-    private static Map<String, Session> usernameSession = new HashMap<>();
-
+    private static final Map<Long, Map<Session, String>> lobbySessions = new HashMap<>();
     private final Logger logger = LoggerFactory.getLogger(GameChat.class);
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) throws IOException {
+    public void onOpen(Session session, @PathParam("lobby") Long lobby, @PathParam("username") String username) throws IOException {
+        logger.info("[onOpen] " + username + " joined lobby: " + lobby);
 
-        // server side log
-        logger.info("[onOpen] " + username);
+        lobbySessions.putIfAbsent(lobby, new HashMap<>());
 
-        // Handle the case of a duplicate username
-        if (usernameSession.containsKey(username)) {
-            session.getBasicRemote().sendText("Username already exists");
+        Map<Session, String> sessions = lobbySessions.get(lobby);
+
+        if (sessions.containsValue(username)) {
+            session.getBasicRemote().sendText("Username already exists in this lobby");
             session.close();
-        }
-        else {
-            // map current session with username
-            sessionUsername.put(session, username);
+        } else {
 
-            // map current username with session
-            usernameSession.put(username, session);
-
-            // send to the user joining in
-            sendMessageToPArticularUser(username, "Welcome to the chat server, "+username);
-
-            // send to everyone in the chat
-            broadcast("User: " + username + " has Joined the Chat");
+            sessions.put(session, username);
+            sendMessageToUser(session, "Welcome to the chat server, " + username);
+            broadcast(lobby, "User: " + username + " has joined the chat");
         }
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) throws IOException {
+    public void onMessage(Session session, @PathParam("lobby") Long lobby, String message) throws IOException {
+        String username = lobbySessions.get(lobby).get(session);
+        logger.info("[onMessage] " + username + " in lobby " + lobby + ": " + message);
 
-        // get the username by session
-        String username = sessionUsername.get(session);
 
-        // server side log
-        logger.info("[onMessage] " + username + ": " + message);
-
-        // Direct message to a user using the format "@username <message>"
         if (message.startsWith("@")) {
-
-            // split by space
-            String[] split_msg =  message.split("\\s+");
-
-            // Combine the rest of message
-            StringBuilder actualMessageBuilder = new StringBuilder();
-            for (int i = 1; i < split_msg.length; i++) {
-                actualMessageBuilder.append(split_msg[i]).append(" ");
+            String[] splitMessage = message.split("\\s+", 2);
+            if (splitMessage.length > 1) {
+                String destUsername = splitMessage[0].substring(1); // Get username after '@'
+                String actualMessage = splitMessage[1];
+                sendDirectMessage(lobby, username, destUsername, "[DM from " + username + "]: " + actualMessage);
             }
-            String destUserName = split_msg[0].substring(1);    //@username and get rid of @
-            String actualMessage = actualMessageBuilder.toString();
-            sendMessageToPArticularUser(destUserName, "[DM from " + username + "]: " + actualMessage);
-            sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
-        }
-        else { // Message to whole chat
-            broadcast(username + ": " + message);
+        } else {
+            broadcast(lobby, username + ": " + message);
         }
     }
 
     @OnClose
-    public void onClose(Session session) throws IOException {
+    public void onClose(Session session, @PathParam("lobby") Long lobby) throws IOException {
+        String username = lobbySessions.get(lobby).get(session);
+        logger.info("[onClose] " + username + " left lobby: " + lobby);
 
-        // get the username from session-username mapping
-        String username = sessionUsername.get(session);
 
-        // server side log
-        logger.info("[onClose] " + username);
+        lobbySessions.get(lobby).remove(session);
 
-        // remove user from memory mappings
-        sessionUsername.remove(session);
-        usernameSession.remove(username);
 
-        // send the message to chat
-        broadcast(username + " disconnected");
+        if (lobbySessions.get(lobby).isEmpty()) {
+            lobbySessions.remove(lobby);
+        }
+
+
+        broadcast(lobby, username + " disconnected");
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable) {
-
-        // get the username from session-username mapping
-        String username = sessionUsername.get(session);
-
-        // do error handling here
-        logger.info("[onError]" + username + ": " + throwable.getMessage());
+    public void onError(Session session, Throwable throwable, @PathParam("lobby") Long lobby) {
+        String username = lobbySessions.get(lobby).get(session);
+        logger.info("[onError] " + username + " in lobby " + lobby + ": " + throwable.getMessage());
     }
 
-    private void sendMessageToPArticularUser(String username, String message) {
-        try {
-            usernameSession.get(username).getBasicRemote().sendText(message);
-        } catch (IOException e) {
-            logger.info("[DM Exception] " + e.getMessage());
+    private void sendDirectMessage(Long lobby, String fromUsername, String toUsername, String message) {
+        Map<Session, String> sessions = lobbySessions.get(lobby);
+
+        if (sessions != null) {
+            sessions.forEach((session, username) -> {
+                if (username.equals(toUsername) || username.equals(fromUsername)) {
+                    try {
+                        session.getBasicRemote().sendText(message);
+                    } catch (IOException e) {
+                        logger.info("[DM Exception] " + e.getMessage());
+                    }
+                }
+            });
         }
     }
 
-    private void broadcast(String message) {
-        sessionUsername.forEach((session, username) -> {
-            try {
-                session.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                logger.info("[Broadcast Exception] " + e.getMessage());
-            }
-        });
+    private void broadcast(Long lobby, String message) {
+        Map<Session, String> sessions = lobbySessions.get(lobby);
+
+        if (sessions != null) {
+            sessions.forEach((session, username) -> {
+                try {
+                    session.getBasicRemote().sendText(message);
+                } catch (IOException e) {
+                    logger.info("[Broadcast Exception] " + e.getMessage());
+                }
+            });
+        }
     }
 
+    private void sendMessageToUser(Session session, String message) {
+        try {
+            session.getBasicRemote().sendText(message);
+        } catch (IOException e) {
+            logger.info("[Send Exception] " + e.getMessage());
+        }
+    }
+
+    public class ImageEncoder {
+
+        public static String encodeImageToBase64(File imageFile) throws IOException {
+            BufferedImage image = ImageIO.read(imageFile);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", baos);
+            return Base64.getEncoder().encodeToString(baos.toByteArray());
+        }
+    }
 }
