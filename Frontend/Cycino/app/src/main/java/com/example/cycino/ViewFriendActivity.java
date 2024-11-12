@@ -1,15 +1,10 @@
 package com.example.cycino;
 
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -20,16 +15,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class ViewActivity extends AppCompatActivity {
+public class ViewFriendActivity extends AppCompatActivity {
 
     private Button friendsButton;
     RequestQueue requestQueue;
@@ -40,14 +33,14 @@ public class ViewActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view);
+        setContentView(R.layout.activity_viewfriend);
         friendsButton = findViewById(R.id.fPage);
         viewLayout = findViewById(R.id.layout_view);
         nameText = findViewById(R.id.userNameText);
         biographyText = findViewById(R.id.biographyText);
 
 
-        requestQueue = Volley.newRequestQueue(ViewActivity.this);
+        requestQueue = Volley.newRequestQueue(ViewFriendActivity.this);
         friendsButton.setText("Return to Friends Page");
 
         Intent intent = getIntent();
@@ -68,7 +61,7 @@ public class ViewActivity extends AppCompatActivity {
         friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ViewActivity.this, FriendPageActivity.class);
+                Intent intent = new Intent(ViewFriendActivity.this, FriendPageActivity.class);
                 intent.putExtra("UUID",loggedInUser);
                 intent.putExtra("USERNAME",userName);
                 startActivity(intent);

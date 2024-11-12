@@ -30,6 +30,7 @@ public class FriendPageActivity extends AppCompatActivity {
 
     private TextView[] followerName;
     private TextView userName;
+    private Button backBtn;
     private Button[] chatButton;
     private Button[] profileButton;
     private LinearLayout[] profileContainer;
@@ -43,6 +44,8 @@ public class FriendPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendpage);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        backBtn.findViewById(R.id.fBackBtn);
         followerName = new TextView[]{
                 findViewById(R.id.friend1Name),
                 findViewById(R.id.friend2Name),
@@ -84,10 +87,20 @@ public class FriendPageActivity extends AppCompatActivity {
         getFollowerList(userID);
         //getUserName(userID);
 
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FriendPageActivity.this,HomePageActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",userID);
+                startActivity(i);
+            }
+        });
+
         profileButton[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[0]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);
@@ -98,7 +111,7 @@ public class FriendPageActivity extends AppCompatActivity {
         profileButton[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[1]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);
@@ -109,7 +122,7 @@ public class FriendPageActivity extends AppCompatActivity {
         profileButton[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[2]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);
@@ -120,7 +133,7 @@ public class FriendPageActivity extends AppCompatActivity {
         profileButton[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[3]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);

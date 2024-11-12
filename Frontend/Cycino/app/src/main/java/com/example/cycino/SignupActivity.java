@@ -93,7 +93,8 @@ public class SignupActivity extends AppCompatActivity {
                         try {
                             String status = response.getString("status") ;
                             if (status.equals("200 ok")) {
-                                Intent intent = new Intent(SignupActivity.this, WelcomeActivity.class);
+                                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+
                                 intent.putExtra("USERNAME", username);
                                //  intent.putExtra("USER_ID",) ; PUT EXTRA THE USER ID
                                 startActivity(intent);

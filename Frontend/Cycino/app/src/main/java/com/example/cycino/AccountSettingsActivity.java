@@ -21,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
 public class AccountSettingsActivity extends AppCompatActivity {
 
     private Button backButton;
