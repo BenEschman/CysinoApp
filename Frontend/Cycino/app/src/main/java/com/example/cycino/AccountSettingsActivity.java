@@ -152,6 +152,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @param username
+     */
     private void deleteAccount(String username) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/delete/" + username;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -190,6 +193,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param username
+     * @param password
+     */
     private void updateLogin(String username, String password) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + username ;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -220,6 +227,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param username
+     * @param newPassword
+     */
     private void updateUserPassword(final String username, final String newPassword) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/update/" + username;
 
@@ -252,6 +263,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param newFirstName
+     */
     private void updateFirstName(final String newFirstName)
     {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,6 +308,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * @param newLastName
+     */
     private void updateLastName(final String newLastName)
     {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -336,6 +353,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * @param newPhoneNumber 
+     */
     private void updatePhoneNumber(final int newPhoneNumber)
     {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////

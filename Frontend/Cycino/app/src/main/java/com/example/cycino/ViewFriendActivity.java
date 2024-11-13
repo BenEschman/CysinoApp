@@ -28,9 +28,12 @@ public class ViewFriendActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     private LinearLayout viewLayout;
     private TextView nameText, biographyText;
+    private JSONObject user;
 
 
-
+    /**
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewfriend);
@@ -71,7 +74,11 @@ public class ViewFriendActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param user
+     */
     private void showOneUser(JSONObject user) {
+        this.user = user;
         TextView nameOut = new TextView(this);
         TextView phoneNumOut = new TextView(this);
 
@@ -93,6 +100,9 @@ public class ViewFriendActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param id
+     */
         private void getOneUser(Integer id) {
             //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
          String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;

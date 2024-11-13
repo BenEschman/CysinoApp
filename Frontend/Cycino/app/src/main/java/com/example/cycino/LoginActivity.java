@@ -31,6 +31,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button signupButton;
     private Button forgotPasswordButton;
 
+    /**
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -69,6 +72,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @param username
+     * @param password
+     */
     private void logInUser(final String username, final String password) {
         // Server URL for login
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/submit/" + username + "/" + password ;

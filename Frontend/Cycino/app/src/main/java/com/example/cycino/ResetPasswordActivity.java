@@ -26,6 +26,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private Button change_password_button;
     private Button back_to_login ;
 
+    /**
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resetpassword);
@@ -51,6 +54,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @param username
+     * @param newPassword
+     */
     private void updateUserPassword(String username, String newPassword) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/update/" + username;
 

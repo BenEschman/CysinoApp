@@ -28,6 +28,9 @@ public class SignupActivity extends AppCompatActivity {
     private Button loginButton;         // define login button variable
     private Button signupButton;        // define signup button variable
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +72,10 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @param username
+     * @param password
+     */
     private void signUpUser(final String username, final String password) {
         // Server URL
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/signup/register"; // signup/register to make new users.

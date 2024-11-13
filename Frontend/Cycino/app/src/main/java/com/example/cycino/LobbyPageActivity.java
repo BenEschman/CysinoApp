@@ -43,6 +43,9 @@ public class LobbyPageActivity extends AppCompatActivity {
     private int currentUser = 4 ;
     private ArrayList<JSONObject> userList = new ArrayList<>();
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +130,12 @@ public class LobbyPageActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * @param user
+     * @param username
+     * @throws JSONException
+     */
     private void addUserToList(JSONObject user, String username) throws JSONException {
             userList.add(user) ;
             android.widget.TextView userTextView = new android.widget.TextView(this);
@@ -136,6 +145,11 @@ public class LobbyPageActivity extends AppCompatActivity {
             userListContainer.addView(userTextView);
     }
 
+    /**
+     * @param user
+     * @param inputUsername
+     * @throws JSONException
+     */
     private void addUserToLobby(JSONObject user, String inputUsername) throws JSONException {
         int userID = user.getInt("id") ;
         for (JSONObject existingUser : userList) {
@@ -182,6 +196,9 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param inputUsername
+     */
     private void getAddUser(String inputUsername)
     {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + inputUsername ;
@@ -229,6 +246,10 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param userId
+     * @throws JSONException
+     */
     private void deleteUserFromList(int userId) throws JSONException {
         // Iterate through the userList to find the user with the given ID
         for (int i = 0; i < userList.size(); i++) {
@@ -248,6 +269,9 @@ public class LobbyPageActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * @param inputUsername
+     */
     private void getDeleteUser(String inputUsername)
     {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + inputUsername ;
@@ -295,6 +319,10 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param user
+     * @throws JSONException
+     */
     private void deleteUserFromLobby(JSONObject user) throws JSONException {
         int userID = user.getInt("id") ;
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/remove/" + lobbyID + "/" + userID ;
@@ -335,6 +363,9 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param lobbyID
+     */
     private void deleteLobby(int lobbyID)
     {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/delete/" + lobbyID;
@@ -347,7 +378,7 @@ public class LobbyPageActivity extends AppCompatActivity {
                             String status = response.getString("status");
                             if (status.equals("200 ok")) {
                                 Toast.makeText(LobbyPageActivity.this, "Lobby has been deleted.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LobbyPageActivity.this, WelcomeActivity.class); // Go to home page.
+                                Intent intent = new Intent(LobbyPageActivity.this, HomePageActivity.class); // Go to home page.
                                 startActivity(intent);
                                 finish();
                             }
@@ -379,6 +410,9 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param lobbyID
+     */
     private void loadUsersInLobby(int lobbyID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/" + lobbyID;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
