@@ -78,6 +78,7 @@ public class BlackJackLogic {
             c.setNumber(1);
             return score + 1;
         }
+        
         if(score + c.getValue() > 21){
             for(Card card: hand){
                 if(card.getNumber().equals("ACE") && card.getValue() != 1){
