@@ -56,7 +56,7 @@ public class Card implements Serializable {
     }
 
     public String img(){
-        return value.toLowerCase() + "_of_" + suit.toString().toLowerCase() +".png";
+        return suit.toString().toLowerCase() + "_" + value.toLowerCase() +".png";
     }
 
     public void setDeck(Deck d){

@@ -1,3 +1,93 @@
+stages:
+  - mavenbuild
+  - maventest
+  
+maven-build:            
+  stage: mavenbuild
+  tags:
+    - yourname_tag      # <-- change to your runner's tag
+  script:
+    - cd Backend        # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
+    - mvn package
+  only:
+    refs:
+      - YOURNAME_CICD
+    changes:
+      - Backend/**/*
+
+
+maven-test:             
+  stage: maventest
+  tags:
+    - yourname_tag     # <-- change to your runner's tag
+  script:
+    - cd Backend       # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
+    - mvn test
+  only:
+    refs:
+      - YOURNAME_CICD
+    changes:
+      - Backend/**/*
+stages:
+  - mavenbuild
+  - maventest
+  
+maven-build:            
+  stage: mavenbuild
+  tags:
+    - yourname_tag      # <-- change to your runner's tag
+  script:
+    - cd Backend        # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
+    - mvn package
+  only:
+    refs:
+      - YOURNAME_CICD
+    changes:
+      - Backend/**/*
+
+
+maven-test:             
+  stage: maventest
+  tags:
+    - yourname_tag     # <-- change to your runner's tag
+  script:
+    - cd Backend       # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
+    - mvn test
+  only:
+    refs:
+      - YOURNAME_CICD
+    changes:
+      - Backend/**/*
+stages:
+  - mavenbuild
+  - maventest
+  
+maven-build:            
+  stage: mavenbuild
+  tags:
+    - yourname_tag      # <-- change to your runner's tag
+  script:
+    - cd Backend        # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
+    - mvn package
+  only:
+    refs:
+      - YOURNAME_CICD
+    changes:
+      - Backend/**/*
+
+
+maven-test:             
+  stage: maventest
+  tags:
+    - yourname_tag     # <-- change to your runner's tag
+  script:
+    - cd Backend       # change 'Backend' to to where you have the pom.xml (do not add / in the beginning)
+    - mvn test
+  only:
+    refs:
+      - YOURNAME_CICD
+    changes:
+      - Backend/**/*
 stages:             # these stages (jobs) forms the CICD pipeline
   - mavenbuild      # this is a JOB to build your Springboot application
   - maventest       # this is a JOB to run tests in your Springboot application (it's okay you don't have any test for now)

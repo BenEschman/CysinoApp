@@ -1,10 +1,7 @@
 package coms309.Cycino.stats;
 
 import coms309.Cycino.users.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -28,6 +25,11 @@ public class GameHistory {
     private Duration duration;
 
     @ManyToMany
+    @JoinTable(
+            name = "user_game_history",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_history_id")
+    )
     private Set<User> players;
 
     public GameHistory(){
