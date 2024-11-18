@@ -17,6 +17,10 @@ public class Enums {
         CLUBS
     }
 
+
+
+    
+
     public enum VALUE{
         JACK,
         QUEEN,
