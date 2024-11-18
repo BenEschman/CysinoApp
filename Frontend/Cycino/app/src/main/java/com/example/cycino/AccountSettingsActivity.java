@@ -1,5 +1,5 @@
 package com.example.cycino;
-
+// Comment for activation of runner
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
