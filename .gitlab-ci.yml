@@ -59,6 +59,10 @@ android-build:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/Cycino/gradlew
   script:
+    - echo "Current working directory: $(pwd)"
+    - ls -la
+    - ls -la ./Frontend/Cycino
+    - ./gradlew build --info
     - java -version
     - gradle -v
     - ls -la ./Frontend/Cycino/gradle/wrapper

@@ -1,5 +1,5 @@
 package com.example.cycino;
-// Comment for activation of runner 5
+// Comment for activation of runner 6
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
