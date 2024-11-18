@@ -1,4 +1,5 @@
 package coms309.Cycino;
+// Comment for runner activation 3
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

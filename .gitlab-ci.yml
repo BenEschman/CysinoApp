@@ -59,6 +59,8 @@ android-build:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/Cycino/gradlew
   script:
+    - echo $JAVA_HOME
+    - echo $PATH
     - cd Frontend/Cycino                   # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
     - ./gradlew build               # gradle build
   only:
