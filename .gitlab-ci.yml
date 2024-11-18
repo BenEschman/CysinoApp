@@ -15,7 +15,7 @@ android-build:
     - ./gradlew build
   only:
     refs:
-      - evan_CICD
+      - evan_cicd
     changes:
       - Frontend/**/*
 
@@ -32,7 +32,7 @@ android-test:
     - ./gradlew test
   only:
     refs:
-      - evan_CICD
+      - evan_cicd
     changes:
       - Frontend/**/*
 
