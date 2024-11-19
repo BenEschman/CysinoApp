@@ -41,7 +41,9 @@ import java.io.File;
 
 
 /**
- *
+ * The BlackjackActivity is the activity that runs the game of blackjack.
+ * It handles both frontend and backend interactions.
+ * Includes all functions of basic blackjack
  * @author Sam Craft
  */
 
@@ -50,53 +52,112 @@ public class BlackjackActivity extends AppCompatActivity {
 
     String url = "http://coms-3090-052.class.las.iastate.edu:8080/blackjack/";
 
-    private ImageView dCard1;
-    private ImageView dCard2;
-    private ImageView p1Card1;
-    private ImageView p1Card2;
-    private ImageView p2Card1;
-    private ImageView p2Card2;
+    /**
+     * ImageView for card
+     */
+    private ImageView dCard1,dCard2, p1Card1, p1Card2, p2Card1, p2Card2;
 
-    private TextView dScore;
-    private TextView pScore;
-    private TextView winStatus;
+    /**
+     * TextView for game info
+     */
+    private TextView dScore, pScore, winStatus;
 
-    private LinearLayout dCards;
-    private LinearLayout p1Cards;
-    private LinearLayout p2Cards;
+    /**
+     * LinearLayout for card formatting
+     */
+    private LinearLayout dCards, p1Cards, p2Cards, cardR1, cardR2;
 
-    private LinearLayout cardR1;
-    private LinearLayout cardR2;
-
+    /**
+     * Button for Hit
+     */
     private Button hitButton;
+    /**
+     * Button for Stand
+     */
     private Button standButton;
+    /**
+     * Button for Start
+     */
     private Button startButton;
+    /**
+     * Button for Split
+     */
     private Button splitButton;
+    /**
+     * Button for Deal
+     */
     private Button dealButton;
+    /**
+     * Button for Double
+     */
     private Button doubleButton;
 
     RequestQueue requestQueue;
 
+    /**
+     * Current Lobby ID
+     */
     private static Integer lobbyID = 56;
+    /**
+     * User's user ID
+     */
     private static Integer userID;
 
+    /**
+     * Number of cards dealer has
+     */
     private int dCardNum = 0;
+    /**
+     * number of cards player has
+     */
     private int p1CardNum = 0;
+    /**
+     * Number of players in game
+     */
     private Integer numPlayers;
 
+    /**
+     * ImageView for extra cards
+     */
     private ImageView d1x1, d1x2, d1x3, d1x4, d1x5;
-
+    /**
+     * ImageView for extra cards
+     */
     private ImageView p1x1, p1x2, p1x3, p1x4, p1x5;
 
-    private Button sendBtn, chatToggleBtn, backBtn, imageBtn;
-    private EditText msgEtx;
-    private TextView msgTv;
-    private ScrollView chatArea;
 
+    /**
+     * Chat Buttons
+     */
+    private Button sendBtn, chatToggleBtn, backBtn, imageBtn;
+    /**
+     * Chat message box
+     */
+    private EditText msgEtx;
+    /**
+     * Chat message area
+     */
+    private TextView msgTv;
+    /**
+     * Chat outer boundary
+     */
+    private ScrollView chatArea;
+    /**
+     * Boolean to check if chat is open or closed
+     */
     private boolean chatOpen = true;
+    /**
+     * VM URL
+     */
     private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/";
+    /**
+     * Current user's username
+     */
     private String username;
 
+    /**
+     * File that holds the emulator's external storage location
+     */
     File sdcard;
 
     /**
@@ -650,6 +711,7 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     /**
+     * Adds a card to dealer's hand
      * @param cardS
      */
     private void addDealerCard(String cardS) {
@@ -686,6 +748,7 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     /**
+     * Adds a card to player's hand
      * @param cardS
      */
     private void addPlayer1Card(String cardS) {
@@ -722,6 +785,7 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     /**
+     * Timer in a new thread
      * @param waitTime
      */
     private void myWait(int waitTime) {
@@ -778,6 +842,10 @@ public class BlackjackActivity extends AppCompatActivity {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
         }
 
+    /**
+     * Setter for global numPlayers variable
+     * @param num
+     */
         private void setNumPlayers(int num) {
             numPlayers = num;
         }

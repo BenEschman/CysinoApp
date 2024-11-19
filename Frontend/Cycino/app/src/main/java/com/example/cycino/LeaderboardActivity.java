@@ -31,31 +31,55 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * The LeaderboardActivity allows you to see every player's stats
+ * It handles the getting and displaying of all stats
+ *
  * @author Sam Craft
  */
 
 public class LeaderboardActivity extends AppCompatActivity{
 
 
-
+    /**
+     * AndroidStudio function for moving items on screen
+     */
     Gravity gravity = new Gravity();
 
-    final private String[] names = {"name1","name2","name3","name5","name4"};
-    final private Integer[] scores = {500000,100000,200,5000,200};
-    final private Integer[] numWins = {1000,10,85,20,300};
 
-
+    /**
+     * LinearLayout for player Names
+     */
     private LinearLayout lbNames;
+    /**
+     * LinearLayout for player Scores
+     */
     private LinearLayout lbScores;
+    /**
+     *  LinearLayout for player Wins
+     */
     private LinearLayout lbWins;
+    /**
+     *  Button to select blacjack tab
+     */
     private Button blackjackButton;
+    /**
+     * TextView to show current game selected
+     */
     private TextView titleText;
     RequestQueue requestQueue;
 
 
+    /**
+     * Global counting variable
+     */
     int items;
-    final int numLines = 2;
+    /**
+     * List of usernames
+     */
     List<String> userNames = new ArrayList<String>();
+    /**
+     * Empty JSONArray for HTTP Reponses
+     */
     JSONArray responseArr;
 
 
@@ -138,10 +162,11 @@ public class LeaderboardActivity extends AppCompatActivity{
     }
 
     /**
+     * Updates the leaderboard frontend with the JSON Object passed through
      * @param name
      * @param jObj
      * @throws JSONException
-     * Updates the leaderboard frontend with the JSON Object passed through
+     *
      */
     private void updateLeaderboard(String name, JSONObject jObj) throws JSONException {
 
@@ -238,8 +263,9 @@ public class LeaderboardActivity extends AppCompatActivity{
 
 
     /**
-     * @param id
      * Gets the name of one user based off of their user ID
+     * @param id
+     *
      */
     private void getOneName(Integer id) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
