@@ -35,6 +35,9 @@ public class HomePageActivity extends AppCompatActivity {
     private String username;
     private Integer UUID;
 
+    /**
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);

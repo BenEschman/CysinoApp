@@ -26,10 +26,16 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Sam Craft
+ * @author Evan Litzer
+ */
+
 public class FriendPageActivity extends AppCompatActivity {
 
     private TextView[] followerName;
     private TextView userName;
+    private Button backBtn;
     private Button[] chatButton;
     private Button[] profileButton;
     private LinearLayout[] profileContainer;
@@ -43,6 +49,8 @@ public class FriendPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendpage);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        backBtn.findViewById(R.id.fBackBtn);
         followerName = new TextView[]{
                 findViewById(R.id.friend1Name),
                 findViewById(R.id.friend2Name),
@@ -84,10 +92,20 @@ public class FriendPageActivity extends AppCompatActivity {
         getFollowerList(userID);
         //getUserName(userID);
 
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FriendPageActivity.this,HomePageActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",userID);
+                startActivity(i);
+            }
+        });
+
         profileButton[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[0]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);
@@ -98,7 +116,7 @@ public class FriendPageActivity extends AppCompatActivity {
         profileButton[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[1]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);
@@ -109,7 +127,7 @@ public class FriendPageActivity extends AppCompatActivity {
         profileButton[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[2]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);
@@ -120,7 +138,7 @@ public class FriendPageActivity extends AppCompatActivity {
         profileButton[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FriendPageActivity.this,ViewActivity.class);
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
                 intent.putExtra("UUID",friendsID[3]);
                 intent.putExtra("lUUID",userID);
                 intent.putExtra("USERNAME",username);
@@ -133,6 +151,10 @@ public class FriendPageActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param userID Gets the list of followers for a specific user ID
+     *
+     */
     public void getFollowerList(final int userID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/following";
 
@@ -172,6 +194,12 @@ public class FriendPageActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
+    /**
+     * @param userID
+     * @param followingID
+     *
+     * Follows another user by entering both the current user's ID, and the ID of the user that is attempting to be followed.
+     */
     private void followUser(final int userID, final int followingID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/follow";
 
@@ -215,6 +243,11 @@ public class FriendPageActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param userID
+     * @param followingID
+     * Unfollows another user by entering both the current user's ID, and the ID of the user that is attempting to be unfollowed.
+     */
     private void unfollowUser(final int userID, final int followingID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/unfollow/" + followingID;
 
@@ -259,6 +292,11 @@ public class FriendPageActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param userId
+     * @param followingId
+     * Mutes the notifications from a different user
+     */
     private void muteNotis(final int userId, final int followingId) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userId + "/follow/update";
 
@@ -300,6 +338,11 @@ public class FriendPageActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param id
+     * @param loopI
+     * Gets the usernames of all of the user's followers.
+     */
     private void getUserName(Integer id, Integer loopI) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
@@ -332,6 +375,10 @@ public class FriendPageActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @param numEntries
+     * Enables the correct amount of user templates for the page
+     */
     private void showUserEntries(int numEntries) {
         for (int i = 0; i < numEntries; i++) {
             profileContainer[i].setVisibility(View.VISIBLE);

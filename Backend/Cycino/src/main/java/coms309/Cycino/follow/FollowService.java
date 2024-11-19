@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -89,8 +90,13 @@ public class FollowService {
         return false;
     }
 
-    public List<Follow> getFollowers(Long uid) {
-        return followRepository.getFollowersByFollowingID(uid);
+    public List<Long> getFollowers(Long uid) {
+        List<Long> followersUIDs = new ArrayList<>();
+        List<Follow> followers = followRepository.getFollowersByFollowingID(uid);
+        for (Follow follow : followers) {
+            followersUIDs.add(follow.getForeignKey());
+        }
+        return followersUIDs;
     }
 
 }

@@ -30,6 +30,9 @@ public class GameChatActivity extends AppCompatActivity {
     private Integer lobbyID;
     private String username;
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

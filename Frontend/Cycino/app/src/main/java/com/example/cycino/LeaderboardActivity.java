@@ -30,6 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Sam Craft
+ */
+
 public class LeaderboardActivity extends AppCompatActivity{
 
 
@@ -45,7 +49,6 @@ public class LeaderboardActivity extends AppCompatActivity{
     private LinearLayout lbScores;
     private LinearLayout lbWins;
     private Button blackjackButton;
-    private Button demoButton;
     private TextView titleText;
     RequestQueue requestQueue;
 
@@ -68,7 +71,6 @@ public class LeaderboardActivity extends AppCompatActivity{
         lbWins = findViewById(R.id.lb_wins);
         titleText = findViewById(R.id.text_leaderboard_title);
         blackjackButton = findViewById(R.id.blackjackLbButton);
-        demoButton = findViewById(R.id.demoButton);
 
         requestQueue = Volley.newRequestQueue(LeaderboardActivity.this);
 
@@ -76,8 +78,6 @@ public class LeaderboardActivity extends AppCompatActivity{
         titleText.setTextSize(40);
 
         blackjackButton.setText("Blackjack");
-        demoButton.setText("Demo Features");
-
 
         getBlackjackStats();
         resetLeaderboard();
@@ -104,21 +104,11 @@ public class LeaderboardActivity extends AppCompatActivity{
 
             }
         });
-
-
-
-        demoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LeaderboardActivity.this, LeaderboardInteractionActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
     }
 
+    /**
+     *Resets the leaderboard to be completely empty.
+     */
     private void resetLeaderboard() {
 
 
@@ -147,6 +137,12 @@ public class LeaderboardActivity extends AppCompatActivity{
         lbScores.addView(scoreTitle);
     }
 
+    /**
+     * @param name
+     * @param jObj
+     * @throws JSONException
+     * Updates the leaderboard frontend with the JSON Object passed through
+     */
     private void updateLeaderboard(String name, JSONObject jObj) throws JSONException {
 
 
@@ -198,6 +194,9 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     }
 
+    /**
+     *Gets blackjack stats for every user that exists
+     */
     private void getBlackjackStats() {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/stats/all/BLACKJACK";
@@ -238,6 +237,10 @@ public class LeaderboardActivity extends AppCompatActivity{
     }
 
 
+    /**
+     * @param id
+     * Gets the name of one user based off of their user ID
+     */
     private void getOneName(Integer id) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;

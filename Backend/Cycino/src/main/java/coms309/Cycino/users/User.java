@@ -5,27 +5,16 @@ import coms309.Cycino.Enums;
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
 import coms309.Cycino.Games.GameLogic.PlayerHands;
 import coms309.Cycino.follow.Follow;
+import coms309.Cycino.groupChat.GroupChat;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
-<<<<<<< HEAD
 import coms309.Cycino.stats.GameHistory;
 import coms309.Cycino.stats.UserStats;
 import jakarta.persistence.*;
 
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettingsRepository;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-=======
-import coms309.Cycino.stats.UserStats;
-import jakarta.persistence.*;
-import coms309.Cycino.Enums;
-
-import java.util.HashSet;
-import java.util.List;
->>>>>>> 33-blackjack-game-view
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users") // escaping using double quotes for H2 SQL compatibility
@@ -35,6 +24,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    private String username;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -59,7 +49,6 @@ public class User implements Serializable {
     @JsonIgnore
     private LoginInfo loginInfo;
 
-<<<<<<< HEAD
     @ManyToOne
     private Lobby lobby;
 
@@ -74,19 +63,17 @@ public class User implements Serializable {
     )
     private Set<GameHistory> gameHistories;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_groupchat",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "groupChat_id")
+    )
+    private Set<GroupChat> groupChats = new HashSet<>();
 
     public User(){}
 
     public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo, BlackJackSettings blackJackSettings) {
-=======
-    @ManyToMany(mappedBy = "users")
-    @JsonIgnore
-    private Set<UserStats> userStats = new HashSet<>();
-
-    public User(){}
-
-    public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo) {
->>>>>>> 33-blackjack-game-view
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,10 +83,34 @@ public class User implements Serializable {
         this.followList = followList;
         this.loginInfo = loginInfo;
         this.blackJackSettings = blackJackSettings;
+        this.username = loginInfo.getUsername();
+    }
+
+    public void addGroupChat(GroupChat groupChat){
+        this.groupChats.add(groupChat);
+        groupChat.getUsers().add(this);
+    }
+
+    public void removeGroupChat(GroupChat groupChat){
+        this.groupChats.remove(groupChat);
+        groupChat.getUsers().remove(this);
+    }
+
+    public Set<GroupChat> getGroupChats() {
+        return groupChats;
+    }
+
+    public void setGroupChats(Set<GroupChat> groupChats) {
+        this.groupChats = groupChats;
     }
 
     public BlackJackSettings getBlackJackSettings() {
         return this.blackJackSettings;
+    }
+
+    public String getUsername(){
+        username = loginInfo.getUsername();
+        return username;
     }
 
     public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
@@ -119,6 +130,7 @@ public class User implements Serializable {
     }
 
     public long getId(){
+        this.username = loginInfo.getUsername();
         return id;
     }
 
