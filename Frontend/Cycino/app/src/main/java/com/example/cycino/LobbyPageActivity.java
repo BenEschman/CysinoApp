@@ -28,20 +28,81 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The LobbyPageActivity is the main interface for managing a game lobby.
+ * It allows users to see who’s currently in the lobby, add new players,
+ * remove existing ones, or adjust settings as needed. There’s also an option to start the game
+ * once everything is set up or delete the lobby entirely if plans change.
+ *
+ * The class handles most of the interactions between the user and the server for lobby management.
+ * This includes adding/deleting players, starting a game, going to settings, etc.
+ *
+ * Players are displayed in a list, showing their usernames and roles in the game. The buttons are laid out for easy access,
+ * covering everything a host might need to do in preparation for the game.
+ *
+ */
 public class LobbyPageActivity extends AppCompatActivity {
 
+    /**
+     * EditText for entering a username to add or remove from the lobby.
+     */
     private EditText editTextUsername;
+
+    /**
+     * Button to add a user to the lobby.
+     */
     private Button buttonAddUser;
-    private Button buttonRemoveUser ;
+
+    /**
+     * Button to remove a user from the lobby.
+     */
+    private Button buttonRemoveUser;
+
+    /**
+     * Button to start the game from the lobby.
+     */
     private Button buttonStartGame;
+
+    /**
+     * Button to delete the lobby.
+     */
     private Button buttonDeleteLobby;
+
+    /**
+     * Button to navigate back to the home screen.
+     */
     private Button buttonBackToHome;
+
+    /**
+     * Button to open the settings page for the lobby.
+     */
     private Button buttonChangeSettings;
+
+    /**
+     * ScrollView to display the list of users in the lobby.
+     */
     private ScrollView scrollViewUserList;
+
+    /**
+     * LinearLayout container for dynamically displaying the list of users.
+     */
     private LinearLayout userListContainer;
-    private int lobbyID = 53 ; // FOR TESTING PURPOSES!!!!!!!!!!!
-    private int currentUser = 4 ;
+
+    /**
+     * ID of the current lobby.
+     */
+    private int lobbyID = 53; // Temporary value for testing purposes.
+
+    /**
+     * ID of the current user.
+     */
+    private int currentUser = 4;
+
+    /**
+     * List of users currently in the lobby.
+     */
     private ArrayList<JSONObject> userList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +120,15 @@ public class LobbyPageActivity extends AppCompatActivity {
         scrollViewUserList = findViewById(R.id.scrollViewUserList);
         userListContainer = findViewById(R.id.userListContainer);
 
+
+        // Load existing users in the lobby.
         loadUsersInLobby(lobbyID);
 
-
-
-        // Set up click listeners for buttons
+        /**
+         * Sets up the "Add User" button.
+         * When clicked, retrieves the username from the input field and attempts to add the user to the lobby.
+         * Displays a message if the field is empty.
+         */
         buttonAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +142,11 @@ public class LobbyPageActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Sets up the "Remove User" button.
+         * When clicked, retrieves the username from the input field and attempts to remove the user from the lobby.
+         * Notifies the user if the input field is empty.
+         */
         buttonRemoveUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +160,10 @@ public class LobbyPageActivity extends AppCompatActivity {
             }
         });
 
-
-
+        /**
+         * Sets up the "Start Game" button.
+         * When clicked, triggers a placeholder action to start the game.
+         */
         buttonStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +172,10 @@ public class LobbyPageActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Sets up the "Delete Lobby" button.
+         * When clicked, attempts to delete the current lobby using the lobby ID.
+         */
         buttonDeleteLobby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +184,10 @@ public class LobbyPageActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Sets up the "Back to Home" button.
+         * When clicked, notifies the user and navigates back to the home screen.
+         */
         buttonBackToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +197,10 @@ public class LobbyPageActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Sets up the "Change Settings" button.
+         * When clicked, notifies the user and navigates to the settings page.
+         */
         buttonChangeSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +211,16 @@ public class LobbyPageActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Adds a user to the lobby's user list and dynamically updates the UI to display their information.
+     * Creates a new TextView for the user, showing their username and role, and adds it to the user container.
+     * This keeps the lobby interface up-to-date with the current players.
+     *
+     * @param user     The JSON object representing the user to be added.
+     * @param username The username of the user being added.
+     * @throws JSONException If there is an issue extracting the user's role from the JSON object.
+     */
     private void addUserToList(JSONObject user, String username) throws JSONException {
         userList.add(user) ;
         android.widget.TextView userTextView = new android.widget.TextView(this);
@@ -135,7 +229,15 @@ public class LobbyPageActivity extends AppCompatActivity {
         userTextView.setTextSize(20);
         userListContainer.addView(userTextView);
     }
-
+    /**
+     * Attempts to add a user to the lobby by sending a PUT request to the server.
+     * Checks if the user is already in the lobby before making the server call, avoiding duplicates.
+     * If successful, the user is added to the local user list and displayed in the list.
+     *
+     * @param user          The JSON object representing the user to be added.
+     * @param inputUsername The username of the user to be added to the lobby.
+     * @throws JSONException If there is an issue extracting the user ID from the JSON object.
+     */
     private void addUserToLobby(JSONObject user, String inputUsername) throws JSONException {
         int userID = user.getInt("id") ;
         for (JSONObject existingUser : userList) {
@@ -147,6 +249,13 @@ public class LobbyPageActivity extends AppCompatActivity {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/add/" + lobbyID + "/" + userID ;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
+                    /**
+                     * Processes the server's response to the PUT request.
+                     * If successful, the user is added to the UI and the local user list.
+                     * Otherwise, an error message is displayed to indicate the failure.
+                     *
+                     * @param response The JSON response from the server.
+                     */
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("LobbyPage", "Server Response: " + response.toString());
@@ -166,6 +275,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
+                    /**
+                     * Handles errors encountered during the PUT request.
+                     * Logs the error details and displays a message notifying the user of the issue.
+                     *
+                     * @param error The error encountered during the request.
+                     */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
@@ -182,11 +297,26 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Sends a GET request to verfiy if a user with the specified username exists.
+     * If the user is found, the method proceeds to add the user to current lobby.
+     * Handles server responses, validates user existence, and provides feedback on errors and success.
+     *
+     * @param inputUsername The username of the user to be verified and added to the lobby.
+     */
     private void getAddUser(String inputUsername)
     {
+        // Construct the URL for the GET request
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + inputUsername ;
+        // Create a JSON object request to validate the user
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    /**
+                     * Handles the server's response to the GET request.
+                     * If the user exists, retrieves the user object and calls addUserToLobby to add them to the lobby.
+                     *
+                     * @param response The JSON response from the server containing user details.
+                     */
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -209,6 +339,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
+                    /**
+                     * Handles errors encountered during the GET request.
+                     * Logs the error and displays a toast message notifying the user of the issue.
+                     *
+                     * @param error The error encountered during the request.
+                     */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("VolleyError", "Server error: " + error.getMessage());
@@ -216,6 +352,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                     }
 
                 }) {
+            /**
+             * Adds headers to the GET request, specifying the content type and accepted response type.
+             *
+             * @return A map containing the request headers.
+             * @throws AuthFailureError If there is an authentication failure when setting headers.
+             */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -229,6 +371,15 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Removes a user from the lobby's user list and updates the UI to reflect the change.
+     * Iterates through the current user list to find the user with the specified ID.
+     * If the user is found, it is removed from both the internal list and the displayed UI.
+     * If the user is not found, a toast message notifies the caller.
+     *
+     * @param userId The unique identifier of the user to be removed from the lobby.
+     * @throws JSONException If an error occurs while processing the JSON object structure.
+     */
     private void deleteUserFromList(int userId) throws JSONException {
         // Iterate through the userList to find the user with the given ID
         for (int i = 0; i < userList.size(); i++) {
@@ -247,12 +398,27 @@ public class LobbyPageActivity extends AppCompatActivity {
         Toast.makeText(this, "User not found in the lobby list.", Toast.LENGTH_SHORT).show();
     }
 
-
+    /**
+     * Sends a GET request to verify the existence of a user by username and retrieve their user object.
+     * If the user exists, the method proceeds to delete the user from the current lobby.
+     * Handles server responses, user validation, and error notifications to ensure smooth operation.
+     *
+     * @param inputUsername The username of the user to be verified and removed from the lobby.
+     */
     private void getDeleteUser(String inputUsername)
     {
+        // Get the correct URL with the right endpoints for GET request
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + inputUsername ;
+        // Create a JSON object request to validate the user
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    /**
+                     * Handles the server's response to the GET request.
+                     * Checks if the user exists and retrieves the user object. If the user exists, it calls
+                     * deleteUserFromLobby to remove the user from the lobby.
+                     *
+                     * @param response The JSON response from the server containing the user details.
+                     */
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -275,6 +441,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
+                    /**
+                     * Handles errors encountered during the GET request.
+                     * Logs the error and displays a toast message notifying the user of the issue.
+                     *
+                     * @param error The error encountered during the request.
+                     */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("VolleyError", "Server error: " + error.getMessage());
@@ -282,6 +454,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                     }
 
                 }) {
+            /**
+             * Adds headers to the GET request, specifying the content type and accepted response type.
+             *
+             * @return A map containing the request headers.
+             * @throws AuthFailureError If there is an authentication failure when setting headers.
+             */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -295,11 +473,28 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Sends a PUT request to remove a user from the specified lobby.
+     * If the user is sucessfully removed, the UI and internal user list are updated to reflect the change.
+     * Handles server responses and errors during the deletion process.
+     *
+     * @param user A JSON object representing the user to be removed, containg their ID and details.
+     * @throws JSONException If an error occurs while extracting the user ID from the JSON object.
+     */
     private void deleteUserFromLobby(JSONObject user) throws JSONException {
+        // Get USER ID from the user.
         int userID = user.getInt("id") ;
+        // Assemble the correct URL with right endpoints for PUT request.
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/remove/" + lobbyID + "/" + userID ;
+        // Create JSON object request to remove the user from the lobby.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
+                    /**
+                     * Handles the server's response to the PUT request.
+                     * Updates the UI and internal user list if the user is successfully removed.
+                     *
+                     * @param response The JSON response from the server indicating the operation's success or failure.
+                     */
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("LobbyPage", "Server Response: " + response.toString());
@@ -319,6 +514,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
+                    /**
+                     * Handles errors encountered during the PUT request.
+                     * Logs the error and displays a toast message notifying the user of the issue.
+                     *
+                     * @param error The error encountered during the request.
+                     */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
@@ -334,12 +535,27 @@ public class LobbyPageActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
     }
-
+    /**
+     * Sends a DELETE request to the server to delete the specified lobby.
+     * If the deletion is successful, the user is redirected to the welcome screen.
+     * Any errors encountered during the request or response handling are logged and displayed to the user.
+     *
+     * @param lobbyID The unique identifier of the lobby to be deleted.
+     */
     private void deleteLobby(int lobbyID)
     {
+        // Create the correct URL with correct endpoints to delete the endpoint
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/delete/" + lobbyID;
+        // Create a JSON object request to delete the lobby
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+                    /**
+                     * Handles the server's response to the DELETE request.
+                     * If the response indicates successful deletion, the user is notified via a toast message
+                     * and redirected to the welcome screen.
+                     *
+                     * @param response The JSON response from the server.
+                     */
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("LobbyPage", "Server Response: " + response.toString());
@@ -357,6 +573,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
+                    /**
+                     * Handles errors encountered during the DELETE request.
+                     * Logs the error details and displays a toast message notifying the user of the issue.
+                     *
+                     * @param error The error encountered during the request.
+                     */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
@@ -367,6 +589,12 @@ public class LobbyPageActivity extends AppCompatActivity {
                         error.printStackTrace();
                     }
                 }) {
+            /**
+             * Adds headers to the DELETE request, including the content type.
+             *
+             * @return A map containing the request headers.
+             * @throws AuthFailureError If there is an issue with authentication when setting headers.
+             */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -379,10 +607,27 @@ public class LobbyPageActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Retrieves the list of users currently in the specified lobby from the server.
+     * For each user retrieved, this method dynamically updates the user interface
+     * to display the username and associated role within the lobby. This ensures
+     * that the lobby's user list is accurately reflected in real-time.
+     *
+     * @param lobbyID The unique identifier of the lobby whose user list is being loaded.
+     */
     private void loadUsersInLobby(int lobbyID) {
+       // Constuct the URL for the server request.
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/" + lobbyID;
+        // Create a JSON object request ti retrieve the lobby's users
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    /**
+                     * Handles the server's response to the GET request.
+                     * Extracts the list of players from the "players" array in the JSON response,
+                     * and iterates through the list to add each player to the user list and UI.
+                     *
+                     * @param response The JSON response from the server containing player data.
+                     */
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -404,12 +649,25 @@ public class LobbyPageActivity extends AppCompatActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
+                    /**
+                     * Handles errors that occur during the request to the server.
+                     * Logs the error message and displays a toast message to inform the user
+                     * that the player list could not be loaded.
+                     *
+                     * @param error The error encountered during the request.
+                     */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("VolleyError", "Server error: " + error.getMessage());
                         Toast.makeText(getApplicationContext(), "Failed to load players in lobby", Toast.LENGTH_LONG).show();
                     }
                 }) {
+            /**
+             * Adds headers to the GET request, specifying the content type and accepted response type.
+             *
+             * @return A map containing the request headers.
+             * @throws AuthFailureError If there is an authentication failure when setting headers.
+             */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -418,7 +676,6 @@ public class LobbyPageActivity extends AppCompatActivity {
                 return headers;
             }
         };
-
         // Add the request to the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
