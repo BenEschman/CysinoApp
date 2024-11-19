@@ -40,6 +40,11 @@ import org.json.JSONObject;
 import java.io.File;
 
 
+/**
+ *
+ * @author Sam Craft
+ */
+
 
 public class BlackjackActivity extends AppCompatActivity {
 
@@ -294,6 +299,8 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     /**
+     *
+     * Starts the game. Sets up all frontend components, makes calls to backend to start a new game.
      * @param numPlayers
      * @param playerNum
      * @param lobbyID
@@ -396,7 +403,7 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     *Deals the hand for the game. Deals for everyone at the table
      */
     private void deal(){
 
@@ -508,7 +515,7 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     *Sends a request to the backend to hit for the user connected from the device
      */
     private void hit(){
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"hit/"+lobbyID+"/"+userID, null,
@@ -551,7 +558,9 @@ public class BlackjackActivity extends AppCompatActivity {
 
 
     }
-
+    /**
+     *Sends a request to the backend to stand for the user connected from the device
+     */
     private void stand() {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"stand/"+lobbyID+"/"+userID, null,
                 new Response.Listener<JSONObject>() {
@@ -582,7 +591,7 @@ public class BlackjackActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     *Shows the rest of the dealers hand and finishes up the game
      */
     private void finishGame() {
 

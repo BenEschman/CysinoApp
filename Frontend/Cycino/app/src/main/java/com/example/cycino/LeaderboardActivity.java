@@ -30,6 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Sam Craft
+ */
+
 public class LeaderboardActivity extends AppCompatActivity{
 
 
@@ -103,7 +107,7 @@ public class LeaderboardActivity extends AppCompatActivity{
     }
 
     /**
-     *
+     *Resets the leaderboard to be completely empty.
      */
     private void resetLeaderboard() {
 
@@ -137,6 +141,7 @@ public class LeaderboardActivity extends AppCompatActivity{
      * @param name
      * @param jObj
      * @throws JSONException
+     * Updates the leaderboard frontend with the JSON Object passed through
      */
     private void updateLeaderboard(String name, JSONObject jObj) throws JSONException {
 
@@ -190,7 +195,7 @@ public class LeaderboardActivity extends AppCompatActivity{
     }
 
     /**
-     *
+     *Gets blackjack stats for every user that exists
      */
     private void getBlackjackStats() {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
@@ -234,6 +239,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     /**
      * @param id
+     * Gets the name of one user based off of their user ID
      */
     private void getOneName(Integer id) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";

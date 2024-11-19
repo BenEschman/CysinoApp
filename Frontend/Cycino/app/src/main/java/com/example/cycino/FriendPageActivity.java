@@ -26,6 +26,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Sam Craft
+ * @author Evan Litzer
+ */
+
 public class FriendPageActivity extends AppCompatActivity {
 
     private TextView[] followerName;
@@ -147,7 +152,8 @@ public class FriendPageActivity extends AppCompatActivity {
     }
 
     /**
-     * @param userID
+     * @param userID Gets the list of followers for a specific user ID
+     *
      */
     public void getFollowerList(final int userID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/following";
@@ -191,6 +197,8 @@ public class FriendPageActivity extends AppCompatActivity {
     /**
      * @param userID
      * @param followingID
+     *
+     * Follows another user by entering both the current user's ID, and the ID of the user that is attempting to be followed.
      */
     private void followUser(final int userID, final int followingID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/follow";
@@ -238,6 +246,7 @@ public class FriendPageActivity extends AppCompatActivity {
     /**
      * @param userID
      * @param followingID
+     * Unfollows another user by entering both the current user's ID, and the ID of the user that is attempting to be unfollowed.
      */
     private void unfollowUser(final int userID, final int followingID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/unfollow/" + followingID;
@@ -286,6 +295,7 @@ public class FriendPageActivity extends AppCompatActivity {
     /**
      * @param userId
      * @param followingId
+     * Mutes the notifications from a different user
      */
     private void muteNotis(final int userId, final int followingId) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userId + "/follow/update";
@@ -331,6 +341,7 @@ public class FriendPageActivity extends AppCompatActivity {
     /**
      * @param id
      * @param loopI
+     * Gets the usernames of all of the user's followers.
      */
     private void getUserName(Integer id, Integer loopI) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
@@ -366,6 +377,7 @@ public class FriendPageActivity extends AppCompatActivity {
 
     /**
      * @param numEntries
+     * Enables the correct amount of user templates for the page
      */
     private void showUserEntries(int numEntries) {
         for (int i = 0; i < numEntries; i++) {
