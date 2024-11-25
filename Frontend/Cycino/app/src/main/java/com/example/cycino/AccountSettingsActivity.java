@@ -125,12 +125,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newPhoneNumber = editPhoneNumber.getText().toString();
                 if (newPhoneNumber.matches("^[0-9]+$")) {
-
-
-                    // UPDATE USER PHONE NUMBER IN USER TABLE
-
-
-                    Toast.makeText(AccountSettingsActivity.this, "Phone number updated to: " + newPhoneNumber, Toast.LENGTH_SHORT).show();
+                    updatePhoneNumber(userID, newPhoneNumber) ;
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid phone number. Only numbers are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -353,13 +348,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
     /**
      * @param newPhoneNumber 
      */
-    private void updatePhoneNumber(final int newPhoneNumber)
+    private void updatePhoneNumber(final int userID, final String newPhoneNumber)
     {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/update/" + userID ;
 
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("firstname", newPhoneNumber);
+            jsonBody.put("phoneNumber", newPhoneNumber);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
@@ -373,8 +368,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         Log.d("AccountSettingsActivity", "Server Response: " + response.toString());
                         try {
                             String status = response.getString("status");
-                            if (status.equals("200 ok")) {
-                                Toast.makeText(getApplicationContext(), "Phone number has been updated.", Toast.LENGTH_SHORT).show();
+                            if (status.equals("200 OK")) {
+                                Toast.makeText(AccountSettingsActivity.this, "Phone number updated to: " + newPhoneNumber, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -393,6 +388,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     }
                 }) {
         };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 
 
