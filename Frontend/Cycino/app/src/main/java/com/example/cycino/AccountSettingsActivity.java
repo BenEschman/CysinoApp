@@ -39,6 +39,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     //testing
     private String userUsername = "mike";
     private String userPassword = "123" ;
+    private int userID = 3 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,34 +93,27 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
         });
 
+        // This currently changes all user information. need a proper endpoint or null checks.
         btnChangeFirstName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newFirstName = editFirstName.getText().toString();
                 if (newFirstName.matches("^[a-zA-Z]+$")) {
-
-
-                    // UPDATE FIRST NAME IN USER INFO TABLE
-
-
-                    Toast.makeText(AccountSettingsActivity.this, "First name updated to: " + newFirstName, Toast.LENGTH_SHORT).show();
+                    updateFirstName(userID, newFirstName);
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid first name. Only letters are allowed.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+
+        // This currently changes all user information. need a proper endpoint.
         btnChangeLastName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newLastName = editLastName.getText().toString();
                 if (newLastName.matches("^[a-zA-Z]+$")) {
-
-
-                    // UPDATE LAST NAME IN USER INFO
-
-
-                    Toast.makeText(AccountSettingsActivity.this, "Last name updated to: " + newLastName, Toast.LENGTH_SHORT).show();
+                    updateLastName(userID, newLastName) ;
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid last name. Only letters are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -266,19 +260,18 @@ public class AccountSettingsActivity extends AppCompatActivity {
     /**
      * @param newFirstName
      */
-    private void updateFirstName(final String newFirstName)
+    private void updateFirstName(final int userID, final String newFirstName)
     {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/update/" + userID;
 
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("firstname", newFirstName);
+            jsonBody.put("firstName", newFirstName);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
             return;
         }
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
@@ -286,8 +279,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         Log.d("AccountSettingsActivity", "Server Response: " + response.toString());
                         try {
                             String status = response.getString("status");
-                            if (status.equals("200 ok")) {
-                                Toast.makeText(getApplicationContext(), "First name has been updated.", Toast.LENGTH_SHORT).show();
+                            if (status.equals("200 OK")) {
+                                Toast.makeText(AccountSettingsActivity.this, "First name updated to: " + newFirstName, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -306,18 +299,20 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     }
                 }) {
         };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 
     /**
      * @param newLastName
      */
-    private void updateLastName(final String newLastName)
+    private void updateLastName(final int userID, final String newLastName)
     {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/update/" + userID ;
 
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("lastname", newLastName);
+            jsonBody.put("lastName", newLastName);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
@@ -331,8 +326,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         Log.d("AccountSettingsActivity", "Server Response: " + response.toString());
                         try {
                             String status = response.getString("status");
-                            if (status.equals("200 ok")) {
-                                Toast.makeText(getApplicationContext(), "Last name has been updated.", Toast.LENGTH_SHORT).show();
+                            if (status.equals("200 OK")) {
+                                Toast.makeText(AccountSettingsActivity.this, "Last name updated to: " + newLastName, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -351,6 +346,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     }
                 }) {
         };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
     }
 
     /**
