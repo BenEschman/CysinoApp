@@ -44,11 +44,11 @@ public class UserService {
     public boolean create(User user, long id){
         User oldUser = getUser(id);
         if(oldUser != null) {
-            oldUser.setFirstName(user.getFirstName());
-            oldUser.setLastName(user.getLastName());
-            oldUser.setPhoneNumber(user.getPhoneNumber());
-            oldUser.setUserBiography(user.getUserBiography());
-            oldUser.setRole(user.getRole());
+            if(user.getFirstName() != null){oldUser.setFirstName(user.getFirstName());}
+            if(user.getLastName() != null){oldUser.setLastName(user.getLastName());}
+            if(user.getPhoneNumber() != null){oldUser.setPhoneNumber(user.getPhoneNumber());}
+            if(user.getUserBiography() != null){oldUser.setUserBiography(user.getUserBiography());}
+            if(user.getRole() != null){oldUser.setRole(user.getRole());}
             userRepository.save(oldUser);
             return true;
         }
