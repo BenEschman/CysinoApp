@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,13 +24,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.cycino.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class MainSettingsActivity extends AppCompatActivity {
 
@@ -59,9 +61,7 @@ public class MainSettingsActivity extends AppCompatActivity {
     private int maxBet ;
     private int numberOfDecks ;
 
-    /**
-     * @param savedInstanceState
-     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +70,6 @@ public class MainSettingsActivity extends AppCompatActivity {
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
         logOutButton = findViewById(R.id.logOutButton);
-        brightnessDial = findViewById(R.id.brightnessDial);
-        brightnessLabel = findViewById(R.id.brightnessLabel);
         notificationsSwitch = findViewById(R.id.notificationsSwitch);
         accountSettingsButton = findViewById(R.id.accountSettingsButton);
         onlineStatusSwitch = findViewById(R.id.onlineStatusSwitch);
@@ -275,9 +273,6 @@ public class MainSettingsActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * @param isEnabled
-     */
     private void handleNotificationsSwitchChange(boolean isEnabled) {
         String url = "" ;
         if (isEnabled) {
@@ -322,18 +317,12 @@ public class MainSettingsActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * @param brightnessLevel
-     */
     private void setActivityBrightness(int brightnessLevel) {
         WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
         layoutParams.screenBrightness = brightnessLevel / 100.0f; // Convert from 0-100 to 0-1 scale
         getWindow().setAttributes(layoutParams);
     }
 
-    /**
-     * @param brightnessLevel
-     */
     private void setSystemBrightness(int brightnessLevel) {
         try {
             if (Settings.System.canWrite(this)) {
@@ -350,9 +339,6 @@ public class MainSettingsActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * @param isEnabled
-     */
     private void handleOnlineStatusSwitchChange(boolean isEnabled) {
         if (isEnabled) {
             String url = "http://coms-3090-052.class.las.iastate.edu:8080/";  //Add user settings endpoint
@@ -399,13 +385,7 @@ public class MainSettingsActivity extends AppCompatActivity {
 
     // Update in user settings database table if needed.
 
-    /**
-     * @param dealerStandOn
-     * @param maxBet
-     * @param minBet
-     * @param amountOfDecks
-     * @param userID
-     */
+
     private void updateGameSettings(int dealerStandOn, int maxBet, int minBet, int amountOfDecks, int userID) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/gameSettings/blackjack/user/" + userID + "/update";
         JSONObject jsonBody = new JSONObject();
@@ -443,6 +423,7 @@ public class MainSettingsActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse != null && error.networkResponse.data != null) {
                             String errorMsg = new String(error.networkResponse.data);
+
                             Log.e("VolleyError", "Error message: " + errorMsg);
                         }
                         else {
@@ -462,9 +443,6 @@ public class MainSettingsActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-    /**
-     * @param userID
-     */
     private void getSettings(int userID)
     {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/gameSettings/blackjack/user/" + userID  ;
@@ -496,12 +474,6 @@ public class MainSettingsActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * @param dealerStandOn
-     * @param minBet
-     * @param maxBet
-     * @param numberOfDecks
-     */
     private void updateSettingsDisplay(int dealerStandOn, int minBet, int maxBet, int numberOfDecks) {
         // Update each TextView with the new values
         dealerStandOnTV.setText("Dealer Stand-On Value: " + dealerStandOn);
@@ -510,6 +482,7 @@ public class MainSettingsActivity extends AppCompatActivity {
         deckNumberTV.setText("Number of Decks: " + numberOfDecks);
     }
 }
+
 
 
 
