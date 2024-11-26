@@ -51,8 +51,12 @@ public class BlackjackService {
         l.setGameId(blackJack.getId());
         blackJack.setHands(saveRepo(l, blackJack));
         blackJackRepo.save(blackJack);
+        blackJack.setOrder();
+        blackJackRepo.save(blackJack);
         response.put("status", "200 ok");
         response.put("blackjack", blackJackRepo.findById(blackJack.getId()));
+        response.put("players", l.getPlayers().size());
+        response.put("order", blackJack.getOrder());
         return response;
     }
 
@@ -103,7 +107,17 @@ public class BlackjackService {
         for(PlayerHands hand: blj.getHands()){
             repo.save(hand);
         }
+        if(end(blj, id) && response.containsKey("string")){
+            response.putAll(finish(lobbyId));
+            String temp = (String) response.get("string");
+            temp += " finish";
+            response.put("string", temp);
+        }
         return response;
+    }
+
+    private boolean end(BlackJack blj, Long id){
+        return Objects.equals(blj.getOrder().get(blj.getOrder().size() - 1), id);
     }
 
     public Map<String, Object> stand(Long lobbyId, Long id){
@@ -121,7 +135,16 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
-        return BlackJackLogic.stand(blj.getHand(user));
+        response = BlackJackLogic.stand(blj.getHand(user));
+        if(end(blj, id) && response.containsKey("string")){
+            System.out.println("1");
+            response.putAll(finish(lobbyId));
+            System.out.println("2");
+            String temp = (String) response.get("string");
+            temp += " finish";
+            response.put("string", temp);
+        }
+        return response;
     }
 
     public Map<String, Object> dou(Long lobbyId, Long id){
@@ -142,6 +165,12 @@ public class BlackjackService {
         response = BlackJackLogic.doubleBJ(blj.getHand(user),blj.getCards() ,user);
         for(PlayerHands hand: blj.getHands()){
             repo.save(hand);
+        }
+        if(end(blj, id) && response.containsKey("string")){
+            response.putAll(finish(lobbyId));
+            String temp = (String) response.get("string");
+            temp += " finish";
+            response.put("string", temp);
         }
         return response;
     }
@@ -269,6 +298,7 @@ public class BlackjackService {
     }
 
     public Map<String, Object> finish(long lobbyId){
+        System.out.print("Check 1.25");
         Map<String, Object> response = new HashMap<>();
         Lobby l = lobbyService.getLobby(lobbyId);
         if(l == null){
@@ -282,6 +312,7 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
+        System.out.print("Check 1.5");
         response.put("status", "200 ok");
         PlayerHands playerHands = null;
         for(PlayerHands hand: blj.getHands()){
@@ -290,12 +321,17 @@ public class BlackjackService {
                 break;
             }
         }
+        System.out.print("Check 1");
         while(playerHands.getScore() < 17){
+            System.out.println("Check 1.05");
             BlackJackLogic.hit(playerHands, blj.getCards());
+            System.out.println("Check 1.1");
             repo.save(playerHands);
+            System.out.print("Check 1.3");
         }
         response.put("dealer", playerHands.getHand());
         response.put("dscore", playerHands.getScore());
+        System.out.print("Check 2");
         for(PlayerHands hand: blj.getHands()){
             if(hand == playerHands)
                 continue;
@@ -306,6 +342,7 @@ public class BlackjackService {
             else if(hand.getScore() == playerHands.getScore())
                 response.put(hand.getPlayer().getId() + "", "push");
         }
+        System.out.print("Check 3");
         return response;
     }
 

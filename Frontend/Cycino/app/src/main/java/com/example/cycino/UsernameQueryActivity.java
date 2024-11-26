@@ -26,6 +26,9 @@ public class UsernameQueryActivity extends AppCompatActivity {
     private Button backToLogin;
     private boolean usernameExists;
 
+    /**
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usernamequery);
@@ -66,6 +69,9 @@ public class UsernameQueryActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * @param Username
+     */
     private void pushData(final String Username) {
         // Server URL for login (adjust to match your API)
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + Username;

@@ -30,28 +30,56 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The LeaderboardActivity allows you to see every player's stats
+ * It handles the getting and displaying of all stats
+ *
+ * @author Sam Craft
+ */
+
 public class LeaderboardActivity extends AppCompatActivity{
 
 
-
+    /**
+     * AndroidStudio function for moving items on screen
+     */
     Gravity gravity = new Gravity();
 
-    final private String[] names = {"name1","name2","name3","name5","name4"};
-    final private Integer[] scores = {500000,100000,200,5000,200};
-    final private Integer[] numWins = {1000,10,85,20,300};
 
-
+    /**
+     * LinearLayout for player Names
+     */
     private LinearLayout lbNames;
+    /**
+     * LinearLayout for player Scores
+     */
     private LinearLayout lbScores;
+    /**
+     *  LinearLayout for player Wins
+     */
     private LinearLayout lbWins;
+    /**
+     *  Button to select blacjack tab
+     */
     private Button blackjackButton;
-    private Button demoButton;
+    /**
+     * TextView to show current game selected
+     */
     private TextView titleText;
     RequestQueue requestQueue;
 
+
+    /**
+     * Global counting variable
+     */
     int items;
-    final int numLines = 2;
+    /**
+     * List of usernames
+     */
     List<String> userNames = new ArrayList<String>();
+    /**
+     * Empty JSONArray for HTTP Reponses
+     */
     JSONArray responseArr;
 
 
@@ -67,7 +95,6 @@ public class LeaderboardActivity extends AppCompatActivity{
         lbWins = findViewById(R.id.lb_wins);
         titleText = findViewById(R.id.text_leaderboard_title);
         blackjackButton = findViewById(R.id.blackjackLbButton);
-        demoButton = findViewById(R.id.demoButton);
 
         requestQueue = Volley.newRequestQueue(LeaderboardActivity.this);
 
@@ -75,8 +102,6 @@ public class LeaderboardActivity extends AppCompatActivity{
         titleText.setTextSize(40);
 
         blackjackButton.setText("Blackjack");
-        demoButton.setText("Demo Features");
-
 
         getBlackjackStats();
         resetLeaderboard();
@@ -103,21 +128,11 @@ public class LeaderboardActivity extends AppCompatActivity{
 
             }
         });
-
-
-
-        demoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LeaderboardActivity.this, LeaderboardInteractionActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
     }
 
+    /**
+     *Resets the leaderboard to be completely empty.
+     */
     private void resetLeaderboard() {
 
 
@@ -146,6 +161,13 @@ public class LeaderboardActivity extends AppCompatActivity{
         lbScores.addView(scoreTitle);
     }
 
+    /**
+     * Updates the leaderboard frontend with the JSON Object passed through
+     * @param name
+     * @param jObj
+     * @throws JSONException
+     *
+     */
     private void updateLeaderboard(String name, JSONObject jObj) throws JSONException {
 
 
@@ -197,6 +219,9 @@ public class LeaderboardActivity extends AppCompatActivity{
 
     }
 
+    /**
+     *Gets blackjack stats for every user that exists
+     */
     private void getBlackjackStats() {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/stats/all/BLACKJACK";
@@ -237,6 +262,11 @@ public class LeaderboardActivity extends AppCompatActivity{
     }
 
 
+    /**
+     * Gets the name of one user based off of their user ID
+     * @param id
+     *
+     */
     private void getOneName(Integer id) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
@@ -258,10 +288,10 @@ public class LeaderboardActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
                 }
             });
-
-
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
     }
+
+
 
 }

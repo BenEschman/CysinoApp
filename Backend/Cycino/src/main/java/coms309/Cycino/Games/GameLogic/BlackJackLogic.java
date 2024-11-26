@@ -22,20 +22,28 @@ public class BlackJackLogic {
             return result;
         }
         Card c = cards.draw();
+        System.out.println("Check 1.111");
         score = checkAce(hand.getHand(), score, c);
         hand.add(c);
+        System.out.println("Check 1.9");
         result.put("card", c);
         result.put("score", hand.getScore());
+        System.out.println("Check 1.6");
         if(score > 21){
             result.put("result", "bust");
+            if(hand.getPlayer() != null)
+                result.put("string", createMessage(hand, "hit", c));
             return result;
         }
 
+        System.out.println("Check 1.7");
         if(score == 21){
             result.put("result", "blackjack");
+            if(hand.getPlayer() != null)
+                result.put("string", createMessage(hand, "hit", c));
             return result;
         }
-
+        System.out.println("Check 1.8");
         return result;
     }
 
@@ -70,20 +78,17 @@ public class BlackJackLogic {
             c.setNumber(1);
             return score + 1;
         }
-        if(score + c.getValue() > 21) {
-            int aces = 0;
-            int nas = 0;
-            for (Card card : hand) {
-                if (card.getNumber().equals("ACE")) {
-                    aces++;
-                } else
-                    nas += card.getValue();
-            }
-            if(aces > 0 && nas + aces < score){
-                c.setNumber(1);
-                return score + c.getValue() - 10;
+
+        if(score + c.getValue() > 21){
+            for(Card card: hand){
+                if(card.getNumber().equals("ACE") && card.getValue() != 1){
+                    card.setNumber(1);
+                    score -= 10;
+                    break;
+                }
             }
         }
+
         return score + c.getValue();
     }
 
@@ -96,6 +101,7 @@ public class BlackJackLogic {
         if(hand.getScore() > 21)
             response.put("bust", true);
         else response.put("bust", false);
+        response.put("string", createMessage(hand, "stand", null));
         return response;
     }
 
@@ -113,6 +119,7 @@ public class BlackJackLogic {
         response = check(hand);
         response.put("card", c);
         hand.stand();
+        response.put("string", createMessage(hand, "double", c));
         return response;
     }
 
@@ -146,5 +153,17 @@ public class BlackJackLogic {
         } else response.put("bust", false);
         response.put("score", hand.getScore());
         return response;
+    }
+
+    private static String createMessage(PlayerHands hand, String action, Card c){
+        User user = hand.getPlayer();
+        String result = "user: ";
+        result += user.getId() + " img: ";
+        if(c != null)
+            result += c.img() + " action: ";
+        else
+            result += " action: ";
+        result += action;
+        return result;
     }
 }

@@ -40,58 +40,129 @@ import org.json.JSONObject;
 import java.io.File;
 
 
+/**
+ * The BlackjackActivity is the activity that runs the game of blackjack.
+ * It handles both frontend and backend interactions.
+ * Includes all functions of basic blackjack
+ * @author Sam Craft
+ */
+
+
 public class BlackjackActivity extends AppCompatActivity {
 
     String url = "http://coms-3090-052.class.las.iastate.edu:8080/blackjack/";
 
-    private ImageView dCard1;
-    private ImageView dCard2;
-    private ImageView p1Card1;
-    private ImageView p1Card2;
-    private ImageView p2Card1;
-    private ImageView p2Card2;
+    /**
+     * ImageView for card
+     */
+    private ImageView dCard1,dCard2, p1Card1, p1Card2, p2Card1, p2Card2;
 
-    private TextView dScore;
-    private TextView pScore;
-    private TextView winStatus;
+    /**
+     * TextView for game info
+     */
+    private TextView dScore, pScore, winStatus;
 
-    private LinearLayout dCards;
-    private LinearLayout p1Cards;
-    private LinearLayout p2Cards;
+    /**
+     * LinearLayout for card formatting
+     */
+    private LinearLayout dCards, p1Cards, p2Cards, cardR1, cardR2;
 
-    private LinearLayout cardR1;
-    private LinearLayout cardR2;
-
+    /**
+     * Button for Hit
+     */
     private Button hitButton;
+    /**
+     * Button for Stand
+     */
     private Button standButton;
+    /**
+     * Button for Start
+     */
     private Button startButton;
+    /**
+     * Button for Split
+     */
     private Button splitButton;
+    /**
+     * Button for Deal
+     */
     private Button dealButton;
+    /**
+     * Button for Double
+     */
     private Button doubleButton;
 
     RequestQueue requestQueue;
 
-    private static Integer lobbyID = 52;
-    private static Integer playerID = 1;
+    /**
+     * Current Lobby ID
+     */
+    private static Integer lobbyID = 56;
+    /**
+     * User's user ID
+     */
+    private static Integer userID;
 
+    /**
+     * Number of cards dealer has
+     */
     private int dCardNum = 0;
+    /**
+     * number of cards player has
+     */
     private int p1CardNum = 0;
+    /**
+     * Number of players in game
+     */
+    private Integer numPlayers;
 
+    /**
+     * ImageView for extra cards
+     */
     private ImageView d1x1, d1x2, d1x3, d1x4, d1x5;
-
+    /**
+     * ImageView for extra cards
+     */
     private ImageView p1x1, p1x2, p1x3, p1x4, p1x5;
 
-    private Button sendBtn, chatToggleBtn, backBtn, imageBtn;
-    private EditText msgEtx;
-    private TextView msgTv;
-    private ScrollView chatArea;
 
+    /**
+     * Chat Buttons
+     */
+    private Button sendBtn, chatToggleBtn, backBtn, imageBtn;
+    /**
+     * Chat message box
+     */
+    private EditText msgEtx;
+    /**
+     * Chat message area
+     */
+    private TextView msgTv;
+    /**
+     * Chat outer boundary
+     */
+    private ScrollView chatArea;
+    /**
+     * Boolean to check if chat is open or closed
+     */
     private boolean chatOpen = true;
+    /**
+     * VM URL
+     */
     private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/";
+    /**
+     * Current user's username
+     */
     private String username;
 
+    /**
+     * File that holds the emulator's external storage location
+     */
     File sdcard;
 
+    /**
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blackjack);
@@ -101,9 +172,10 @@ public class BlackjackActivity extends AppCompatActivity {
 
         Intent inIntent = getIntent();
         username = inIntent.getStringExtra("USERNAME");
-        String serverUrl = serverURL + "/1" + null + "/" + username;
+        userID = inIntent.getIntExtra("UUID",-1);
 
-        int numPlayers = 1;
+
+
         Integer playerNum = 1;
 
         dCard1 = findViewById(R.id.dealerCard1);
@@ -180,6 +252,7 @@ public class BlackjackActivity extends AppCompatActivity {
                     }
                 });
 
+        String serverUrl = serverURL + "1/" + username;
         Intent serviceIntent = new Intent(this, WebSocketService.class);
         serviceIntent.setAction("CONNECT");
         serviceIntent.putExtra("key", "chat1");
@@ -220,6 +293,7 @@ public class BlackjackActivity extends AppCompatActivity {
 
                     if (chatOpen) {
                         sendBtn.setVisibility(View.GONE);
+                        imageBtn.setVisibility(View.GONE);
                         msgEtx.setVisibility(View.GONE);
                         chatArea.setVisibility(View.GONE);
                         chatToggleBtn.setText("Open Chat");
@@ -228,6 +302,7 @@ public class BlackjackActivity extends AppCompatActivity {
                     } else {
 
                         sendBtn.setVisibility(View.VISIBLE);
+                        imageBtn.setVisibility(View.VISIBLE);
                         msgEtx.setVisibility(View.VISIBLE);
                         chatArea.setVisibility(View.VISIBLE);
                         chatToggleBtn.setText("Close Chat");
@@ -241,6 +316,8 @@ public class BlackjackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(BlackjackActivity.this,HomePageActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",userID);
                 startActivity(i);
             }
         });
@@ -282,6 +359,13 @@ public class BlackjackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * Starts the game. Sets up all frontend components, makes calls to backend to start a new game.
+     * @param numPlayers
+     * @param playerNum
+     * @param lobbyID
+     */
     private void startGame(int numPlayers, int playerNum, int lobbyID) {
 
         p1Cards.removeView(p1x1);
@@ -352,7 +436,8 @@ public class BlackjackActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         // Handle the successful response here
                         try {
-                            String status = response.getString("status") ;
+                            String status = response.getString("status");
+                            setNumPlayers(response.getInt("players"));
                             System.out.println(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -378,6 +463,9 @@ public class BlackjackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *Deals the hand for the game. Deals for everyone at the table
+     */
     private void deal(){
 
         winStatus.setText("");
@@ -435,7 +523,7 @@ public class BlackjackActivity extends AppCompatActivity {
             }
         });
 
-        JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest(Request.Method.GET, url+"gethand/"+lobbyID+"/"+playerID, null,
+        JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest(Request.Method.GET, url+"gethand/"+lobbyID+"/"+userID, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
@@ -487,8 +575,11 @@ public class BlackjackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *Sends a request to the backend to hit for the user connected from the device
+     */
     private void hit(){
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"hit/"+lobbyID+"/"+playerID, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"hit/"+lobbyID+"/"+userID, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
@@ -528,9 +619,11 @@ public class BlackjackActivity extends AppCompatActivity {
 
 
     }
-
+    /**
+     *Sends a request to the backend to stand for the user connected from the device
+     */
     private void stand() {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"stand/"+lobbyID+"/"+playerID, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"stand/"+lobbyID+"/"+userID, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
@@ -558,6 +651,9 @@ public class BlackjackActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     *Shows the rest of the dealers hand and finishes up the game
+     */
     private void finishGame() {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"finish/"+lobbyID, null,
@@ -568,7 +664,7 @@ public class BlackjackActivity extends AppCompatActivity {
                         try {
                             System.out.println(response);
                             JSONArray dealerCards = response.getJSONArray("dealer");
-                            winStatus.setText(response.getString(playerID.toString()));
+                            winStatus.setText(response.getString(userID.toString()));
                             Integer score = response.getInt("dscore");
                             dScore.setText("Dealer Score: "+score);
 
@@ -614,6 +710,10 @@ public class BlackjackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Adds a card to dealer's hand
+     * @param cardS
+     */
     private void addDealerCard(String cardS) {
 
         dCardNum++;
@@ -646,6 +746,11 @@ public class BlackjackActivity extends AppCompatActivity {
         }
 
     }
+
+    /**
+     * Adds a card to player's hand
+     * @param cardS
+     */
     private void addPlayer1Card(String cardS) {
 
         p1CardNum++;
@@ -679,6 +784,10 @@ public class BlackjackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Timer in a new thread
+     * @param waitTime
+     */
     private void myWait(int waitTime) {
         class MyRunnable implements Runnable {
             public synchronized void run() {
@@ -703,7 +812,7 @@ public class BlackjackActivity extends AppCompatActivity {
                 if ("chat1".equals(key)) {
                     String message = intent.getStringExtra("message");
 
-                    if (message.contains("IMG")) {
+                    if (message.contains("DONOTSEND")) {
 
                     }
                     else {
@@ -733,6 +842,13 @@ public class BlackjackActivity extends AppCompatActivity {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
         }
 
+    /**
+     * Setter for global numPlayers variable
+     * @param num
+     */
+        private void setNumPlayers(int num) {
+            numPlayers = num;
+        }
 
 
 }

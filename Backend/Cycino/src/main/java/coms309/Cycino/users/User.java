@@ -24,6 +24,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    private String username;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -82,6 +83,25 @@ public class User implements Serializable {
         this.followList = followList;
         this.loginInfo = loginInfo;
         this.blackJackSettings = blackJackSettings;
+        this.username = loginInfo.getUsername();
+    }
+
+    public void addGroupChat(GroupChat groupChat){
+        this.groupChats.add(groupChat);
+        groupChat.getUsers().add(this);
+    }
+
+    public void removeGroupChat(GroupChat groupChat){
+        this.groupChats.remove(groupChat);
+        groupChat.getUsers().remove(this);
+    }
+
+    public Set<GroupChat> getGroupChats() {
+        return groupChats;
+    }
+
+    public void setGroupChats(Set<GroupChat> groupChats) {
+        this.groupChats = groupChats;
     }
 
     public void addGroupChat(GroupChat groupChat){
@@ -106,6 +126,11 @@ public class User implements Serializable {
         return this.blackJackSettings;
     }
 
+    public String getUsername(){
+        username = loginInfo.getUsername();
+        return username;
+    }
+
     public void setBlackJackSettings(BlackJackSettings blackJackSettings) {
         this.blackJackSettings = blackJackSettings;
     }
@@ -123,6 +148,7 @@ public class User implements Serializable {
     }
 
     public long getId(){
+        this.username = loginInfo.getUsername();
         return id;
     }
 
