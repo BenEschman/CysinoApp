@@ -1,7 +1,6 @@
 package coms309.Cycino.signup;
 
 import coms309.Cycino.login.LoginInfo;
-import coms309.Cycino.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,8 +14,8 @@ public class SignupController {
 
 
     @Autowired
-    private SignupService signupService;
 
+    private SignupService signupService;
 
     @PostMapping("/signup/register")
     public Map<String, Object> signup(@RequestBody LoginInfo user){

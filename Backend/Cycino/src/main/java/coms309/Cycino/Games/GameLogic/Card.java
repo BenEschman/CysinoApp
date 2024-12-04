@@ -32,10 +32,9 @@ public class Card implements Serializable {
         try{
             this.number = Integer.parseInt(number);
         } catch(Exception e){
-            this.number = 10;
+            this.number = 10 + Enums.VALUE.valueOf(number).ordinal();
         }
-        if(number.equals(Enums.VALUE.ACE.toString()))
-            this.number = 11;
+
     }
 
     @Override
@@ -69,6 +68,11 @@ public class Card implements Serializable {
 
     public void setNumber(int i){
         number = i;
+    }
+
+
+    public boolean equals(Card o){
+        return o.getNumber().equals(value) && o.getSuit() == suit;
     }
 
 }
