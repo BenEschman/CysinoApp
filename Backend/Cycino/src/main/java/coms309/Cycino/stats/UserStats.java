@@ -2,6 +2,7 @@ package coms309.Cycino.stats;
 
 import coms309.Cycino.Enums;
 import coms309.Cycino.users.User;
+import io.swagger.annotations.ApiModelProperty;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -15,10 +16,15 @@ public class UserStats {
     private String userStatsId;
 
     private long user_Id;
+    @ApiModelProperty(notes = "game for stats",name="game",required=true,value="game")
     private String game;
+    @ApiModelProperty(notes = "wins in game",name="wins",required=true,value="game wins")
     private int wins;
+    @ApiModelProperty(notes = "losses in game",name="losses",required=true,value="game losses")
     private int losses;
+    @ApiModelProperty(notes = "win percentage",name="percentage",required=true,value="win percentage")
     private double percentage;
+    @ApiModelProperty(notes = "net chips won",name="net",required=true,value="net won")
     private double net;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Id")
