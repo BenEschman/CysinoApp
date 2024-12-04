@@ -10,6 +10,7 @@ import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.login.LoginInfo;
 import coms309.Cycino.stats.GameHistory;
 import coms309.Cycino.stats.UserStats;
+import io.swagger.annotations.ApiModelProperty;
 import jakarta.persistence.*;
 
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettingsRepository;
@@ -24,9 +25,13 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @ApiModelProperty(notes = "username of user",name="username",required=true,value="username")
     private String username;
+    @ApiModelProperty(notes = "first name of user",name="first name",required=true,value="first name")
     private String firstName;
+    @ApiModelProperty(notes = "last name of user",name="last name",required=true,value="last name")
     private String lastName;
+    @ApiModelProperty(notes = "phonenumber of user",name="phone number",required=true,value="phone number")
     private String phoneNumber;
     private double chips;
     @Enumerated(EnumType.STRING)

@@ -1,16 +1,13 @@
 package coms309.Cycino;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import org.junit.Test;
 
-class CycinoApplicationTests {
+public class CycinoApplicationTests {
 
 
 	@Test
-
-	void contextLoads() {
+    public void contextLoads() {
 	}
 
 }

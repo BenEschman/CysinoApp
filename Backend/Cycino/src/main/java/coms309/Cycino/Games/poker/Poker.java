@@ -14,27 +14,51 @@ import java.util.Set;
 @Entity
 public class Poker extends Game {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private double pot = 0;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Deck cards;
+    private double lastBet = 0;
 
-    @OneToMany(mappedBy = "blackJack", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<PlayerHands> hands = new HashSet<>();
-
-    @Column(name = "`order`")
-    private ArrayList<Long> order = new ArrayList<>();
-
-    @OneToOne
-    private Lobby lobby;
+    private Set<Long> folded = new HashSet<>();
 
     public Poker(){
     }
 
     public Poker(Lobby l, Deck d){
         super(l,d);
+    }
+
+    public void increasePot(double raise){
+        pot += raise;
+    }
+
+    public double getPot(){
+        return pot;
+    }
+
+    public void setLastBet(double bet){
+        lastBet = bet;
+    }
+
+    public double getLastBet(){
+        return lastBet;
+    }
+
+    public Set<Long> getFolded(){
+        return folded;
+    }
+
+    public Set<Long> getIn(){
+        Set<Long> temp = new HashSet<>();
+        for(PlayerHands hand: getHands()){
+            if(!folded.contains(hand.getPlayer().getId())){
+                temp.add(hand.getPlayer().getId());
+            }
+        }
+        return temp;
+    }
+
+    public void fold(long user){
+        folded.add(user);
     }
 
 }
