@@ -1,11 +1,13 @@
 package coms309.Cycino.Games.GameLogic;
 
 import coms309.Cycino.Games.Blackjack.BlackJack;
+import coms309.Cycino.Games.Game;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,33 +30,37 @@ public class PlayerHands implements Serializable {
     private boolean dealer = false;
 
     @ManyToOne(optional = true) // Allow null
-    @JoinColumn(name = "blackjack_id", nullable = true) // Allow null in the database
-    private BlackJack blackJack;
+    @JoinColumn(name = "game_id", nullable = true) // Allow null in the database
+    private Game game;
 
 
 
     public PlayerHands(){
-
+        hand = new HashSet<>();
     }
-    public PlayerHands(User player, BlackJack blackJack){
+    public PlayerHands(User player, Game game){
         this.player = player;
-        this.blackJack = blackJack;
+        this.game = game;
         hand = new HashSet<>();
     }
 
-    public PlayerHands(BlackJack b){
-        this.blackJack = b;
+    public PlayerHands(Game b){
+        this.game = b;
         hand = new HashSet<>();
         dealer = true;
     }
 
-    public void setBlackJack(BlackJack bj){
-        blackJack = bj;
+    public void setBlackJack(Game bj){
+        game = bj;
     }
 
     public int getScore(){
         score = 0;
         for(Card c: hand){
+            if(c.getValue() >= 10){
+                score += 10;
+                continue;
+            }
             score += c.getValue();
         }
         return score;
@@ -105,5 +111,25 @@ public class PlayerHands implements Serializable {
 
     public boolean isDealer(){
         return dealer;
+    }
+
+    public boolean contains(Card c){
+        for(Card card: hand){
+            if(card.equals(c))
+                return true;
+        }
+        return false;
+    }
+
+    public void addAll(Collection<Card> cards){
+        hand.addAll(cards);
+    }
+
+    public Card containsValue(int i){
+        for(Card c: hand){
+            if(c.getValue() == i)
+                return c;
+        }
+        return null;
     }
 }

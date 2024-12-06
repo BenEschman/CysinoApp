@@ -130,7 +130,7 @@ public class User implements Serializable {
     }
 
     public long getId(){
-        this.username = loginInfo.getUsername();
+        //this.username = loginInfo.getUsername();
         return id;
     }
 
