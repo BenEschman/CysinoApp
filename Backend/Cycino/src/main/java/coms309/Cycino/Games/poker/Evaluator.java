@@ -14,9 +14,12 @@ public class Evaluator {
         Map<String, Object> multi = checkMult(hands);
 
         Set<Double> v = new HashSet<>();
-        v.add((Double) straight.get("value"));
-        v.add((Double) multi.get("value"));
-        v.add((Double) flush.get("value"));
+        if(straight.get("value") != null)
+            v.add((double) straight.get("value"));
+        if(multi.get("value") != null)
+            v.add((double) multi.get("value"));
+        if(flush.get("value") != null)
+            v.add((double) flush.get("value"));
 
         double high = 0;
         for(double d: v){
@@ -164,11 +167,11 @@ public class Evaluator {
         }
 
         if(values.containsValue(2)){
-            values.values().remove(2);
+            //values.values().remove(2);
             if(values.containsValue(3)){
                 response.put("name", "Full House");
-                response.put("value", 6);
-            } else if(values.containsValue(2)){
+                response.put("value", 7);
+            } else if(Collections.frequency(values.values(), 2) >= 2){
                 response.put("name", "Two Pair");
                 response.put("value", 2);
             } else {
@@ -181,7 +184,7 @@ public class Evaluator {
         }
         if(values.containsValue(4)){
             response.put("name", "Four of a kind");
-            response.put("value", 7);
+            response.put("value", 8);
         }
 
         response.put("value", addDec((int) response.get("value"), values));

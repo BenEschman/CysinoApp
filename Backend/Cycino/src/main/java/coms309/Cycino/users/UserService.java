@@ -32,13 +32,14 @@ public class UserService {
     }
     public User getUser(long id){
 
-        List<User> users = new ArrayList<>(userRepository.findAll());
-        for(coms309.Cycino.users.User u : users){
-            if(u.getLoginInfo().getId() == id){
-                return u;
-            }
-        }
-        return null;
+//        List<User> users = new ArrayList<>(userRepository.findAll());
+//        for(coms309.Cycino.users.User u : users){
+//            if(u.getLoginInfo().getId() == id){
+//                return u;
+//            }
+//        }
+        return userRepository.findById(id).orElse(null);
+       // return null;
     }
 
     public boolean create(User user, long id){

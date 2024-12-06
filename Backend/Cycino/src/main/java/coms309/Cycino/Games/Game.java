@@ -20,7 +20,7 @@ public abstract class Game {
     @OneToOne(cascade = CascadeType.ALL)
     private Deck cards;
 
-    @OneToMany(mappedBy = "blackJack", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<PlayerHands> hands = new HashSet<>();
 
     @Column(name = "`order`")

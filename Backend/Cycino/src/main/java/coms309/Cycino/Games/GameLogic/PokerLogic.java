@@ -11,15 +11,17 @@ public class PokerLogic {
 
     public static Map<PlayerHands, Double> finishHand(Poker poker){
         Map<String, Object> response = new HashMap<>();
-        PlayerHands table;
+        PlayerHands table = null;
         for(PlayerHands hand: poker.getHands()){
             if(hand.getPlayer() == null) {
-                table = null;
+                table = hand;
             }
         }
         Map<PlayerHands, Double> temp = new HashMap<>();
         Map<PlayerHands, Double> winners = new HashMap<>();
         for(PlayerHands hand: poker.getHands()){
+            assert table != null;
+            hand.addAll(table.getHand());
             double score = Evaluator.evaluate(hand);
             temp.put(hand, score);
         }

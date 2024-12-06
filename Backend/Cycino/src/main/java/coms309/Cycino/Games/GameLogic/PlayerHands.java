@@ -1,6 +1,7 @@
 package coms309.Cycino.Games.GameLogic;
 
 import coms309.Cycino.Games.Blackjack.BlackJack;
+import coms309.Cycino.Games.Game;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
 
@@ -29,28 +30,28 @@ public class PlayerHands implements Serializable {
     private boolean dealer = false;
 
     @ManyToOne(optional = true) // Allow null
-    @JoinColumn(name = "blackjack_id", nullable = true) // Allow null in the database
-    private BlackJack blackJack;
+    @JoinColumn(name = "game_id", nullable = true) // Allow null in the database
+    private Game game;
 
 
 
     public PlayerHands(){
-
+        hand = new HashSet<>();
     }
-    public PlayerHands(User player, BlackJack blackJack){
+    public PlayerHands(User player, Game game){
         this.player = player;
-        this.blackJack = blackJack;
+        this.game = game;
         hand = new HashSet<>();
     }
 
-    public PlayerHands(BlackJack b){
-        this.blackJack = b;
+    public PlayerHands(Game b){
+        this.game = b;
         hand = new HashSet<>();
         dealer = true;
     }
 
-    public void setBlackJack(BlackJack bj){
-        blackJack = bj;
+    public void setBlackJack(Game bj){
+        game = bj;
     }
 
     public int getScore(){
