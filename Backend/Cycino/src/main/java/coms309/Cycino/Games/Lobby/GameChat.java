@@ -17,8 +17,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import coms309.Cycino.Games.coinflip.CoinFlip;
 
 @ServerEndpoint("/chat/{lobby}/{username}")
 @Component
@@ -26,6 +28,7 @@ public class GameChat {
 
     private static final Map<Long, Map<Session, String>> lobbySessions = new HashMap<>();
     private final Logger logger = LoggerFactory.getLogger(GameChat.class);
+    private CoinFlip coinFlip = new CoinFlip();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("lobby") Long lobby, @PathParam("username") String username) throws IOException {
@@ -51,7 +54,9 @@ public class GameChat {
         String username = lobbySessions.get(lobby).get(session);
         logger.info("[onMessage] " + username + " in lobby " + lobby + ": " + message);
 
-
+        if (message.startsWith("#")){
+            coinFlip.gameAction(lobby);
+        }
         if (message.startsWith("@")) {
             String[] splitMessage = message.split("\\s+", 2);
             if (splitMessage.length > 1) {
@@ -103,7 +108,7 @@ public class GameChat {
         }
     }
 
-    private void broadcast(Long lobby, String message) {
+    public void broadcast(Long lobby, String message) {
         Map<Session, String> sessions = lobbySessions.get(lobby);
 
         if (sessions != null) {
@@ -133,5 +138,11 @@ public class GameChat {
             ImageIO.write(image, "jpg", baos);
             return Base64.getEncoder().encodeToString(baos.toByteArray());
         }
+    }
+
+    public Collection<String> getLobbyMembers(Long lobbyId) {
+        Map<Session, String> sessions = lobbySessions.get(lobbyId);
+        Collection<String> members = sessions.values();
+        return members;
     }
 }
