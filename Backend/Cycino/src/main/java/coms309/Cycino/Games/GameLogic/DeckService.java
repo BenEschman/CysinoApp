@@ -53,6 +53,7 @@ public class DeckService {
         return list;
     }
 
+
     public void delete(Deck d){
         for (Card card : d.getCards()) {
         card.setDeck(null);

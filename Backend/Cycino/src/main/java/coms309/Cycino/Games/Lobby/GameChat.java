@@ -25,10 +25,10 @@ import java.util.Map;
 public class GameChat {
 
     private static final Map<Long, Map<Session, String>> lobbySessions = new HashMap<>();
-    private final Logger logger = LoggerFactory.getLogger(GameChat.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameChat.class);
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("lobby") Long lobby, @PathParam("username") String username) throws IOException {
+    public static void onOpen(Session session, @PathParam("lobby") Long lobby, @PathParam("username") String username) throws IOException {
         logger.info("[onOpen] " + username + " joined lobby: " + lobby);
 
         lobbySessions.putIfAbsent(lobby, new HashMap<>());
@@ -47,7 +47,7 @@ public class GameChat {
     }
 
     @OnMessage
-    public void onMessage(Session session, @PathParam("lobby") Long lobby, String message) throws IOException {
+    public static void onMessage(Session session, @PathParam("lobby") Long lobby, String message) throws IOException {
         String username = lobbySessions.get(lobby).get(session);
         logger.info("[onMessage] " + username + " in lobby " + lobby + ": " + message);
 
@@ -65,7 +65,7 @@ public class GameChat {
     }
 
     @OnClose
-    public void onClose(Session session, @PathParam("lobby") Long lobby) throws IOException {
+    public static void onClose(Session session, @PathParam("lobby") Long lobby) throws IOException {
         String username = lobbySessions.get(lobby).get(session);
         logger.info("[onClose] " + username + " left lobby: " + lobby);
 
@@ -82,12 +82,12 @@ public class GameChat {
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable, @PathParam("lobby") Long lobby) {
+    public static void onError(Session session, Throwable throwable, @PathParam("lobby") Long lobby) {
         String username = lobbySessions.get(lobby).get(session);
         logger.info("[onError] " + username + " in lobby " + lobby + ": " + throwable.getMessage());
     }
 
-    private void sendDirectMessage(Long lobby, String fromUsername, String toUsername, String message) {
+    private static void sendDirectMessage(Long lobby, String fromUsername, String toUsername, String message) {
         Map<Session, String> sessions = lobbySessions.get(lobby);
 
         if (sessions != null) {
@@ -103,21 +103,22 @@ public class GameChat {
         }
     }
 
-    private void broadcast(Long lobby, String message) {
+    public static void broadcast(Long lobby, String message) {
         Map<Session, String> sessions = lobbySessions.get(lobby);
 
+        System.out.print(sessions);
         if (sessions != null) {
             sessions.forEach((session, username) -> {
                 try {
                     session.getBasicRemote().sendText(message);
                 } catch (IOException e) {
-                    logger.info("[Broadcast Exception] " + e.getMessage());
+                    logger.info("[Broadcast Exception] {}", e.getMessage());
                 }
             });
         }
     }
 
-    private void sendMessageToUser(Session session, String message) {
+    private static void sendMessageToUser(Session session, String message) {
         try {
             session.getBasicRemote().sendText(message);
         } catch (IOException e) {
@@ -134,4 +135,5 @@ public class GameChat {
             return Base64.getEncoder().encodeToString(baos.toByteArray());
         }
     }
+
 }

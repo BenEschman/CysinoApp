@@ -61,4 +61,10 @@ public class Poker extends Game {
         folded.add(user);
     }
 
+    public void reset(){
+        folded.removeAll(folded);
+        lastBet = 0;
+        pot = 0;
+    }
+
 }

@@ -84,10 +84,11 @@ public class User implements Serializable {
         this.loginInfo = loginInfo;
         this.blackJackSettings = blackJackSettings;
         this.username = loginInfo.getUsername();
+        chips = 1000;
     }
 
     public void addGroupChat(GroupChat groupChat){
-        this.groupChats.add(groupChat);
+        groupChats.add(groupChat);
         groupChat.getUsers().add(this);
     }
 
