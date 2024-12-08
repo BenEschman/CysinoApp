@@ -35,4 +35,33 @@ public class PokerController {
     public Map<String, Object> finish(@PathVariable long lobby){
         return service.finish(lobby);
     }
+
+    @PutMapping("/poker/fold/{lobby}/{id}")
+    public Map<String, Object> fold(@PathVariable long lobby, @PathVariable long id){
+        return service.fold(lobby, id);
+    }
+    @PutMapping("/poker/call/{lobby}/{id}")
+    public Map<String, Object> call(@PathVariable long lobby, @PathVariable long id){
+        return service.call(lobby, id);
+    }
+
+    @PutMapping("/poker/check/{lobby}/{id}")
+    public Map<String, Object> check(@PathVariable long lobby, @PathVariable long id){
+        return service.check(lobby, id);
+    }
+
+    @PutMapping("/poker/raise/{lobby}/{id}/{bet}")
+    public Map<String, Object> raise(@PathVariable long lobby, @PathVariable long id, @PathVariable double bet){
+        return service.raise(lobby, id, bet);
+    }
+
+    @DeleteMapping("/poker/delete/{lobby}")
+    public Map<String, Object> delete(@PathVariable long lobby){
+        return service.deleteGame(lobby);
+    }
+
+    @PutMapping("/poker/reset/{lobby}")
+    public Map<String, Object> reset(@PathVariable long lobby){
+        return service.reset(lobby);
+    }
 }

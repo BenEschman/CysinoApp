@@ -44,6 +44,9 @@ public class Deck {
     }
 
     public Card draw(){
+        if(cards.isEmpty()){
+            return null;
+        }
         ArrayList<Card> cards = shuffle();
         Card c = (Card) cards.remove(0);
         Collections.shuffle(cards);
