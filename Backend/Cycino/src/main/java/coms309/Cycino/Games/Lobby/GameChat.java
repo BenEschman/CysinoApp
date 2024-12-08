@@ -54,8 +54,8 @@ public class GameChat {
         String username = lobbySessions.get(lobby).get(session);
         logger.info("[onMessage] " + username + " in lobby " + lobby + ": " + message);
 
-        if (message.startsWith("#")){
-            coinFlip.gameAction(lobby);
+        if (message.startsWith("#COINFLIP: ")){
+            coinFlip.gameAction(lobby, username, message);
         }
         if (message.startsWith("@")) {
             String[] splitMessage = message.split("\\s+", 2);
