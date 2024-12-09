@@ -8,13 +8,19 @@ import java.util.Random;
 public class CoinFlipGameState {
 
     private Map<String, String> playerMoves = new HashMap<>();
+    private Map<String, Integer> playerBets = new HashMap<>();
     private String coin = "NONE";
     private boolean gameOver = false;
 
     public CoinFlipGameState(Collection<String> players) {
         for (String player : players) {
             this.playerMoves.put(player, "UNDECIDED");
+            this.playerBets.put(player, 0);
         }
+    }
+
+    public void setPlayerBets(String player, int bet) {
+        playerBets.put(player, bet);
     }
 
     public void setPlayerMove(String player, String move) {
@@ -100,7 +106,13 @@ public class CoinFlipGameState {
         String gameState = "";
         gameState += "\n" + "COIN: " + coin;
         gameState += "\n";
+        gameState += "CALLS: ";
         for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
+            gameState += entry.getKey() + " " + entry.getValue() + " ";
+        }
+        gameState += "\n";
+        gameState += "BETS: ";
+        for(Map.Entry<String, Integer> entry : playerBets.entrySet()) {
             gameState += entry.getKey() + " " + entry.getValue() + " ";
         }
         gameState += "\n" + "GAME: ";
