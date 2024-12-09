@@ -125,6 +125,13 @@ public class PlayerHands implements Serializable {
         hand.addAll(cards);
     }
 
+    public void reset(){
+        hand.removeAll(hand);
+        score = 0;
+        bet = 0;
+        split = false;
+    }
+
     public Card containsValue(int i){
         for(Card c: hand){
             if(c.getValue() == i)

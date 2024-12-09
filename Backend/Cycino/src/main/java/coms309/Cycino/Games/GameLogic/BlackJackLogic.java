@@ -59,9 +59,12 @@ public class BlackJackLogic {
             }
         }
         for(PlayerHands hand: hands){
+            if(hand.getPlayer() == null)
+                continue;
             checkSplit(hand);
+            if(hand.getScore() == 21)
+                hand.getPlayer().addChips(hand.getBet() * 0.5);
         }
-
     }
 
 

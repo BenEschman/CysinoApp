@@ -51,6 +51,7 @@ public class LobbyService {
             response.put("status", "404 not found");
             return response;
         }
+
         repo.deleteById(id);
         response.put("lobbyId", id);
         response.put("status", "200 ok");

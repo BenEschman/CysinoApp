@@ -2,6 +2,7 @@ package coms309.Cycino.Games;
 
 import coms309.Cycino.Games.GameLogic.Deck;
 import coms309.Cycino.Games.GameLogic.PlayerHands;
+import coms309.Cycino.Games.Lobby.GameChat;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
@@ -56,6 +57,7 @@ public abstract class Game {
     }
 
     public void setOrder(){
+        order = new ArrayList<>();
         for(PlayerHands hand: hands){
             if(hand.getPlayer() != null)
                 order.add(hand.getPlayer().getId());
@@ -82,5 +84,10 @@ public abstract class Game {
     public ArrayList<Long> getOrder(){
         return order;
     }
+
+    public void resetDeck(Deck d){
+        this.cards = d;
+    }
+
 
 }
