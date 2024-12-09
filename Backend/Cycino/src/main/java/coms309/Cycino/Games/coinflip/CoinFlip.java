@@ -1,11 +1,13 @@
 package coms309.Cycino.Games.coinflip;
 
 import coms309.Cycino.Games.Lobby.GameChat;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class CoinFlip {
     private static final String serverMessage = "#COINFLIP:";

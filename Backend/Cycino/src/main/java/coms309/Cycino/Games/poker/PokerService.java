@@ -27,7 +27,6 @@ public class PokerService {
     public Map<String, Object> createPoker(Long id){
         Map<String, Object> response = new HashMap<>();
         Lobby l = (Lobby) lobbyService.getLobby(id);
-        System.out.println(l.getPlayers());
         Poker p = new Poker(l, deckService.start(1));
         repo.save(p);
         lobbyService.updateGameId(p.getId(), l);
@@ -95,7 +94,7 @@ public class PokerService {
         }
         response.put("status", "200 ok");
         response.putAll(getHands(id));
-        GameChat.broadcast(id, "next: " + p.getOrder().get(0));
+        GameChat.broadcast(id, "#Poker next: " + p.getOrder().get(0));
         return response;
     }
 
@@ -104,10 +103,9 @@ public class PokerService {
         Lobby l = lobbyService.getLobby(id);
         Poker p = repo.findById(l.getId()).orElse(null);
         assert p != null;
-        System.out.println(p.getHands());
         for(PlayerHands hand: p.getHands()){
             if(hand.getPlayer() == null){
-                response.put("null", hand.getHand());
+                response.put("dealer", hand.getHand());
                 continue;
             }
             response.put(hand.getPlayer().getId() + "", hand.getHand());
@@ -121,12 +119,16 @@ public class PokerService {
         Lobby l = lobbyService.getLobby(id);
         Poker p = repo.findById(l.getId()).orElse(null);
         assert p != null;
-//        for(PlayerHands hand: p.getHands()){
-//            if(hand.getPlayer() == null)
-//                hand.add(p.getCards().draw());
-//        }
+        PlayerHands d = null;
+        for(PlayerHands hand: p.getHands()){
+            if(hand.getPlayer() == null)
+                d = hand;
+
+        }
+        while(d.getHand().size() < 5){
+            d.add(p.getCards().draw());
+        }
         Map<PlayerHands, Double> winners = PokerLogic.finishHand(p);
-        //System.out.println(winners);
         for(PlayerHands hand: winners.keySet()){
             if(hand.getPlayer() == null){
                 continue;
@@ -155,37 +157,7 @@ public class PokerService {
         assert p != null;
         p.fold(id);
         response.put("message", message(p, id));
-        if(response.get("message").equals("finish: true")){
-            Map<String, Object> temp = finish(lobby);
-            temp.putAll(response);
-            GameChat.broadcast(lobby, (String) response.get("message"));
-            return temp;
-        } else if(((String)(response.get("message"))).contains("update: true")){
-            nextRound(id, p);
-        }
-        GameChat.broadcast(lobby, (String) response.get("message"));
-        return response;
-    }
-
-    public Map<String, Object> check(long lobby, long id){
-        Map<String, Object> response = new HashMap<>();
-        Lobby l = lobbyService.getLobby(lobby);
-        Poker p = repo.findById(l.getId()).orElse(null);
-        User u = null;
-        for(User user: l.getPlayers()){
-            if(user.getId() == id){
-                u = user;
-                break;
-            }
-        }
-        if(u == null){
-            response.put("error", "no user found");
-            response.put("status", 404);
-            return response;
-        }
-        assert p != null;
-        response.put("message", message(p, id));
-        if(response.get("message").equals("finish: true")){
+        if(((String)(response.get("message"))).contains("finish: true")){
             Map<String, Object> temp = finish(lobby);
             temp.putAll(response);
             GameChat.broadcast(lobby, (String) response.get("message"));
@@ -214,14 +186,16 @@ public class PokerService {
             return response;
         }
         assert p != null;
-        if(u.getChips() < p.getLastBet()){
-            response.put("error", "not enough chips");
-            response.put("status", 405);
-            return response;
+        if(p.getLastBet() != 0) {
+            if (u.getChips() < p.getLastBet()) {
+                response.put("error", "not enough chips");
+                response.put("status", 405);
+                return response;
+            }
+            u.addChips(-1 * p.getLastBet());
         }
-        u.addChips(-1 * p.getLastBet());
         response.put("message", message(p, id));
-        if(response.get("message").equals("finish: true")){
+        if(((String)(response.get("message"))).contains("finish: true")){
             Map<String, Object> temp = finish(lobby);
             temp.putAll(response);
             GameChat.broadcast(lobby, (String) response.get("message"));
@@ -258,7 +232,7 @@ public class PokerService {
         p.increasePot(raise);
         p.setLastBet(raise);
         response.put("message", message(p, id));
-        if(response.get("message").equals("finish: true")){
+        if(((String)(response.get("message"))).contains("finish: true")){
             Map<String, Object> temp = finish(lobby);
             temp.putAll(response);
             GameChat.broadcast(lobby, (String) response.get("message"));
@@ -280,7 +254,13 @@ public class PokerService {
             response.put("error", "no lobby with that id");
             return response;
         }
-        Poker blj = repo.findById(l.getId()).orElse(null);
+        Poker blj = null;
+        try {
+            blj = repo.findById(l.getId()).orElse(null);
+        } catch(Exception e){
+            response.put("status", 404);
+            return response;
+        }
         if(blj == null){
             response.put("status", "404 not found");
             response.put("error", "game not started yet");
@@ -311,14 +291,16 @@ public class PokerService {
         assert dealer != null;
         if(dealer.getHand().size() == 5){
            Map<String, Object> response = finish(id);
-           String message = "winners: ";
+           String message = "#Poker winners: ";
            for(String s: response.keySet()){
                message += s + " ";
            }
+           message += "finish";
            GameChat.broadcast(id, message);
            return;
         }
         dealer.add(p.getCards().draw());
+        p.setLastBet(0);
         handsRepo.save(dealer);
     }
 
@@ -340,12 +322,12 @@ public class PokerService {
         int f = order.indexOf(id);
         long next = getnext(p, f);
         if(f == order.size() - 1){
-            return "update: true, next: " + next;
+            return "#Poker update: true, next: " + next;
         }
         if(next == 0){
-            return "finish: true";
+            return "#Poker finish: true";
         }
-        return "next: " + next;
+        return "#Poker next: " + next;
     }
 
     private long getnext(Poker p, int after){
