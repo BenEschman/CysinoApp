@@ -24,7 +24,6 @@ public class CoinFlip {
         addNewGame(lobbyId, gameChat.getLobbyMembers(lobbyId));
         // retrieve correct gameState
         CoinFlipGameState gameState = gameStates.get(lobbyId);
-        // TODO
         // use player and message to alter gamestate (let player make moves)
         String[] args = message.split(" ");
         String command = args[1];
