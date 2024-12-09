@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/gold"
+            android:textStyle="bold"
             android:padding="5dp"
             android:text="Lobby"
             android:textColor="@color/cardinal"
@@ -30,6 +31,7 @@
             android:padding="5dp"
             android:text="Leaderboard"
             android:textColor="@color/cardinal"
+            android:textStyle="bold"
             android:textSize="20sp" />
 
         <Button
@@ -40,6 +42,7 @@
             android:padding="5dp"
             android:text="Friends"
             android:textColor="@color/cardinal"
+            android:textStyle="bold"
             android:textSize="20sp" />
 
         <Button
@@ -50,6 +53,19 @@
             android:padding="5dp"
             android:text="Settings"
             android:textColor="@color/cardinal"
+            android:textStyle="bold"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/rulesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/gold"
+            android:padding="5dp"
+            android:text="Rules and Information"
+            android:textStyle="bold"
+            android:textColor="@color/cardinal"
+            android:textSize="20sp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

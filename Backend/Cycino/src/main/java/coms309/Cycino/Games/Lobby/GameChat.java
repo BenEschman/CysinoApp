@@ -59,11 +59,9 @@ public class GameChat {
 
         if (message.startsWith("#COINFLIP: ")){
             coinFlip.gameAction(lobby, username, message);
-        }
-        if (message.startsWith("#BACCARAT: ")){
+        } else if (message.startsWith("#BACCARAT: ")){
             baccarat.gameAction(lobby, username, message);
-        }
-        if (message.startsWith("@")) {
+        } else if (message.startsWith("@")) {
             String[] splitMessage = message.split("\\s+", 2);
             if (splitMessage.length > 1) {
                 String destUsername = splitMessage[0].substring(1); // Get username after '@'
