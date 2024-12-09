@@ -18,13 +18,14 @@ public class BaccaratDeck {
         generateDeck();
     }
     private void generateDeck(){
-        while(numberOfDecks > 0){
+        int decks = numberOfDecks;
+        while(decks > 0){
             for (int i = 0; i < cardNames.length; i++) {
                 for (int j = 0; j < suits.length; j++) {
                     deck.add(new BaccaratCard(cardNames[i], suits[j], i+1));
                 }
             }
-            numberOfDecks--;
+            decks--;
         }
 
     }
@@ -44,7 +45,7 @@ public class BaccaratDeck {
 
     public void drawBanker(){
         int randomNumber = random.nextInt(deck.size());
-        playerCards.add(deck.get(randomNumber));
+        bankerCards.add(deck.get(randomNumber));
         deck.remove(randomNumber);
     }
     public void resetGame(){

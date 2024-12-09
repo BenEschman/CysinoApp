@@ -13,6 +13,7 @@ public class BaccaratGameState {
 
     private Map<String, String> playerMoves = new HashMap<>();
     private boolean win = false;
+    private boolean tie = false;
     private BaccaratDeck baccaratDeck = new BaccaratDeck();
 
     //private DeckService deckService = new DeckService();
@@ -22,10 +23,6 @@ public class BaccaratGameState {
         for (String player : players) {
             this.playerMoves.put(player, "UNDECIDED");
         }
-    }
-
-    public void testDraw(){
-        baccaratDeck.drawPlayer();
     }
 
     public void setPlayerMove(String player, String move) {
@@ -53,15 +50,17 @@ public class BaccaratGameState {
             if (checkNatural()){
                 // updateState / check for winner
                 // updateState(coin);
+                updateState();
             } else {
                 // Draw third cards
-                if (playerThirdCard()) {baccaratDeck.drawPlayer();
+                if (playerThirdCard()) {
+                    baccaratDeck.drawPlayer();
                     if (bankerThirdCard()){
                         baccaratDeck.drawBanker();
                     }
                 }
+                updateState();
             }
-            updateState(coin);
         }
     }
 
@@ -113,60 +112,77 @@ public class BaccaratGameState {
         return response;
     }
 
-    private void updateState(String coin){
-        playerMoves.forEach((player, move) -> {
-            if (move.equals(coin)) {
-                playerMoves.put(player, "IN");
-            } else{
-                playerMoves.put(player, "LOST");
-            }
-        });
-        checkWinner();
+    private void updateState(){
+        int playerScore = handValue(baccaratDeck.getPlayerCards());
+        int bankerScore = handValue(baccaratDeck.getBankerCards());
+
+        if (playerScore > bankerScore) {
+            this.win = true;
+            playerMoves.forEach((player, move) -> {
+                if (move.equals("PLAYER")) {
+                    playerMoves.put(player, "WIN");
+                } else{
+                    playerMoves.put(player, "LOST");
+                }
+            });
+        } else if (playerScore < bankerScore) {
+            this.win = true;
+            playerMoves.forEach((player, move) -> {
+                if (move.equals("BANKER")) {
+                    playerMoves.put(player, "WIN");
+                } else{
+                    playerMoves.put(player, "LOST");
+                }
+            });
+        } else if (playerScore == bankerScore) {
+            this.tie = true;
+            playerMoves.forEach((player, move) -> {
+                playerMoves.put(player, "TIE");
+            });
+        }
     }
 
-    private void checkWinner(){
-        int standingPlayers = 0;
-        Collection<String> moves = playerMoves.values();
-        for (String move : moves) {
-            if (move.equals("IN")) {
-                standingPlayers++;
-            }
-        }
-        if (standingPlayers == 1) {
-            playerMoves.forEach((player, move) -> {
-                if (move.equals("IN")) {
-                    playerMoves.put(player, "WIN");
-                    this.win = true;
-                }
-            });
-        } else {
-            playerMoves.forEach((player, move) -> {
-                if (move.equals("IN")) {
-                    playerMoves.put(player, "UNDECIDED");
-                }
-            });
-        }
-    }
 
     private void resetState(){
         playerMoves.forEach((player, move) -> {
             playerMoves.put(player, "UNDECIDED");
         });
         this.win = false;
+        this.tie = false;
+    }
+
+    private String dealtCardsToString(){
+        String playerCards = "";
+        String bankerCards = "";
+        for (int i=0; i < baccaratDeck.getPlayerCards().size(); i++) {
+            playerCards += baccaratDeck.getPlayerCards().get(i).toString();
+            playerCards += " ";
+        }
+        for (int i=0; i < baccaratDeck.getBankerCards().size(); i++) {
+            bankerCards += baccaratDeck.getBankerCards().get(i).toString();
+            bankerCards += " ";
+        }
+        return "PLAYER CARDS: " + playerCards + " BANKER CARDS: " + bankerCards;
     }
 
     @Override
     public String toString() {
         String gameState = "";
+        if (win || tie){
+            gameState += dealtCardsToString() + "\n";
+        }
         if (win){
             for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
+                System.out.println(entry.getValue());
                 if (entry.getValue().equals("WIN")) {
                     gameState += " " + entry.getKey() + " " + entry.getValue();
                 }
             }
             resetState();
-        }
-        else{
+        } else if (tie) {
+            gameState += " " + "TIE";
+            resetState();
+        } else{
             for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
                 gameState += " " + entry.getKey() + " " + entry.getValue();
             }
