@@ -15,7 +15,7 @@ public class BaccaratGameState {
     private boolean win = false;
     private boolean tie = false;
     private BaccaratDeck baccaratDeck = new BaccaratDeck();
-    private String gameResult = "";
+    private String gameResult = "NONE";
 
     //private DeckService deckService = new DeckService();
     //private Deck deck;
@@ -157,7 +157,7 @@ public class BaccaratGameState {
         });
         this.win = false;
         this.tie = false;
-        this.gameResult = "";
+        this.gameResult = "NONE";
     }
 
     private String dealtCardsToString(){
@@ -178,14 +178,23 @@ public class BaccaratGameState {
     @Override
     public String toString() {
         String gameState = "";
+        gameState += "\n" + "CALLS: ";
+        for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
+            gameState += entry.getKey() + " " + entry.getValue() + " ";
+        }
+        gameState += "\n" + "GAMESTATE:" + " ";
+        if (win || tie){
+            gameState += "OVER";
+        } else {
+            gameState += "ONGOING";
+        }
+        gameState += "\n" + "GAMERESULT:" + " " + gameResult;
         if (win || tie){
             gameState += dealtCardsToString();
-            gameState += "\n" + "GAMERESULT:" + " " + gameResult;
             resetState();
         } else{
-            for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
-                gameState += " " + entry.getKey() + " " + entry.getValue();
-            }
+            gameState += "\n" + "PLAYER " + "NONE";
+            gameState += "\n" + "BANKER " + "NONE";
         }
         return gameState;
     }
