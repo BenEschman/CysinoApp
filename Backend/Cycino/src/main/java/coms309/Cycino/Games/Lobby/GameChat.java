@@ -1,5 +1,6 @@
 package coms309.Cycino.Games.Lobby;
 
+import coms309.Cycino.Games.baccarat.Baccarat;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -17,14 +18,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import coms309.Cycino.Games.coinflip.CoinFlip;
+import coms309.Cycino.Games.baccarat.Baccarat;
 
 @ServerEndpoint("/chat/{lobby}/{username}")
 @Component
 public class GameChat {
 
     private static final Map<Long, Map<Session, String>> lobbySessions = new HashMap<>();
+    private CoinFlip coinFlip = new CoinFlip();
+    private Baccarat baccarat = new Baccarat();
     private static final Logger logger = LoggerFactory.getLogger(GameChat.class);
 
     @OnOpen
@@ -47,11 +53,16 @@ public class GameChat {
     }
 
     @OnMessage
-    public static void onMessage(Session session, @PathParam("lobby") Long lobby, String message) throws IOException {
+    public void onMessage(Session session, @PathParam("lobby") Long lobby, String message) throws IOException {
         String username = lobbySessions.get(lobby).get(session);
         logger.info("[onMessage] " + username + " in lobby " + lobby + ": " + message);
 
-
+        if (message.startsWith("#COINFLIP: ")){
+            coinFlip.gameAction(lobby, username, message);
+        }
+        if (message.startsWith("#BACCARAT: ")){
+            baccarat.gameAction(lobby, username, message);
+        }
         if (message.startsWith("@")) {
             String[] splitMessage = message.split("\\s+", 2);
             if (splitMessage.length > 1) {
@@ -136,4 +147,9 @@ public class GameChat {
         }
     }
 
+    public Collection<String> getLobbyMembers(Long lobbyId) {
+        Map<Session, String> sessions = lobbySessions.get(lobbyId);
+        Collection<String> members = sessions.values();
+        return members;
+    }
 }
