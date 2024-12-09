@@ -1,16 +1,16 @@
-package coms309.Cycino.Games.coinflip;
+package coms309.Cycino.Games.baccarat;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class CoinFlipGameState {
+public class BaccaratGameState {
 
     private Map<String, String> playerMoves = new HashMap<>();
     private boolean win = false;
 
-    public CoinFlipGameState(Collection<String> players) {
+    public BaccaratGameState(Collection<String> players) {
         for (String player : players) {
             this.playerMoves.put(player, "UNDECIDED");
         }
@@ -18,7 +18,8 @@ public class CoinFlipGameState {
     public void setPlayerMove(String player, String move) {
         playerMoves.put(player, move);
     }
-    private boolean readyToFlip(){
+
+    private boolean readyToDeal(){
         boolean response = true;
         Collection<String> moves = playerMoves.values();
         for (String move : moves) {
@@ -29,9 +30,9 @@ public class CoinFlipGameState {
         return response;
     }
 
-    public void flip(){
+    public void dealCards(){
         String coin = "";
-        if (readyToFlip()) {
+        if (readyToDeal()) {
             Random random = new Random();
             int randomNumber = random.nextInt(2);
             if (randomNumber == 0) {

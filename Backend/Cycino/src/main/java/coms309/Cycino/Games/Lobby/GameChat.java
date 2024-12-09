@@ -1,5 +1,6 @@
 package coms309.Cycino.Games.Lobby;
 
+import coms309.Cycino.Games.baccarat.Baccarat;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import coms309.Cycino.Games.coinflip.CoinFlip;
+import coms309.Cycino.Games.baccarat.Baccarat;
 
 @ServerEndpoint("/chat/{lobby}/{username}")
 @Component
@@ -29,6 +31,7 @@ public class GameChat {
     private static final Map<Long, Map<Session, String>> lobbySessions = new HashMap<>();
     private final Logger logger = LoggerFactory.getLogger(GameChat.class);
     private CoinFlip coinFlip = new CoinFlip();
+    private Baccarat baccarat = new Baccarat();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("lobby") Long lobby, @PathParam("username") String username) throws IOException {
@@ -56,6 +59,9 @@ public class GameChat {
 
         if (message.startsWith("#COINFLIP: ")){
             coinFlip.gameAction(lobby, username, message);
+        }
+        if (message.startsWith("#BACCARAT: ")){
+            baccarat.gameAction(lobby, username, message);
         }
         if (message.startsWith("@")) {
             String[] splitMessage = message.split("\\s+", 2);
