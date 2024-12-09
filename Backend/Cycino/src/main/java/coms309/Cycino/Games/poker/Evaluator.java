@@ -132,7 +132,7 @@ public class Evaluator {
                 response.put("value", 9 + getHigh(flush).getValue()/100.0);
             }
             else{
-                PlayerHands fin = (PlayerHands) simplify((ArrayList<Card>) ((PlayerHands) response.get("hand")).getHand()).get("hand");
+                PlayerHands fin = (PlayerHands) simplify(((PlayerHands) response.get("hand")).getHand()).get("hand");
                 response.put("hand", fin);
                 response.put("value", 5 + getHigh(fin).getValue()/100.0);
             }

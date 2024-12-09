@@ -125,6 +125,7 @@ public class LobbyService {
         response.put("status", "200 ok");
         //response.put("lobby", l);
         response.put("players", players);
+        response.put("size", players.size());
         return response;
     }
 
