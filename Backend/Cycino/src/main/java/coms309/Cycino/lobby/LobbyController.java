@@ -25,7 +25,7 @@ public class LobbyController {
         return service.startLobby(userId);
     }
 
-    @DeleteMapping("/lobby/delete/{id}/{userId")
+    @DeleteMapping("/lobby/delete/{id}/{userId}")
     public Map<String, Object> delete(@PathVariable Long id, @PathVariable long userId){
         return service.delete(id, userId);
     }
