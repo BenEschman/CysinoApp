@@ -30,6 +30,6 @@ public class BaccaratCard {
     }
 
     public String toString() {
-        return name + " " + "of" + " " + suit;
+        return suit + "_" + name;
     }
 }

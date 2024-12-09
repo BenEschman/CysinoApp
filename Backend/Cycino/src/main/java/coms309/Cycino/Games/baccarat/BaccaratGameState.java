@@ -15,6 +15,7 @@ public class BaccaratGameState {
     private boolean win = false;
     private boolean tie = false;
     private BaccaratDeck baccaratDeck = new BaccaratDeck();
+    private String gameResult = "";
 
     //private DeckService deckService = new DeckService();
     //private Deck deck;
@@ -117,6 +118,7 @@ public class BaccaratGameState {
         int bankerScore = handValue(baccaratDeck.getBankerCards());
 
         if (playerScore > bankerScore) {
+            this.gameResult = "PLAYER";
             this.win = true;
             playerMoves.forEach((player, move) -> {
                 if (move.equals("PLAYER")) {
@@ -126,6 +128,7 @@ public class BaccaratGameState {
                 }
             });
         } else if (playerScore < bankerScore) {
+            this.gameResult = "BANKER";
             this.win = true;
             playerMoves.forEach((player, move) -> {
                 if (move.equals("BANKER")) {
@@ -135,9 +138,14 @@ public class BaccaratGameState {
                 }
             });
         } else if (playerScore == bankerScore) {
+            this.gameResult = "TIE";
             this.tie = true;
             playerMoves.forEach((player, move) -> {
-                playerMoves.put(player, "TIE");
+                if (move.equals("TIE")) {
+                    playerMoves.put(player, "WIN");
+                } else{
+                    playerMoves.put(player, "LOST");
+                }
             });
         }
     }
@@ -149,6 +157,7 @@ public class BaccaratGameState {
         });
         this.win = false;
         this.tie = false;
+        this.gameResult = "";
     }
 
     private String dealtCardsToString(){
@@ -162,25 +171,16 @@ public class BaccaratGameState {
             bankerCards += baccaratDeck.getBankerCards().get(i).toString();
             bankerCards += " ";
         }
-        return "PLAYER CARDS: " + playerCards + " BANKER CARDS: " + bankerCards;
+        return "\n" + "PLAYER " + baccaratDeck.getPlayerCards().size() + " " + playerCards +
+                "\n" + "BANKER " + baccaratDeck.getBankerCards().size() + " " + bankerCards;
     }
 
     @Override
     public String toString() {
         String gameState = "";
         if (win || tie){
-            gameState += dealtCardsToString() + "\n";
-        }
-        if (win){
-            for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
-                System.out.println(entry.getValue());
-                if (entry.getValue().equals("WIN")) {
-                    gameState += " " + entry.getKey() + " " + entry.getValue();
-                }
-            }
-            resetState();
-        } else if (tie) {
-            gameState += " " + "TIE";
+            gameState += dealtCardsToString();
+            gameState += "\n" + "GAMERESULT:" + " " + gameResult;
             resetState();
         } else{
             for(Map.Entry<String, String> entry : playerMoves.entrySet()) {

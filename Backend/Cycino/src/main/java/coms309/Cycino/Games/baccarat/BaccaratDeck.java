@@ -8,8 +8,8 @@ public class BaccaratDeck {
     private final ArrayList<BaccaratCard> bankerCards = new ArrayList<>();
     private int playerCardNumber;
     private int bankerCardNumber;
-    private final String[] cardNames = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-    private final String[] suits = {"Clubs", "Diamonds", "Hearts", "Spades"};
+    private final String[] cardNames = {"ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"};
+    private final String[] suits = {"clubs", "diamonds", "hearts", "spades"};
     private ArrayList<BaccaratCard> deck = new ArrayList<>();
     private final Random random = new Random();
     private int numberOfDecks = 1;
