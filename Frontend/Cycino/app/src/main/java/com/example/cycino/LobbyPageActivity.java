@@ -563,7 +563,7 @@ public class LobbyPageActivity extends AppCompatActivity {
                             String status = response.getString("status");
                             if (status.equals("200 ok")) {
                                 Toast.makeText(LobbyPageActivity.this, "Lobby has been deleted.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LobbyPageActivity.this, WelcomeActivity.class); // Go to home page.
+                                Intent intent = new Intent(LobbyPageActivity.this, HomePageActivity.class); // Go to home page.
                                 startActivity(intent);
                                 finish();
                             }
