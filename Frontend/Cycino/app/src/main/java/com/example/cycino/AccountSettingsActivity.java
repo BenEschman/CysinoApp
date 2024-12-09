@@ -37,8 +37,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private EditText editPhoneNumber;
 
     //testing
-    private String userUsername = "mike";
-    private String userPassword = "123" ;
+    private String userUsername = "evam";
+    private String userPassword = "12345" ;
     private int userID = 3 ;
 
     @Override
@@ -86,7 +86,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newPassword = editPassword.getText().toString();
                 if (!newPassword.contains(" ")) {
-                    updateUserPassword(userUsername, newPassword);
+                    updateLogin(userUsername, newPassword);
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid password. No spaces are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -183,16 +183,16 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * @param username
-     * @param password
+     * @param newUsername
+     * @param newPassword
      */
-    private void updateLogin(String username, String password) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + username ;
+    private void updateLogin(String newUsername, String newPassword) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + userUsername ;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject userData = new JSONObject();
         try {
-            userData.put("username", username);
-            userData.put("password", password);
+            userData.put("username", newUsername);
+            userData.put("password", newPassword);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating JSON data", Toast.LENGTH_LONG).show();
@@ -203,8 +203,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Login information has been updated", Toast.LENGTH_LONG).show();
-                        userUsername = username ;
-                        userPassword = password ;
+                        userUsername = newUsername ;
+                        userPassword = newPassword ;
+                        editUsername.setText("");
+                        editPassword.setText("");
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -213,42 +215,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         Log.e("UsernamePassword", "Error: " + error.getMessage());
                     }
                 });
-        requestQueue.add(jsonObjectRequest);
-    }
-
-    /**
-     * @param username
-     * @param newPassword
-     */
-    private void updateUserPassword(final String username, final String newPassword) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/update/" + username;
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("username", username);
-            jsonBody.put("password", newPassword);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "Password has been changed", Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Failed to update password", Toast.LENGTH_SHORT).show();
-                        Log.e("ResetPassword", "Error: " + error.getMessage());
-                    }
-                });
-
         requestQueue.add(jsonObjectRequest);
     }
 
