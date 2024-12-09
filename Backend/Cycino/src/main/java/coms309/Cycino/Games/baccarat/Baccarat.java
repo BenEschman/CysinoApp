@@ -33,6 +33,8 @@ public class Baccarat {
         } else if (command.equals("BET")){
             // TODO
             // DO NOTHING FOR NOW, SHOULD LET PLAYERS BET TO WIN AND LOSE CHIPS
+        } else if (command.equals("TEST")){
+            gameState.testDraw();
         }
         // Always check if we are ready to deal cards, this alters the gameState that is returned
         gameState.dealCards();
