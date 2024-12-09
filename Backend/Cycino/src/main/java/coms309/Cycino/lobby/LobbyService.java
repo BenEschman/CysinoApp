@@ -1,5 +1,6 @@
 package coms309.Cycino.lobby;
 
+import coms309.Cycino.Enums;
 import coms309.Cycino.Games.Blackjack.BlackjackService;
 import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserService;
@@ -26,10 +27,16 @@ public class LobbyService {
     }
 
     public Map<String, Object> startLobby(Long u){
+
         Map<String, Object> response = new HashMap<>();
         User user = userService.getUser(u);
+        Enums.Roles role = user.getRole();
+        if(role.ordinal() == 0){
+            response.put("status", 405);
+            response.put("error", "permission not allowed");
+            return response;
+        }
         Lobby l = new Lobby(user);
-
         repo.save(l);
         response.put("lobbyId", l.getLobbyId());
         response.put("status", "200 ok");
@@ -45,13 +52,18 @@ public class LobbyService {
         return response;
     }
 
-    public Map<String, Object> delete(Long id){
+    public Map<String, Object> delete(Long id, long userId){
         Map<String, Object> response = new HashMap<>();
         if(repo.findById(id).isEmpty()){
             response.put("status", "404 not found");
             return response;
         }
-
+        Enums.Roles role = userService.getUser(userId).getRole();
+        if(role.ordinal() < 2){
+            response.put("status", 405);
+            response.put("error", "permission not allowed");
+            return response;
+        }
         repo.deleteById(id);
         response.put("lobbyId", id);
         response.put("status", "200 ok");
@@ -77,6 +89,12 @@ public class LobbyService {
     public Map<String, Object> removePlayer(long userId, Long id){
         Map<String, Object> response = new HashMap<>();
         User u = userService.getUser(userId);
+        Enums.Roles role = u.getRole();
+        if(role.ordinal() >= 2){
+            response.put("status", 405);
+            response.put("error", "permission not allowed");
+            return response;
+        }
         Lobby l = repo.findById(id).orElse(null);
         if(l == null){
             response.put("status", "404 not found");
