@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class CoinFlip {
     private static final String serverMessage = "#COINFLIP:";
     private static final GameChat gameChat = new GameChat();
@@ -31,7 +32,7 @@ public class CoinFlip {
         if (command.equals("PICK")){
             gameState.setPlayerMove(player, commandArgument);
         } else if (command.equals("BET")){
-            // DO NOTHING FOR NOW
+            gameState.setPlayerBets(player, Integer.parseInt(commandArgument));
         }
         // Always check if you can flip the coin, this alters the gameState that is returned
         gameState.flip();
