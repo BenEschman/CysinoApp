@@ -16,9 +16,11 @@ public class CoinFlipGameState {
             this.playerMoves.put(player, "UNDECIDED");
         }
     }
+
     public void setPlayerMove(String player, String move) {
         playerMoves.put(player, move);
     }
+
     private boolean readyToFlip(){
         boolean response = true;
         Collection<String> moves = playerMoves.values();

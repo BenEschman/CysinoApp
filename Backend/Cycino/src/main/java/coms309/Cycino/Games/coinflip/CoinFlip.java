@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class CoinFlip {
     private static final String serverMessage = "#COINFLIP:";
     private static final GameChat gameChat = new GameChat();
