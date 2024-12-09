@@ -1,6 +1,7 @@
 package coms309.Cycino.Games.GameLogic;
 
 import coms309.Cycino.Games.Blackjack.BlackJack;
+import coms309.Cycino.Games.Lobby.GameChat;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.users.User;
 
@@ -22,13 +23,10 @@ public class BlackJackLogic {
             return result;
         }
         Card c = cards.draw();
-        System.out.println("Check 1.111");
         score = checkAce(hand.getHand(), score, c);
         hand.add(c);
-        System.out.println("Check 1.9");
         result.put("card", c);
         result.put("score", hand.getScore());
-        System.out.println("Check 1.6");
         if(score > 21){
             result.put("result", "bust");
             if(hand.getPlayer() != null)
@@ -36,14 +34,12 @@ public class BlackJackLogic {
             return result;
         }
 
-        System.out.println("Check 1.7");
         if(score == 21){
             result.put("result", "blackjack");
             if(hand.getPlayer() != null)
                 result.put("string", createMessage(hand, "hit", c));
             return result;
         }
-        System.out.println("Check 1.8");
         return result;
     }
 
@@ -105,6 +101,7 @@ public class BlackJackLogic {
             response.put("bust", true);
         else response.put("bust", false);
         response.put("string", createMessage(hand, "stand", null));
+
         return response;
     }
 

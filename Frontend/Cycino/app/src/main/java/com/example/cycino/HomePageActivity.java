@@ -30,7 +30,7 @@ import java.io.File;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    private Button lobby,leaderboard,friends,settings;
+    private Button lobby,leaderboard,friends,settings, rulesBtn ;
 
     private String username;
     private Integer UUID;
@@ -50,6 +50,7 @@ public class HomePageActivity extends AppCompatActivity {
         leaderboard = findViewById(R.id.leaderboardButton);
         friends = findViewById(R.id.friendsButton);
         settings = findViewById(R.id.settingsButton);
+        rulesBtn = findViewById(R.id.rulesButton);
 
         lobby.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +92,16 @@ public class HomePageActivity extends AppCompatActivity {
 
             }
         });
+        rulesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomePageActivity.this,RulesActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",UUID);
+                startActivity(i);
+            }
+        });
+
 
     }
 }

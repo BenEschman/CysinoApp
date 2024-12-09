@@ -15,7 +15,7 @@ public class LobbyController {
 
 
 
-    @PostMapping("/lobby/create")
+    @PostMapping("/lobby/create/{id}")
     public Map<String, Object> startLobby(){
         return service.startLobby();
     }
@@ -25,9 +25,9 @@ public class LobbyController {
         return service.startLobby(userId);
     }
 
-    @DeleteMapping("/lobby/delete/{id}")
-    public Map<String, Object> delete(@PathVariable Long id){
-        return service.delete(id);
+    @DeleteMapping("/lobby/delete/{id}/{userId")
+    public Map<String, Object> delete(@PathVariable Long id, @PathVariable long userId){
+        return service.delete(id, userId);
     }
 
     @PutMapping("/lobby/add/{id}/{userId}")
