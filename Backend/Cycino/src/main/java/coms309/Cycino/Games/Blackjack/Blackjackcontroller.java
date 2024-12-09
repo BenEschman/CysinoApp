@@ -69,4 +69,9 @@ public class Blackjackcontroller {
         return bjs.getHands(lobby);
     }
 
+    @PutMapping("/blackjack/bet/{lobby}/{userId}/{bet}")
+    public Map<String, Object> addBet(@PathVariable long lobby, @PathVariable long userId, @PathVariable double bet){
+        return bjs.setBet(lobby, userId, bet);
+    }
+
 }

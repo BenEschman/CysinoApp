@@ -56,7 +56,6 @@ public class UserStatsController {
         response.put("error", "No user with that id");
         return response;
     }
-
     @PutMapping("/stats/update/{win}/{loss}/{chips}/{game}")
     public Map<String, Object> update(@PathVariable int win, @PathVariable int loss, @PathVariable int chips, @PathVariable String game, @RequestHeader("userId") Long userId){
         Map<String,Object> response = new HashMap<>();

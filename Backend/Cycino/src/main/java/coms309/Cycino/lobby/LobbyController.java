@@ -20,7 +20,7 @@ public class LobbyController {
         return service.startLobby();
     }
 
-    @PostMapping("/lobby/create1/{userId}")
+    @PostMapping("/lobby/create/{userId}")
     public Map<String, Object> startLobby(@PathVariable Long userId){
         return service.startLobby(userId);
     }

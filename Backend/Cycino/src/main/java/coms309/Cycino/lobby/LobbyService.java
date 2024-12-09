@@ -29,6 +29,7 @@ public class LobbyService {
         Map<String, Object> response = new HashMap<>();
         User user = userService.getUser(u);
         Lobby l = new Lobby(user);
+
         repo.save(l);
         response.put("lobbyId", l.getLobbyId());
         response.put("status", "200 ok");
@@ -50,6 +51,7 @@ public class LobbyService {
             response.put("status", "404 not found");
             return response;
         }
+
         repo.deleteById(id);
         response.put("lobbyId", id);
         response.put("status", "200 ok");

@@ -1,6 +1,5 @@
 package coms309.Cycino.users;
 
-import coms309.Cycino.stats.UserStatsController;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +37,8 @@ public class UserController {
     public User getUser(@PathVariable long id){
         return userService.getUser(id);
     }
+
+
 
 
 }
