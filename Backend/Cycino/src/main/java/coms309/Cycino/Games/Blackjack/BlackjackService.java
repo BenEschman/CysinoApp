@@ -1,6 +1,7 @@
 package coms309.Cycino.Games.Blackjack;
 
 import coms309.Cycino.Games.GameLogic.*;
+import coms309.Cycino.Games.Lobby.GameChat;
 import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.lobby.LobbyService;
 import coms309.Cycino.stats.GameHistory;
@@ -140,6 +141,9 @@ public class BlackjackService {
             temp += " finish";
             response.put("string", temp);
         }
+        if(response.containsValue("string")){
+            GameChat.broadcast(lobbyId, (String) response.get("string"));
+        }
         return response;
     }
 
@@ -171,6 +175,9 @@ public class BlackjackService {
             temp += " finish";
             response.put("string", temp);
         }
+        if(response.containsValue("string")){
+            GameChat.broadcast(lobbyId, (String) response.get("string"));
+        }
         return response;
     }
 
@@ -198,6 +205,10 @@ public class BlackjackService {
             String temp = (String) response.get("string");
             temp += " finish";
             response.put("string", temp);
+
+        }
+        if(response.containsValue("string")){
+            GameChat.broadcast(lobbyId, (String) response.get("string"));
         }
         return response;
     }
@@ -218,6 +229,9 @@ public class BlackjackService {
             return response;
         }
         response =  BlackJackLogic.split(blj.getHand(user), blj,user);
+        if(response.containsValue("string")){
+            GameChat.broadcast(lobbyId, (String) response.get("string"));
+        }
         repo.save((PlayerHands) response.get("hand"));
         repo.save((PlayerHands) response.get("hand1"));
         blackJackRepo.save(blj);
@@ -281,6 +295,7 @@ public class BlackjackService {
             repo.save(hand);
         }
         response.put("status", "200 ok");
+        GameChat.broadcast(lobbyId, "next: " + bj.getOrder().get(0));
         return response;
     }
 
@@ -373,6 +388,9 @@ public class BlackjackService {
                 response.put(hand.getPlayer().getId() + "", "push");
                 hand.getPlayer().addChips(hand.getBet());
             }
+        }
+        if(response.containsValue("string")){
+            GameChat.broadcast(lobbyId, "finish");
         }
         return response;
     }
