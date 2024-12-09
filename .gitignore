@@ -57,8 +57,7 @@ gen-external-apklibs
 .mtj.tmp/
 
 # Package Files #
-*.jar
-!gradle/wrapper/gradle-wrapper.jar
+#*.jar
 *.war
 *.nar
 *.ear

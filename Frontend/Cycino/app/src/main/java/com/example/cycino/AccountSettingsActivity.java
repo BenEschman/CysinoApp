@@ -15,10 +15,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.cycino.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 
 public class AccountSettingsActivity extends AppCompatActivity {
@@ -37,9 +37,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private EditText editPhoneNumber;
 
     //testing
-    private String userUsername = "evam";
-    private String userPassword = "12345" ;
-    private int userID = 3 ;
+    private String userUsername = "mike";
+    private String userPassword = "123" ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,27 +93,34 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
         });
 
-        // This currently changes all user information. need a proper endpoint or null checks.
         btnChangeFirstName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newFirstName = editFirstName.getText().toString();
                 if (newFirstName.matches("^[a-zA-Z]+$")) {
-                    updateFirstName(userID, newFirstName);
+
+
+                    // UPDATE FIRST NAME IN USER INFO TABLE
+
+
+                    Toast.makeText(AccountSettingsActivity.this, "First name updated to: " + newFirstName, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid first name. Only letters are allowed.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-
-        // This currently changes all user information. need a proper endpoint.
         btnChangeLastName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String newLastName = editLastName.getText().toString();
                 if (newLastName.matches("^[a-zA-Z]+$")) {
-                    updateLastName(userID, newLastName) ;
+
+
+                    // UPDATE LAST NAME IN USER INFO
+
+
+                    Toast.makeText(AccountSettingsActivity.this, "Last name updated to: " + newLastName, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid last name. Only letters are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -125,7 +132,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newPhoneNumber = editPhoneNumber.getText().toString();
                 if (newPhoneNumber.matches("^[0-9]+$")) {
-                    updatePhoneNumber(userID, newPhoneNumber) ;
+
+
+                    // UPDATE USER PHONE NUMBER IN USER TABLE
+
+
+                    Toast.makeText(AccountSettingsActivity.this, "Phone number updated to: " + newPhoneNumber, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid phone number. Only numbers are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -135,16 +147,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // deleteAccount(username);
+                deleteAccount(userUsername);
                 Toast.makeText(AccountSettingsActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /**
-     * @param username
-     */
-    private void deleteAccount(String username) {
+
+    private void deleteAccount(final String username) {
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/delete/" + username;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
@@ -182,17 +192,13 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * @param newUsername
-     * @param newPassword
-     */
-    private void updateLogin(String newUsername, String newPassword) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + userUsername ;
+    private void updateLogin(String username, String password) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + username ;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject userData = new JSONObject();
         try {
-            userData.put("username", newUsername);
-            userData.put("password", newPassword);
+            userData.put("username", username);
+            userData.put("password", password);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating JSON data", Toast.LENGTH_LONG).show();
@@ -203,10 +209,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Login information has been updated", Toast.LENGTH_LONG).show();
-                        userUsername = newUsername ;
-                        userPassword = newPassword ;
-                        editUsername.setText("");
-                        editPassword.setText("");
+                        userUsername = username ;
+                        userPassword = password ;
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -218,62 +222,45 @@ public class AccountSettingsActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    /**
-     * @param newFirstName
-     */
-    private void updateFirstName(final int userID, final String newFirstName)
-    {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/update/" + userID;
+    private void updateUserPassword(final String username, final String newPassword) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/update/" + username;
 
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("firstName", newFirstName);
+            jsonBody.put("username", username);
+            jsonBody.put("password", newPassword);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
             return;
         }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, jsonBody,
+                new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("AccountSettingsActivity", "Server Response: " + response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(AccountSettingsActivity.this, "First name updated to: " + newFirstName, Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getApplicationContext(), "Password has been changed", Toast.LENGTH_LONG).show();
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                            String errorMsg = new String(error.networkResponse.data);
-                            Log.e("VolleyError", errorMsg);
-                        }
-                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Failed to update password", Toast.LENGTH_SHORT).show();
+                        Log.e("ResetPassword", "Error: " + error.getMessage());
                     }
-                }) {
-        };
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(jsonObjectRequest);
+                });
+
+        requestQueue.add(jsonObjectRequest);
     }
 
-    /**
-     * @param newLastName
-     */
-    private void updateLastName(final int userID, final String newLastName)
+    private void updateFirstName(final String newFirstName)
     {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/update/" + userID ;
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
 
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("lastName", newLastName);
+            jsonBody.put("firstname", newFirstName);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
@@ -287,8 +274,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         Log.d("AccountSettingsActivity", "Server Response: " + response.toString());
                         try {
                             String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(AccountSettingsActivity.this, "Last name updated to: " + newLastName, Toast.LENGTH_SHORT).show();
+                            if (status.equals("200 ok")) {
+                                Toast.makeText(getApplicationContext(), "First name has been updated.", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -307,20 +294,15 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     }
                 }) {
         };
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(jsonObjectRequest);
     }
 
-    /**
-     * @param newPhoneNumber 
-     */
-    private void updatePhoneNumber(final int userID, final String newPhoneNumber)
+    private void updateLastName(final String newLastName)
     {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/update/" + userID ;
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
 
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("phoneNumber", newPhoneNumber);
+            jsonBody.put("lastname", newLastName);
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
@@ -334,8 +316,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                         Log.d("AccountSettingsActivity", "Server Response: " + response.toString());
                         try {
                             String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(AccountSettingsActivity.this, "Phone number updated to: " + newPhoneNumber, Toast.LENGTH_SHORT).show();
+                            if (status.equals("200 ok")) {
+                                Toast.makeText(getApplicationContext(), "Last name has been updated.", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -354,8 +336,48 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     }
                 }) {
         };
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(jsonObjectRequest);
+    }
+
+    private void updatePhoneNumber(final int newPhoneNumber)
+    {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/"; //////////////////////////////////////////////////////////////////////////////////////////////////
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("firstname", newPhoneNumber);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Error creating request body", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("AccountSettingsActivity", "Server Response: " + response.toString());
+                        try {
+                            String status = response.getString("status");
+                            if (status.equals("200 ok")) {
+                                Toast.makeText(getApplicationContext(), "Phone number has been updated.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            String errorMsg = new String(error.networkResponse.data);
+                            Log.e("VolleyError", errorMsg);
+                        }
+                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }) {
+        };
     }
 
 
