@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray">
-
 
     <!-- Back Button -->
     <Button
@@ -12,6 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
+        android:textColor="#B31B1B"
+        android:backgroundTint="#FFD700"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
@@ -23,8 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Account Settings"
-        android:textSize="24sp"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="32sp"
         android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.75"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,6 +52,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
+        android:textStyle="bold"
+        android:textColor="#B31B1B"
+        android:backgroundTint="#FFD700"
         app:layout_constraintTop_toTopOf="@id/editUsername"
         app:layout_constraintBottom_toBottomOf="@id/editUsername"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +79,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
+        android:textStyle="bold"
+        android:textColor="#FFD700"
+        android:backgroundTint="#B31B1B"
         app:layout_constraintTop_toTopOf="@id/editPassword"
         app:layout_constraintBottom_toBottomOf="@id/editPassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +105,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
+        android:textColor="#B31B1B"
+        android:textStyle="bold"
+        android:backgroundTint="#FFD700"
         app:layout_constraintTop_toTopOf="@id/editFirstName"
         app:layout_constraintBottom_toBottomOf="@id/editFirstName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,6 +131,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
+        android:textStyle="bold"
+        android:textColor="#FFD700"
+        android:backgroundTint="#B31B1B"
         app:layout_constraintTop_toTopOf="@id/editLastName"
         app:layout_constraintBottom_toBottomOf="@id/editLastName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -142,22 +158,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
+        android:textStyle="bold"
+        android:textColor="#B31B1B"
+        android:backgroundTint="#FFD700"
         app:layout_constraintTop_toTopOf="@id/editPhoneNumber"
         app:layout_constraintBottom_toBottomOf="@id/editPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="32dp" />
 
     <!-- Button for Deleting Account -->
+
+    <!-- Button for User Page -->
+    <Button
+        android:id="@+id/userPageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Page"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#006400"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/editPhoneNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp" />
+
     <Button
         android:id="@+id/deleteAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete Account"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@android:color/holo_red_dark"
-        app:layout_constraintTop_toBottomOf="@id/editPhoneNumber"
+        android:textColor="#B31B1B"
+        android:backgroundTint="#000000"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp" />

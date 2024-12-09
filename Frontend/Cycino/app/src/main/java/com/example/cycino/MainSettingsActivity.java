@@ -70,8 +70,6 @@ public class MainSettingsActivity extends AppCompatActivity {
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
         logOutButton = findViewById(R.id.logOutButton);
-        brightnessDial = findViewById(R.id.brightnessDial);
-        brightnessLabel = findViewById(R.id.brightnessLabel);
         notificationsSwitch = findViewById(R.id.notificationsSwitch);
         accountSettingsButton = findViewById(R.id.accountSettingsButton);
         onlineStatusSwitch = findViewById(R.id.onlineStatusSwitch);
