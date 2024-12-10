@@ -58,7 +58,7 @@
     <!-- Add Chips Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addChipsButton"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Add Chips"
         app:layout_constraintTop_toBottomOf="@id/chipInput"
@@ -73,7 +73,7 @@
     <!-- Remove Chips Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/removeChipsButton"
-        android:layout_width="0dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Remove Chips"
         app:layout_constraintTop_toBottomOf="@id/addChipsButton"
@@ -97,13 +97,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
+    <!-- Limit Information Text -->
+    <TextView
+        android:id="@+id/limitInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You are only allowed to add up to ten-thousand CyChips at a time."
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/bottomImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- Back Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/backButton"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="🏠 Back to Home 🏠"
-        app:layout_constraintTop_toBottomOf="@id/bottomImage"
+        app:layout_constraintTop_toBottomOf="@id/limitInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:cornerRadius="12dp"

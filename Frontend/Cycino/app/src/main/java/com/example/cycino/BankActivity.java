@@ -1,5 +1,6 @@
 package com.example.cycino;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,16 +32,21 @@ public class BankActivity extends AppCompatActivity {
 
 
     // set user info
-    int userID = 2 ;
+    int userID  ;
+    String username ;
     int userChips ;
-    String addUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/userID/" ;
-    String removeUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/userID/" ;
+    String addUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/" + userID + "/" ;
+    String removeUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/" + userID + "/" ;
     String getUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/get/" + userID ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank); // Ensure this matches your XML filename
+
+        Intent inIntent = getIntent();
+        username = inIntent.getStringExtra("USERNAME");
+        userID = inIntent.getIntExtra("UUID",-1);
 
         // Initialize UI elements
         chipIcon = findViewById(R.id.chipIcon);
@@ -69,7 +75,10 @@ public class BankActivity extends AppCompatActivity {
                     Toast.makeText(this, "Enter a positive number", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                else if (addAmount > 10000) {
+                    Toast.makeText(this, "Enter a number below 10000. ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 // Call handleAddChips with the valid addAmount
                 handleAddChips(addAmount);
 
@@ -79,14 +88,41 @@ public class BankActivity extends AppCompatActivity {
         });
 
         removeChipsButton.setOnClickListener(v -> {
+            String inputText = chipInput.getText().toString().trim();
+            if (inputText.isEmpty()) {
+                Toast.makeText(this, "Please enter a valid chip amount", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            try {
+                int removeAmount = Integer.parseInt(inputText);
+                if (removeAmount <= 0) {
+                    Toast.makeText(this, "Enter a positive number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(removeAmount > userChips) {
+                    Toast.makeText(this, "Are you trying to be in debt? Enter a number less than your current amount.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Call handleAddChips with the valid addAmount
+                handleRemoveChips(removeAmount);
+
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Enter a number.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         backButton.setOnClickListener(v -> {
-
+            Intent i = new Intent(BankActivity.this,HomePageActivity.class);
+            i.putExtra("USERNAME", username);
+            i.putExtra("UUID", userID);
+            startActivity(i);
         });
 
-    }
+
+
+        }
 
 
 
@@ -100,8 +136,8 @@ public class BankActivity extends AppCompatActivity {
                 response -> {
                     try {
                         // Handle the JSON response
-                        String status = response.getString("status");
-                        if (status.equals("200 OK")) {
+                        int status = response.getInt("status");
+                        if (status == 200) {
                             userChips = response.getInt("chips");
                             chipBalance.setText(String.valueOf(userChips));
                         } else {
@@ -124,17 +160,18 @@ public class BankActivity extends AppCompatActivity {
     {
         JsonObjectRequest putRequest = new JsonObjectRequest(
                 Request.Method.PUT,
-                addUrl + "/" + addAmount,
+                addUrl + addAmount,
                 null, // No body for this request
                 response -> {
                     try {
                         // Handle the JSON response
-                        String status = response.getString("status");
-                        if (status.equals("200 OK")) {
+                        int status = response.getInt("status");
+                        if (status == 200) {
                             int updatedChips = response.getInt("chips");
                             Toast.makeText(this, "New balance: " + updatedChips, Toast.LENGTH_SHORT).show();
                             userChips = updatedChips ;
-                            chipBalance.setText(userChips) ;
+                            chipBalance.setText(String.valueOf(userChips));
+                            chipInput.setText("") ;
                         } else {
                             String error = response.getString("error");
                             Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
@@ -148,6 +185,42 @@ public class BankActivity extends AppCompatActivity {
                     Toast.makeText(this, "Request failed. Please try again.", Toast.LENGTH_SHORT).show();
                 }
         );
-        Volley.newRequestQueue(this).add(putRequest);
+        requestQueue.add(putRequest);
     }
+
+    private void handleRemoveChips(int removeAmount)
+    {
+        JsonObjectRequest putRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                removeUrl + removeAmount,
+                null, // No body for this request
+                response -> {
+                    try {
+                        // Handle the JSON response
+                        int status = response.getInt("status");
+                        if (status == 200) {
+                            int updatedChips = response.getInt("chips");
+                            Toast.makeText(this, "New balance: " + updatedChips, Toast.LENGTH_SHORT).show();
+                            userChips = updatedChips ;
+                            chipBalance.setText(String.valueOf(userChips));
+                            chipInput.setText("") ;
+                        } else {
+                            String error = response.getString("error");
+                            Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Response parsing error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    // Handle errors
+                    Toast.makeText(this, "Request failed. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+        );
+        requestQueue.add(putRequest);
+    }
+
+
+
+
 }
