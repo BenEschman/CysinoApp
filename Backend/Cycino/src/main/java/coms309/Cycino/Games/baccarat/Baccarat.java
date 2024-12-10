@@ -31,8 +31,7 @@ public class Baccarat {
         if (command.equals("PICK")){
             gameState.setPlayerMove(player, commandArgument);
         } else if (command.equals("BET")){
-            // TODO
-            // DO NOTHING FOR NOW, SHOULD LET PLAYERS BET TO WIN AND LOSE CHIPS
+            gameState.setPlayerBets(player, Integer.parseInt(commandArgument));
         }
         // Always check if we are ready to deal cards, this alters the gameState that is returned
         gameState.dealCards();
