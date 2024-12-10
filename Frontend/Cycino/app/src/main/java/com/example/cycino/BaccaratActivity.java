@@ -5,27 +5,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class BaccaratActivity extends AppCompatActivity {
 
-    public int lobbyID = 2 ;
-    public String userUsername = "Filip" ;
-    private Button sendBtn, chatToggleBtn, tieBtn, bankerBtn, playerBtn;
-    private EditText msgEtx;
-    private TextView msgTv;
+    private int lobbyID = 2 ;
+    private String userUsername = "Filip" ;
+    private Button sendBtn, chatToggleBtn, tieBtn, bankerBtn, playerBtn, betButton;
+    private EditText msgEtx, betEditText;
+    private TextView msgTv, winnerTv;
     private ImageView playerCard1, playerCard2, playerCard3, bankerCard1, bankerCard2, bankerCard3 ;
     private ScrollView chatArea;
     private boolean chatOpen = true;
     private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/" + lobbyID + "/" + userUsername ;
+    private int playerCardCount ;
+    private int bankerCardCount ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +48,16 @@ public class BaccaratActivity extends AppCompatActivity {
         playerCard1 = findViewById(R.id.playerCard1);
         playerCard2 = findViewById(R.id.playerCard2);
         playerCard3 = findViewById(R.id.playerCard3);
+        bankerCard1 = findViewById(R.id.bankerCard1);
+        bankerCard2 = findViewById(R.id.bankerCard2);
+        bankerCard3 = findViewById(R.id.bankerCard3);
+        betEditText = findViewById(R.id.betEditText);
+        betButton = findViewById(R.id.betButton);
+        winnerTv = findViewById(R.id.winnerTextView);
 
+        playerBtn.setVisibility(View.GONE);
+        bankerBtn.setVisibility(View.GONE);
+        tieBtn.setVisibility(View.GONE);
 
         // Get username from intent
 //        Intent inIntent = getIntent();
@@ -57,6 +70,43 @@ public class BaccaratActivity extends AppCompatActivity {
         serviceIntent.putExtra("key", "chat1");
         serviceIntent.putExtra("url", serverUrl);
         startService(serviceIntent);
+
+
+
+        betButton.setOnClickListener(v -> {
+            String betAmountString = betEditText.getText().toString().trim();
+
+            // Check if the input is not empty and is a valid integer
+            if (!betAmountString.isEmpty()) {
+                try {
+                    int betAmount = Integer.parseInt(betAmountString); // Parse input as integer
+
+                    if (betAmount > 0) {
+                        // Bet is valid, hide the Bet Button and EditText
+                        betEditText.setVisibility(View.GONE);
+                        betButton.setVisibility(View.GONE);
+
+                        // Show the decision buttons
+                        playerBtn.setVisibility(View.VISIBLE);
+                        bankerBtn.setVisibility(View.VISIBLE);
+                        tieBtn.setVisibility(View.VISIBLE);
+
+                        // Optionally, display the bet amount in a Toast
+                        Toast.makeText(this, "Bet placed: " + betAmount, Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Notify the user that the bet must be greater than 0
+                        Toast.makeText(this, "Bet must be a positive number", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NumberFormatException e) {
+                    // Notify the user that the input is not a valid integer
+                    Toast.makeText(this, "Please enter a valid integer", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Notify the user to enter a bet
+                Toast.makeText(this, "Please enter a bet", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         // Set up send button listener
         sendBtn.setOnClickListener(v -> {
@@ -143,54 +193,95 @@ public class BaccaratActivity extends AppCompatActivity {
             }
         }
 
-        if (playerCards != null) {
-            updatePlayerCards(playerCards);
+        Toast.makeText(this, "Player Cards: " + playerCards, Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Banker Cards: " + bankerCards, Toast.LENGTH_LONG).show();
+
+        if (playerCards != null && bankerCards != null && gameResult != null) {
+            startCardReveal(playerCards, bankerCards, gameResult) ;
         }
-//        if (bankerCards != null) {
-//            updateBankerCards(bankerCards);
-//        }
+
     }
 
-    private void updatePlayerCards(String playerCards) {
-        // Split the cards string into individual card names
-        String[] cardArray = playerCards.split(" ");
+    private void startCardReveal(String playerCards, String bankerCards, String gameResult) {
+        // Split the card strings
+        String[] playerCardArray = playerCards.split(" ");
+        String[] bankerCardArray = bankerCards.split(" ");
 
-        // Reference all player card ImageViews in an array
+        // Initialize player and banker card counts
+        playerCardCount = Integer.parseInt(playerCardArray[0]);
+        bankerCardCount = Integer.parseInt(bankerCardArray[0]);
+
+        // Combine cards in the order they are revealed (player first)
+        String[] cardSequence = new String[playerCardCount + bankerCardCount];
+        boolean isPlayerTurn = true;
+        int playerIndex = 1, bankerIndex = 1, sequenceIndex = 0;
+
+        while (sequenceIndex < cardSequence.length) {
+            if (isPlayerTurn && playerIndex <= playerCardCount) {
+                cardSequence[sequenceIndex++] = "PLAYER " + playerCardArray[playerIndex++];
+            } else if (!isPlayerTurn && bankerIndex <= bankerCardCount) {
+                cardSequence[sequenceIndex++] = "BANKER " + bankerCardArray[bankerIndex++];
+            }
+            isPlayerTurn = !isPlayerTurn; // Alternate turns
+        }
+
+        // Start the sequential reveal
+        revealCardsSequentially(cardSequence, gameResult);
+    }
+
+    private void revealCardsSequentially(String[] cardSequence, String winner) {
+        // ImageViews for player and banker cards
         ImageView[] playerCardViews = {playerCard1, playerCard2, playerCard3};
+        ImageView[] bankerCardViews = {bankerCard1, bankerCard2, bankerCard3};
 
-        // Loop through the card views and set the appropriate card drawable
-        for (int i = 0; i < playerCardViews.length; i++) {
-            if (i < cardArray.length) {
-                String cardName = cardArray[i];
+        // Use a Handler for timed reveals
+        Handler handler = new Handler();
+        int totalDelay = 0; // Initialize total delay
+
+        for (int i = 0; i < cardSequence.length; i++) {
+            final int delay = i * 1000; // 1-second delay between each card
+            totalDelay = delay; // Track the total delay
+            final int index = i;
+
+            handler.postDelayed(() -> {
+                String[] parts = cardSequence[index].split(" ");
+                String who = parts[0];
+                String cardName = parts[1];
                 int resourceId = getResources().getIdentifier(cardName.toLowerCase(), "drawable", getPackageName());
 
-                if (resourceId != 0) {
-                    // Set the drawable resource and make the card visible
-                    playerCardViews[i].setImageResource(resourceId);
-                    playerCardViews[i].setVisibility(View.VISIBLE);
-                } else {
-                    // If drawable not found, hide the card (fallback scenario)
-                    playerCardViews[i].setVisibility(View.INVISIBLE);
+                if (who.equals("PLAYER") && index / 2 < playerCardViews.length) {
+                    if (resourceId != 0) {
+                        playerCardViews[index / 2].setImageResource(resourceId);
+                        playerCardViews[index / 2].setVisibility(View.VISIBLE);
+                    } else {
+                        Toast.makeText(this, "Player card not found: " + cardName, Toast.LENGTH_SHORT).show();
+                    }
+                } else if (who.equals("BANKER") && index / 2 < bankerCardViews.length) {
+                    if (resourceId != 0) {
+                        bankerCardViews[index / 2].setImageResource(resourceId);
+                        bankerCardViews[index / 2].setVisibility(View.VISIBLE);
+                    } else {
+                        Toast.makeText(this, "Banker card not found: " + cardName, Toast.LENGTH_SHORT).show();
+                    }
                 }
-            } else {
-                // Hide remaining ImageViews if there are fewer cards
-                playerCardViews[i].setVisibility(View.INVISIBLE);
-            }
+            }, delay);
         }
+
+        // Schedule the updateWinner call after the last card reveal
+        handler.postDelayed(() -> {
+            updateWinner(winner); // Call updateWinner after all cards are revealed
+        }, totalDelay + 1000); // Add an extra 1 second to ensure smooth transition
     }
-
-    private void updateBankerCards(String playerCards)
-    {
-
-    }
-
-
 
     private void handleBet(int betAmount)
     {
 
     }
 
+    void updateWinner(String winner) {
+        winnerTv.setText("Winner: " + winner);
+        winnerTv.setVisibility(View.VISIBLE); // Make it visible
+    }
 
 
     private void handleDecision(String decision)

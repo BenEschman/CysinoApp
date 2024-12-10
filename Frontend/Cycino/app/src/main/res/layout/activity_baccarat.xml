@@ -146,6 +146,56 @@
             android:visibility="invisible" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/winnerTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Winner: TBD"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/bankerLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/betInputSection" />
+
+    <!-- Bet Input Section -->
+    <LinearLayout
+        android:id="@+id/betInputSection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/resultButtons"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- EditText for entering bet amount -->
+        <EditText
+            android:id="@+id/betEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter your bet"
+            android:textSize="16sp"
+            android:layout_marginEnd="8dp"
+            android:inputType="number" />
+
+        <!-- Bet Button -->
+        <Button
+            android:id="@+id/betButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bet"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+
     <!-- Buttons for Player, Banker, and Tie -->
     <LinearLayout
         android:id="@+id/resultButtons"
@@ -181,6 +231,9 @@
         android:layout_height="wrap_content"
         android:text="Tie"
         android:textSize="16sp" />
+
+
+
 </LinearLayout>
 
     <!-- Scrollable chat view -->
