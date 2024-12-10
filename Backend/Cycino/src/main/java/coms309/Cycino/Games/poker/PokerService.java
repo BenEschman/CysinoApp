@@ -338,7 +338,10 @@ public class PokerService {
                 return "#Poker finish";
             return "#Poker update: true, next: " + next;
         }
-        if(next == 0){
+        if(next == -1){
+            return "#Poker finish";
+        }
+        else if(next == 0){
             return "#Poker finish: true";
         }
         return "#Poker next: " + next;
@@ -354,7 +357,7 @@ public class PokerService {
         }
         order.removeAll(folded);
         if(order.size() <= 1)
-            return order.get(0);
+            return -1;
         return 0;
     }
 }
