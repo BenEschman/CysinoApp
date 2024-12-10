@@ -23,7 +23,7 @@ public class BaccaratActivity extends AppCompatActivity {
     private String userUsername = "Filip" ;
     private Button sendBtn, chatToggleBtn, tieBtn, bankerBtn, playerBtn, betButton;
     private EditText msgEtx, betEditText;
-    private TextView msgTv, winnerTv;
+    private TextView msgTv, winnerTv, playerLabel, bankerLabel, playerScoreTv, bankerScoreTv;
     private ImageView playerCard1, playerCard2, playerCard3, bankerCard1, bankerCard2, bankerCard3 ;
     private ScrollView chatArea;
     private boolean chatOpen = true;
@@ -54,6 +54,10 @@ public class BaccaratActivity extends AppCompatActivity {
         betEditText = findViewById(R.id.betEditText);
         betButton = findViewById(R.id.betButton);
         winnerTv = findViewById(R.id.winnerTextView);
+        playerLabel = findViewById(R.id.playerLabel);
+        bankerLabel = findViewById(R.id.bankerLabel);
+        playerScoreTv = findViewById(R.id.playerScore);
+        bankerScoreTv = findViewById(R.id.bankerScore);
 
         playerBtn.setVisibility(View.GONE);
         bankerBtn.setVisibility(View.GONE);
@@ -174,6 +178,8 @@ public class BaccaratActivity extends AppCompatActivity {
 
         String calls = null;
         String gameState = null;
+        String playerScore = "";
+        String bankerScore = "";
         String gameResult = null;
         String playerCards = null;
         String bankerCards = null;
@@ -182,7 +188,14 @@ public class BaccaratActivity extends AppCompatActivity {
         for (String line : lines) {
             if (line.startsWith("CALLS:")) {
                 calls = line.substring("CALLS:".length()).trim();
-            } else if (line.startsWith("GAMESTATE:")) {
+            }
+            else if (line.startsWith("PLAYER_HAND")) {
+                playerScore = line.substring("PLAYER_HAND ".length()).trim();
+            }
+            else if (line.startsWith("BANKER_HAND")) {
+                bankerScore = line.substring("BANKER_HAND ".length()).trim();
+            }
+            else if (line.startsWith("GAMESTATE:")) {
                 gameState = line.substring("GAMESTATE:".length()).trim();
             } else if (line.startsWith("GAMERESULT:")) {
                 gameResult = line.substring("GAMERESULT:".length()).trim();
@@ -193,16 +206,15 @@ public class BaccaratActivity extends AppCompatActivity {
             }
         }
 
-        Toast.makeText(this, "Player Cards: " + playerCards, Toast.LENGTH_LONG).show();
-        Toast.makeText(this,"Banker Cards: " + bankerCards, Toast.LENGTH_LONG).show();
+
 
         if (playerCards != null && bankerCards != null && gameResult != null) {
-            startCardReveal(playerCards, bankerCards, gameResult) ;
+            startCardReveal(playerCards, bankerCards, gameResult, playerScore, bankerScore) ;
         }
 
     }
 
-    private void startCardReveal(String playerCards, String bankerCards, String gameResult) {
+    private void startCardReveal(String playerCards, String bankerCards, String gameResult, String playerScore, String bankerScore) {
         // Split the card strings
         String[] playerCardArray = playerCards.split(" ");
         String[] bankerCardArray = bankerCards.split(" ");
@@ -226,10 +238,10 @@ public class BaccaratActivity extends AppCompatActivity {
         }
 
         // Start the sequential reveal
-        revealCardsSequentially(cardSequence, gameResult);
+        revealCardsSequentially(cardSequence, gameResult, bankerScore, playerScore);
     }
 
-    private void revealCardsSequentially(String[] cardSequence, String winner) {
+    private void revealCardsSequentially(String[] cardSequence, String winner, String bankerScore, String playerScore) {
         // ImageViews for player and banker cards
         ImageView[] playerCardViews = {playerCard1, playerCard2, playerCard3};
         ImageView[] bankerCardViews = {bankerCard1, bankerCard2, bankerCard3};
@@ -269,7 +281,7 @@ public class BaccaratActivity extends AppCompatActivity {
 
         // Schedule the updateWinner call after the last card reveal
         handler.postDelayed(() -> {
-            updateWinner(winner); // Call updateWinner after all cards are revealed
+            updateWinner(winner, bankerScore, playerScore); // Call updateWinner after all cards are revealed
         }, totalDelay + 1000); // Add an extra 1 second to ensure smooth transition
     }
 
@@ -278,15 +290,21 @@ public class BaccaratActivity extends AppCompatActivity {
 
     }
 
-    void updateWinner(String winner) {
+    void updateWinner(String winner, String bankerScore, String playerScore) {
         winnerTv.setText("Winner: " + winner);
         winnerTv.setVisibility(View.VISIBLE); // Make it visible
+        playerScoreTv.setText("Player Score: " + playerScore) ;
+        bankerScoreTv.setText("Banker Score: " + bankerScore) ;
+        playerScoreTv.setVisibility(View.VISIBLE) ;
+        bankerScoreTv.setVisibility(View.VISIBLE) ;
     }
 
 
     private void handleDecision(String decision)
     {
         hideDecisionButtons() ;
+        playerLabel.setVisibility(View.VISIBLE);
+        bankerLabel.setVisibility(View.VISIBLE);
         String decStr =  "#BACCARAT: PICK " + decision ;
         Intent intent = new Intent("SendWebSocketMessage");
         intent.putExtra("key", "chat1");

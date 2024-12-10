@@ -2,15 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#35654d">
 
     <!-- Back Button -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
         android:textSize="16sp"
+        android:backgroundTint="#C41E3A"
+        android:textColor="#FFD700"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"
@@ -24,7 +28,8 @@
         android:text="BACCARAT"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:backgroundTint="#C41E3A"
+        android:textColor="#FFD700"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintEnd_toStartOf="@id/chipCountText"
@@ -41,7 +46,8 @@
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="#FFD700"
+        android:background="#C41E3A"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
@@ -52,9 +58,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Player"
-        android:textSize="18sp"
+        android:textSize="36sp"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/baccaratTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -73,24 +81,24 @@
 
         <ImageView
             android:id="@+id/playerCard1"
-            android:layout_width="90dp"
-            android:layout_height="120dp"
+            android:layout_width="110dp"
+            android:layout_height="140dp"
             android:padding="4dp"
             android:scaleType="fitCenter"
             tools:srcCompat="@drawable/diamonds_king" />
 
         <ImageView
             android:id="@+id/playerCard2"
-            android:layout_width="90dp"
-            android:layout_height="120dp"
+            android:layout_width="110dp"
+            android:layout_height="140dp"
             android:padding="4dp"
             android:scaleType="fitCenter"
             tools:srcCompat="@drawable/hearts_8" />
 
         <ImageView
             android:id="@+id/playerCard3"
-            android:layout_width="90dp"
-            android:layout_height="120dp"
+            android:layout_width="110dp"
+            android:layout_height="140dp"
             android:padding="4dp"
             android:scaleType="fitCenter"
             android:visibility="invisible" />
@@ -102,9 +110,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Banker"
-        android:textSize="18sp"
+        android:textSize="36sp"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="150dp"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/playerCards"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -123,24 +133,24 @@
 
         <ImageView
             android:id="@+id/bankerCard1"
-            android:layout_width="90dp"
-            android:layout_height="120dp"
+            android:layout_width="110dp"
+            android:layout_height="140dp"
             android:padding="4dp"
             android:scaleType="fitCenter"
             tools:srcCompat="@drawable/clubs_10" />
 
         <ImageView
             android:id="@+id/bankerCard2"
-            android:layout_width="90dp"
-            android:layout_height="120dp"
+            android:layout_width="110dp"
+            android:layout_height="140dp"
             android:padding="4dp"
             android:scaleType="fitCenter"
             tools:srcCompat="@drawable/hearts_5" />
 
         <ImageView
             android:id="@+id/bankerCard3"
-            android:layout_width="90dp"
-            android:layout_height="120dp"
+            android:layout_width="110dp"
+            android:layout_height="140dp"
             android:padding="4dp"
             android:scaleType="fitCenter"
             android:visibility="invisible" />
@@ -163,6 +173,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/betInputSection" />
 
+    <TextView
+        android:id="@+id/playerScore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="Player Score: 0"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/winnerTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/bankerScore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="Banker Score: 0"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/playerScore"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Bet Input Section -->
     <LinearLayout
         android:id="@+id/betInputSection"
@@ -178,6 +220,7 @@
         <EditText
             android:id="@+id/betEditText"
             android:layout_width="0dp"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Enter your bet"
@@ -186,15 +229,17 @@
             android:inputType="number" />
 
         <!-- Bet Button -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/betButton"
             android:layout_width="wrap_content"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="#013220"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:text="Bet"
             android:textSize="16sp" />
+
     </LinearLayout>
-
-
 
     <!-- Buttons for Player, Banker, and Tie -->
     <LinearLayout
@@ -209,25 +254,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/playerButton"
         android:layout_width="wrap_content"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="Player"
         android:textSize="16sp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/bankerButton"
         android:layout_width="wrap_content"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="Banker"
         android:textSize="16sp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/tieButton"
         android:layout_width="wrap_content"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:text="Tie"
         android:textSize="16sp" />
@@ -239,6 +287,7 @@
     <!-- Scrollable chat view -->
 <ScrollView
     android:id="@+id/chatView"
+    android:background="#FFFFFF"
     android:layout_width="0dp"
     android:layout_height="150dp"
     android:layout_margin="8dp"
@@ -267,23 +316,30 @@
 
 <EditText
     android:id="@+id/msgEdt"
+    android:textStyle="bold"
     android:layout_width="0dp"
     android:layout_height="50dp"
     android:layout_weight="1"
     android:hint="Type a message"
     android:textSize="16sp" />
 
-<Button
+<com.google.android.material.button.MaterialButton
     android:id="@+id/toggleChat"
     android:layout_width="wrap_content"
+    android:backgroundTint="#C41E3A"
+    android:textColor="#FFD700"
+    android:textStyle="bold"
     android:layout_height="40dp"
     android:layout_marginEnd="4dp"
     android:text="Toggle"
     android:textSize="14sp" />
 
-<Button
+<com.google.android.material.button.MaterialButton
     android:id="@+id/sendBtn"
     android:layout_width="wrap_content"
+    android:backgroundTint="#C41E3A"
+    android:textColor="#FFD700"
+    android:textStyle="bold"
     android:layout_height="50dp"
     android:text="Send" />
 </LinearLayout>
