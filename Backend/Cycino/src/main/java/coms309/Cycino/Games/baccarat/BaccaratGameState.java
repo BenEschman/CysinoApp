@@ -182,6 +182,13 @@ public class BaccaratGameState {
         for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
             gameState += entry.getKey() + " " + entry.getValue() + " ";
         }
+        if (win || tie){
+            gameState += "\n" + "PLAYER_HAND" + " " + handValue(baccaratDeck.getPlayerCards());
+            gameState += "\n" + "BANKER_HAND" + " " + handValue(baccaratDeck.getBankerCards());
+        } else {
+            gameState += "\n" + "PLAYER_HAND" + " " + "NONE";
+            gameState += "\n" + "BANKER_HAND" + " " + "NONE";
+        }
         gameState += "\n" + "GAMESTATE:" + " ";
         if (win || tie){
             gameState += "OVER";
