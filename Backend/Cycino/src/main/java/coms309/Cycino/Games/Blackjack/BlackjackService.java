@@ -89,7 +89,7 @@ public class BlackjackService {
         return response;
     }
 
-    public Map<String, Object> setBet(Long lobby, Long id, double bet){
+    public Map<String, Object> setBet(Long lobby, Long id, int bet){
         Map<String, Object> response = new HashMap<>();
         User user = userService.getUser(id);
         Lobby l = lobbyService.getLobby(lobby);

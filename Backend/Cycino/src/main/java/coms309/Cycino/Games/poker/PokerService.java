@@ -207,7 +207,7 @@ public class PokerService {
         return response;
     }
 
-    public Map<String, Object> raise(long lobby, long id, double raise){
+    public Map<String, Object> raise(long lobby, long id, int raise){
         Map<String, Object> response = new HashMap<>();
         Lobby l = lobbyService.getLobby(lobby);
         Poker p = repo.findById(l.getId()).orElse(null);
@@ -239,7 +239,8 @@ public class PokerService {
             return temp;
         } else if(((String)(response.get("message"))).contains("update: true")){
             String message = (String) response.get("message");
-            message = message.substring(11) + ", raise: " + raise;
+            int i = message.indexOf("update: true");
+            message = message.substring(0, i) + message.substring(i + 12) + ", raise: " + raise;
             response.put("message", message);
         }
         GameChat.broadcast(lobby, (String) response.get("message"));
@@ -321,7 +322,16 @@ public class PokerService {
         ArrayList<Long> order = p.getOrder();
         int f = order.indexOf(id);
         long next = getnext(p, f);
+        PlayerHands dealer = null;
+        for(PlayerHands hands: p.getHands()){
+            if(hands.getPlayer() == null){
+                dealer = hands;
+                break;
+            }
+        }
         if(f == order.size() - 1){
+            if(dealer.getHand().size() >= 5)
+                return "#Poker finish";
             return "#Poker update: true, next: " + next;
         }
         if(next == 0){
