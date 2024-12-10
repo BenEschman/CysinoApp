@@ -30,6 +30,7 @@ public class LobbyService {
 
         Map<String, Object> response = new HashMap<>();
         User user = userService.getUser(u);
+        user.setRole(Enums.Roles.LOBBYHOST);
         Enums.Roles role = user.getRole();
         if(role.ordinal() == 0){
             response.put("status", 405);
@@ -63,6 +64,12 @@ public class LobbyService {
             response.put("status", 405);
             response.put("error", "permission not allowed");
             return response;
+        }
+        for(User u : getLobby(id).getPlayers()){
+            if(u.getRole().equals(Enums.Roles.LOBBYHOST)){
+                u.setRole(Enums.Roles.EXPERIENCED);
+                break;
+            }
         }
         repo.deleteById(id);
         response.put("lobbyId", id);
@@ -126,6 +133,12 @@ public class LobbyService {
         //response.put("lobby", l);
         response.put("players", players);
         response.put("size", players.size());
+        for(User u: players){
+            if(u.getRole().equals(Enums.Roles.LOBBYHOST)){
+                response.put("host", u.getId());
+                break;
+            }
+        }
         return response;
     }
 

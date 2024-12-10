@@ -168,9 +168,7 @@ public class BlackjackService {
         }
         response = BlackJackLogic.stand(blj.getHand(user));
         if(end(blj, id) && response.containsKey("string")){
-            System.out.println("1");
             response.putAll(finish(lobbyId));
-            System.out.println("2");
             String temp = (String) response.get("string");
             temp += " finish";
             response.put("string", temp);

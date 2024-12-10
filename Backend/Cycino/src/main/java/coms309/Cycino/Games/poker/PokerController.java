@@ -45,11 +45,6 @@ public class PokerController {
         return service.call(lobby, id);
     }
 
-    @PutMapping("/poker/check/{lobby}/{id}")
-    public Map<String, Object> check(@PathVariable long lobby, @PathVariable long id){
-        return service.check(lobby, id);
-    }
-
     @PutMapping("/poker/raise/{lobby}/{id}/{bet}")
     public Map<String, Object> raise(@PathVariable long lobby, @PathVariable long id, @PathVariable double bet){
         return service.raise(lobby, id, bet);

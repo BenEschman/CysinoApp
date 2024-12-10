@@ -93,8 +93,11 @@ public class LoginService {
 
     public Map<String, Object> deleteUser(String username){
         Map<String, Object> response = new HashMap<>();
-        if(userService.deleteUser(getUser(username).getId())){
-            loginRepository.deleteById(getUser(username).getId());
+        LoginInfo login = getUser(username);
+        User u = login.getUser();
+        if(u != null){
+            userService.deleteUser(u.getId());
+            loginRepository.deleteById(login.getId());
             response.put("status", "200 ok");
             return response;
         }
