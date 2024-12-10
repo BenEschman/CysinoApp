@@ -1,6 +1,8 @@
 package coms309.Cycino.Games.Lobby;
 
 import coms309.Cycino.Games.baccarat.Baccarat;
+import coms309.Cycino.login.LoginService;
+import coms309.Cycino.users.ChipService;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -10,6 +12,7 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -27,10 +30,9 @@ import coms309.Cycino.Games.baccarat.Baccarat;
 @ServerEndpoint("/chat/{lobby}/{username}")
 @Component
 public class GameChat {
-
     private static final Map<Long, Map<Session, String>> lobbySessions = new HashMap<>();
-    private CoinFlip coinFlip = new CoinFlip();
-    private Baccarat baccarat = new Baccarat();
+    private final CoinFlip coinFlip = new CoinFlip();
+    private final Baccarat baccarat = new Baccarat();
     private static final Logger logger = LoggerFactory.getLogger(GameChat.class);
 
     @OnOpen

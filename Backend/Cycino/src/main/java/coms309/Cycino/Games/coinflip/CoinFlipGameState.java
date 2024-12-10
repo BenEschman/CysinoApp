@@ -10,13 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-@Service
 public class CoinFlipGameState {
-    @Autowired
-    ChipService chipService;
-    @Autowired
-    LoginService loginService;
-
     private Map<String, String> playerMoves = new HashMap<>();
     private Map<String, Integer> playerBets = new HashMap<>();
     private String coin = "NONE";
@@ -38,14 +32,21 @@ public class CoinFlipGameState {
     }
 
     private boolean readyToFlip(){
-        boolean response = true;
+        boolean responseMoves = true;
         Collection<String> moves = playerMoves.values();
         for (String move : moves) {
             if (move.equals("UNDECIDED")) {
-                response = false;
+                responseMoves = false;
             }
         }
-        return response;
+        boolean responseBets = true;
+        Collection<Integer> bets = playerBets.values();
+        for (Integer bet : bets) {
+            if (bet == 0){
+                responseBets = false;
+            }
+        }
+        return responseMoves && responseBets;
     }
 
     public void flip(){
@@ -103,9 +104,20 @@ public class CoinFlipGameState {
         }
     }
 
+    private void changeChipCount(String player, int betAmount, boolean win){
+        if (win){
+            playerBets.put(player, betAmount * 2);
+        } else {
+            playerBets.put(player, betAmount * -1);
+        }
+    }
+
     private void resetState(){
         playerMoves.forEach((player, move) -> {
             playerMoves.put(player, "UNDECIDED");
+        });
+        playerBets.forEach((player, bet) -> {
+            playerBets.put(player, 0);
         });
         this.coin = "NONE";
         this.gameOver = false;
@@ -118,13 +130,28 @@ public class CoinFlipGameState {
         gameState += "\n";
         gameState += "CALLS: ";
         for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
-            gameState += entry.getKey() + " " + entry.getValue() + " ";
+            gameState += entry.getKey() + " " + entry.getValue() + ", ";
         }
+        gameState = gameState.trim();
+        gameState = gameState.substring(0, gameState.length()-1);
         gameState += "\n";
         gameState += "BETS: ";
-        for(Map.Entry<String, Integer> entry : playerBets.entrySet()) {
-            gameState += entry.getKey() + " " + entry.getValue() + " ";
+        if (gameOver){
+            playerMoves.forEach((player, move) -> {
+                if (move.equals("WIN")) {
+                    // Add betted money
+                    changeChipCount(player, playerBets.get(player), true);
+                } else if (move.equals("LOST")) {
+                    // Withdraw betted money
+                    changeChipCount(player, playerBets.get(player), false);
+                }
+            });
         }
+        for(Map.Entry<String, Integer> entry : playerBets.entrySet()) {
+            gameState += entry.getKey() + " " + entry.getValue() + ", ";
+        }
+        gameState = gameState.trim();
+        gameState = gameState.substring(0, gameState.length()-1);
         gameState += "\n" + "GAME: ";
         if (gameOver){
             gameState +=  "OVER";

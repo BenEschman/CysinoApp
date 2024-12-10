@@ -1,6 +1,9 @@
 package coms309.Cycino.Games.coinflip;
 
 import coms309.Cycino.Games.Lobby.GameChat;
+import coms309.Cycino.login.LoginService;
+import coms309.Cycino.users.ChipService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
@@ -8,11 +11,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class CoinFlip {
     private static final String serverMessage = "#COINFLIP:";
-    private static final GameChat gameChat = new GameChat();
     private static final Map<Long, CoinFlipGameState> gameStates = new HashMap<Long, CoinFlipGameState>();
+
+
+    private static final GameChat gameChat = new GameChat();
+
+    public CoinFlip() {}
+
 
     private void addNewGame(Long lobbyId, Collection<String> players){
         // If key is not in gameStates --> New game!
@@ -37,6 +44,6 @@ public class CoinFlip {
         // Always check if you can flip the coin, this alters the gameState that is returned
         gameState.flip();
         gameChat.broadcast(lobbyId, serverMessage + " " + player + " " + command + " " + commandArgument);
-        gameChat.broadcast(lobbyId, serverMessage + gameState.toString());
+        gameChat.broadcast(lobbyId, serverMessage + "\n" + gameState.toString());
     }
 }
