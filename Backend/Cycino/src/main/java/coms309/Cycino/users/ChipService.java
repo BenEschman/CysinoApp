@@ -23,7 +23,7 @@ public class ChipService {
         u.addChips(chips);
         repo.save(u);
         response.put("status", 200);
-        response.put("chips", u.getChips());
+        response.put("chips", (int) u.getChips());
         return response;
     }
 
@@ -38,7 +38,7 @@ public class ChipService {
         u.addChips(-1 * chips);
         repo.save(u);
         response.put("status", 200);
-        response.put("chips", u.getChips());
+        response.put("chips", (int) u.getChips());
         return response;
     }
 
@@ -51,7 +51,7 @@ public class ChipService {
             return response;
         }
         response.put("status", 200);
-        response.put("chips", u.getChips());
+        response.put("chips", (int) u.getChips());
         return response;
     }
 
