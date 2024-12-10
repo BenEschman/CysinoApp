@@ -15,7 +15,7 @@ public class LobbyController {
 
 
 
-    @PostMapping("/lobby/create/{id}")
+    @PostMapping("/lobby/create")
     public Map<String, Object> startLobby(){
         return service.startLobby();
     }

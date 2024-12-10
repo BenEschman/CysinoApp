@@ -1,6 +1,7 @@
 package coms309.Cycino.Games.coinflip;
 
 import coms309.Cycino.Games.Lobby.GameChat;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
 import java.util.Collection;

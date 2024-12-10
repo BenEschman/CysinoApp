@@ -29,7 +29,6 @@ public class Deck {
     }
 
     public ArrayList<Card> shuffle(){
-        System.out.println(cards);
         ArrayList<Card> cardList = new ArrayList<>(cards);
         Collections.shuffle(cardList);
         return cardList;
