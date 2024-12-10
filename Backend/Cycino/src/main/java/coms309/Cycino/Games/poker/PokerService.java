@@ -56,7 +56,7 @@ public class PokerService {
         Lobby l = (Lobby) lobbyService.getLobby(id);
         Poker p = repo.findById(id).orElse(null);
         assert p != null;
-        Map<PlayerHands, Double> evalHands = PokerLogic.finishHand(p);
+        Map<PlayerHands, String> evalHands = PokerLogic.finishHand(p);
         for(PlayerHands hand: evalHands.keySet()){
             response.put(hand.getPlayer().getId() + "", evalHands.get(hand));
         }
@@ -128,7 +128,7 @@ public class PokerService {
         while(d.getHand().size() < 5){
             d.add(p.getCards().draw());
         }
-        Map<PlayerHands, Double> winners = PokerLogic.finishHand(p);
+        Map<PlayerHands, String> winners = PokerLogic.finishHand(p);
         for(PlayerHands hand: winners.keySet()){
             if(hand.getPlayer() == null){
                 continue;

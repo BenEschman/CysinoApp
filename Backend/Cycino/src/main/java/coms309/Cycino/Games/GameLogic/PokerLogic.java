@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class PokerLogic {
 
-    public static Map<PlayerHands, Double> finishHand(Poker poker){
+    public static Map<PlayerHands, String> finishHand(Poker poker){
         Map<String, Object> response = new HashMap<>();
         PlayerHands table = null;
         for(PlayerHands hand: poker.getHands()){
@@ -18,7 +18,7 @@ public class PokerLogic {
             }
         }
         Map<PlayerHands, Double> temp = new HashMap<>();
-        Map<PlayerHands, Double> winners = new HashMap<>();
+        Map<PlayerHands, String> winners = new HashMap<>();
         for(PlayerHands hand: poker.getHands()){
             assert table != null;
             hand.addAll(table.getHand());
@@ -32,12 +32,29 @@ public class PokerLogic {
         }
         for(PlayerHands hand: temp.keySet()){
             if(temp.get(hand) == high){
-                winners.put(hand, high);
+                winners.put(hand, getName(high));
             }
         }
         for(PlayerHands hand: winners.keySet()){
             hand.getPlayer().addChips(poker.getPot() / winners.size());
         }
         return winners;
+    }
+
+    private static String getName(double d){
+        if(d == 9.13)
+            return "Royal Flush";
+        return switch ((int) d) {
+            case 0 -> "Nothing";
+            case 1 -> "Pair";
+            case 2 -> "Two Pair";
+            case 3 -> "Three of a Kind";
+            case 5 -> "Straight";
+            case 6 -> "Flush";
+            case 7 -> "Full House";
+            case 8 -> "Four of a Kind";
+            case 9 -> "Straight FLush";
+            default -> "error";
+        };
     }
 }
