@@ -47,7 +47,7 @@ public class PokerController {
 
     @PutMapping("/poker/raise/{lobby}/{id}/{bet}")
     public Map<String, Object> raise(@PathVariable long lobby, @PathVariable long id, @PathVariable double bet){
-        return service.raise(lobby, id, bet);
+        return service.raise(lobby, id, (int)bet);
     }
 
     @DeleteMapping("/poker/delete/{lobby}")
