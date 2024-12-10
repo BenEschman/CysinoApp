@@ -242,6 +242,10 @@ public class PokerService {
             int i = message.indexOf("update: true");
             message = message.substring(0, i) + message.substring(i + 12) + ", raise: " + raise;
             response.put("message", message);
+        } else {
+            String message = (String) response.get("message");
+            message +=  ", raise: " + raise;
+            response.put("message", message);
         }
         GameChat.broadcast(lobby, (String) response.get("message"));
         return response;
@@ -349,7 +353,7 @@ public class PokerService {
                 return order.get(i);
         }
         order.removeAll(folded);
-        if(!order.isEmpty())
+        if(order.size() <= 1)
             return order.get(0);
         return 0;
     }
