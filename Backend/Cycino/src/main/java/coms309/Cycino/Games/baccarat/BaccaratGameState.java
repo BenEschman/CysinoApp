@@ -1,44 +1,47 @@
 package coms309.Cycino.Games.baccarat;
 
-import coms309.Cycino.Games.GameLogic.Card;
-import coms309.Cycino.Games.GameLogic.Deck;
-import coms309.Cycino.Games.GameLogic.DeckService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
-public class BaccaratGameState {
+import static java.lang.Math.round;
 
+public class BaccaratGameState {
     private Map<String, String> playerMoves = new HashMap<>();
+    private Map<String, Integer> playerBets = new HashMap<>();
     private boolean win = false;
     private boolean tie = false;
     private BaccaratDeck baccaratDeck = new BaccaratDeck();
     private String gameResult = "NONE";
 
-    //private DeckService deckService = new DeckService();
-    //private Deck deck;
 
     public BaccaratGameState(Collection<String> players) {
         for (String player : players) {
             this.playerMoves.put(player, "UNDECIDED");
+            this.playerBets.put(player, 0);
         }
     }
 
-    public void setPlayerMove(String player, String move) {
-        playerMoves.put(player, move);
+    public void setPlayerMove(String player, String move) {playerMoves.put(player, move);}
+    public void setPlayerBets(String player, int bet) {
+        playerBets.put(player, bet);
     }
 
+
     private boolean readyToDeal(){
-        boolean response = true;
+        boolean responseMoves = true;
         Collection<String> moves = playerMoves.values();
         for (String move : moves) {
             if (move.equals("UNDECIDED")) {
-                response = false;
+                responseMoves = false;
             }
         }
-        return response;
+        boolean responseBets = true;
+        Collection<Integer> bets = playerBets.values();
+        for (Integer bet : bets) {
+            if (bet == 0){
+                responseBets = false;
+            }
+        }
+        return responseMoves && responseBets;
     }
 
     public void dealCards(){
@@ -148,12 +151,32 @@ public class BaccaratGameState {
                 }
             });
         }
+        changeChipCount();
     }
 
+    private void changeChipCount(){
+        playerMoves.forEach((player, move) -> {
+            if (move.equals("WIN")) {
+                int betted = playerBets.get(player);
+                if (tie){
+                    playerBets.put(player, betted * 9);
+                } else if (gameResult.equals("BANKER")){
+                    int afterCommission = (int)Math.round((float)betted * 0.95);
+                    playerBets.put(player, afterCommission + betted);
+                } else {
+                    playerBets.put(player, betted * 2);
+                }
+            } else{
+                int betted = playerBets.get(player);
+                playerBets.put(player, 0);
+            }
+        });
+    }
 
     private void resetState(){
         playerMoves.forEach((player, move) -> {
             playerMoves.put(player, "UNDECIDED");
+            playerBets.put(player, 0);
         });
         this.win = false;
         this.tie = false;
@@ -178,8 +201,19 @@ public class BaccaratGameState {
     @Override
     public String toString() {
         String gameState = "";
+        gameState += "\n" + "GAMESTATE:" + " ";
+        if (win || tie){
+            gameState += "OVER";
+        } else {
+            gameState += "ONGOING";
+        }
         gameState += "\n" + "CALLS: ";
         for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
+            gameState += entry.getKey() + " " + entry.getValue() + " ";
+        }
+        gameState += "\n";
+        gameState += "BETS: ";
+        for(Map.Entry<String, Integer> entry : playerBets.entrySet()) {
             gameState += entry.getKey() + " " + entry.getValue() + " ";
         }
         if (win || tie){
@@ -188,12 +222,6 @@ public class BaccaratGameState {
         } else {
             gameState += "\n" + "PLAYER_HAND" + " " + "NONE";
             gameState += "\n" + "BANKER_HAND" + " " + "NONE";
-        }
-        gameState += "\n" + "GAMESTATE:" + " ";
-        if (win || tie){
-            gameState += "OVER";
-        } else {
-            gameState += "ONGOING";
         }
         gameState += "\n" + "GAMERESULT:" + " " + gameResult;
         if (win || tie){

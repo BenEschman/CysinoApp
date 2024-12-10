@@ -1,6 +1,5 @@
 package coms309.Cycino.Games.GameLogic;
 
-import coms309.Cycino.Games.Blackjack.BlackJack;
 import coms309.Cycino.Games.Game;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
@@ -25,7 +24,7 @@ public class PlayerHands implements Serializable {
     private Set<Card> hand;
     private int score;
     private boolean stand = false;
-    private double bet;
+    private int bet;
     private boolean split = false;
     private boolean dealer = false;
 
@@ -86,11 +85,11 @@ public class PlayerHands implements Serializable {
         return stand;
     }
 
-    public void addBet(double bet){
+    public void addBet(int bet){
         this.bet = bet;
     }
 
-    public double getBet(){
+    public int getBet(){
         return bet;
     }
 

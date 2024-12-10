@@ -16,7 +16,7 @@ public class Poker extends Game {
 
     private double pot = 0;
 
-    private double lastBet = 0;
+    private int lastBet = 0;
 
     private Set<Long> folded = new HashSet<>();
 
@@ -35,7 +35,7 @@ public class Poker extends Game {
         return pot;
     }
 
-    public void setLastBet(double bet){
+    public void setLastBet(int bet){
         lastBet = bet;
     }
 

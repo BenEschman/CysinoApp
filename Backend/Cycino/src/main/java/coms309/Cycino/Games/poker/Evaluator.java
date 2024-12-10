@@ -34,30 +34,30 @@ public class Evaluator {
 
     }
 
-    private Map<String, Object> checkRoyal(PlayerHands hands){
-        Map<String, Object> response = new HashMap<>();
-        for(Enums.SUIT suit: Enums.SUIT.values()){
-            for(Enums.VALUE value: Enums.VALUE.values()){
-                Card temp = new Card(value.toString(), suit, null);
-                if(hands.contains(temp)){
-                    if(value == Enums.VALUE.ACE && hands.contains(new Card("10", suit, null))){
-                        PlayerHands tempHand = new PlayerHands();
-                        tempHand.add(new Card("10", suit, null));
-                        tempHand.add(temp);
-                        for(int i = 0; i < 3; i++){
-                            tempHand.add(new Card(Enums.VALUE.values()[i].toString(), suit, null));
-                        }
-                        response.put("hand", tempHand);
-                        response.put("value", 10);
-                        break;
-                    }
-                    continue;
-                }
-                break;
-            }
-        }
-        return response;
-    }
+//    private Map<String, Object> checkRoyal(PlayerHands hands){
+//        Map<String, Object> response = new HashMap<>();
+//        for(Enums.SUIT suit: Enums.SUIT.values()){
+//            for(Enums.VALUE value: Enums.VALUE.values()){
+//                Card temp = new Card(value.toString(), suit, null);
+//                if(hands.contains(temp)){
+//                    if(value == Enums.VALUE.ACE && hands.contains(new Card("10", suit, null))){
+//                        PlayerHands tempHand = new PlayerHands();
+//                        tempHand.add(new Card("10", suit, null));
+//                        tempHand.add(temp);
+//                        for(int i = 0; i < 3; i++){
+//                            tempHand.add(new Card(Enums.VALUE.values()[i].toString(), suit, null));
+//                        }
+//                        response.put("hand", tempHand);
+//                        response.put("value", 10);
+//                        break;
+//                    }
+//                    continue;
+//                }
+//                break;
+//            }
+//        }
+//        return response;
+//    }
 
     private static Map<String, Object> checkFlush(PlayerHands hands){
         ArrayList<Card> hearts = new ArrayList<>();
