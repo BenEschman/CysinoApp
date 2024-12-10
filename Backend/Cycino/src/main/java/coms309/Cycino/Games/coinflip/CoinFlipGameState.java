@@ -1,10 +1,5 @@
 package coms309.Cycino.Games.coinflip;
 
-import coms309.Cycino.login.LoginService;
-import coms309.Cycino.users.ChipService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
