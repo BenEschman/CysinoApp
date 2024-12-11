@@ -89,6 +89,8 @@ public class FriendPageActivity extends AppCompatActivity {
         removeFriendBtn = findViewById(R.id.unfriendButton);
         addFriendEditText = findViewById(R.id.addFriendEditText);
 
+
+
         backButton = findViewById(R.id.backButton);
         followerName = new TextView[]{
                 findViewById(R.id.friend1Name),
@@ -139,6 +141,7 @@ public class FriendPageActivity extends AppCompatActivity {
         username = intent.getStringExtra("USERNAME");
 
         userName.setText(username + "'s Following List:");
+
         getFollowerList(userID);
 
         addFriendBtn.setOnClickListener(v -> {
