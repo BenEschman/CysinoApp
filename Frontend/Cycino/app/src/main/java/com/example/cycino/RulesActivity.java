@@ -27,6 +27,9 @@ public class RulesActivity extends AppCompatActivity {
         scrollViewLayout = findViewById(R.id.scrollViewLayout);
         backBtn = findViewById(R.id.btnBack) ;
 
+        Intent intent = getIntent();
+        int userID = intent.getIntExtra("UUID",-1);
+        String username = intent.getStringExtra("USERNAME");
 
 
 
@@ -266,8 +269,10 @@ public class RulesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 clearScrollView();
-                Intent intent = new Intent(RulesActivity.this, HomePageActivity.class);
-                startActivity(intent); // Start the HomePagePlaceholder activity
+                Intent i = new Intent(RulesActivity.this,HomePageActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",userID);
+                startActivity(i);
             }
 
 
