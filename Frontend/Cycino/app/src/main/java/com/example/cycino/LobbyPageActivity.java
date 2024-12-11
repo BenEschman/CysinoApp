@@ -167,7 +167,34 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
         buttonStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Placeholder for starting game logic
+
+                switch (currSelectedGame) {
+                    case "Baccarat":
+                        Intent i = new Intent(LobbyPageActivity.this,BaccaratActivity.class);
+                        i.putExtra("USERNAME",username);
+                        i.putExtra("UUID",currentUser);
+                        i.putExtra("LOBBYID",lobbyID);
+                        break;
+                    case "Blackjack":
+                        Intent i2 = new Intent(LobbyPageActivity.this,BlackjackActivity.class);
+                        i2.putExtra("USERNAME",username);
+                        i2.putExtra("UUID",currentUser);
+                        i2.putExtra("LOBBYID",lobbyID);
+                        break;
+                    case "Coinflip":
+                        Intent i3 = new Intent(LobbyPageActivity.this,CoinFlipActivity.class);
+                        i3.putExtra("USERNAME",username);
+                        i3.putExtra("UUID",currentUser);
+                        i3.putExtra("LOBBYID",lobbyID);
+                        break;
+                    case "Poker":
+                        Intent i4 = new Intent(LobbyPageActivity.this,PokerActivity.class);
+                        i4.putExtra("USERNAME",username);
+                        i4.putExtra("UUID",currentUser);
+                        i4.putExtra("LOBBYID",lobbyID);
+                        break;
+                }
+
                 Toast.makeText(LobbyPageActivity.this, "Starting game...", Toast.LENGTH_SHORT).show();
             }
         });
@@ -225,6 +252,8 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
                         // Handle the successful response here
                         try {
                             String status = response.getString("status");
+                            lobbyID = response.getInt("lobbyId");
+                            lobbyNum.setText("Lobby: "+lobbyID);
                             System.out.println(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
