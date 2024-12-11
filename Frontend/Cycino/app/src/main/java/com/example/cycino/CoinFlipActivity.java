@@ -225,7 +225,7 @@ public class CoinFlipActivity extends AppCompatActivity{
     }
 
     private void setNumPlayers(Integer np) {
-        
+
         numPlayers = np;
 
         userArray = new CoinFlipUser[np];
