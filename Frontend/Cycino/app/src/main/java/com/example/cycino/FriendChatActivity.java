@@ -26,9 +26,10 @@ public class FriendChatActivity extends AppCompatActivity {
     private EditText messageEditText;
     private ScrollView chatScrollView;
     private LinearLayout chatContainer;
-    private int userID = 4;
+    private int userID ;
+    private String username ;
     private String serverURL;
-    private int recipientID = 2 ;
+    private int recipientID  ;
     private boolean isNotificationsOn ;
 
 
@@ -38,6 +39,11 @@ public class FriendChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendchat); // Ensure this matches your XML filename
+
+        Intent intent = getIntent();
+        userID = intent.getIntExtra("lUUID", -1); // Default to -1 if not found
+        recipientID = intent.getIntExtra("UUID", -1); // Default to -1 if not found
+        username = intent.getStringExtra("USERNAME");
 
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
@@ -62,10 +68,10 @@ public class FriendChatActivity extends AppCompatActivity {
             if (!messageContent.isEmpty()) {
                 String message = recipientSR + messageContent;
 
-                Intent intent = new Intent("SendWebSocketMessage");
-                intent.putExtra("key", "chat2");
-                intent.putExtra("message", message);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                Intent sendIntent = new Intent("SendWebSocketMessage");
+                sendIntent.putExtra("key", "chat2");
+                sendIntent.putExtra("message", message);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);
 
                 messageEditText.setText("");
             } else {
