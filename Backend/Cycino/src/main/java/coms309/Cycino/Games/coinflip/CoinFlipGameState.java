@@ -26,7 +26,7 @@ public class CoinFlipGameState {
         playerMoves.put(player, move);
     }
 
-    private boolean readyToFlip(){
+    public boolean readyToFlip(){
         boolean responseMoves = true;
         Collection<String> moves = playerMoves.values();
         for (String move : moves) {
