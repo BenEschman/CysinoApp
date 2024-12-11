@@ -36,9 +36,13 @@ public class CoinFlip {
         } else if (command.equals("BET")){
             gameState.setPlayerBets(player, Integer.parseInt(commandArgument));
         }
-        // Always check if you can flip the coin, this alters the gameState that is returned
-        gameState.flip();
-        gameChat.broadcast(lobbyId, serverMessage + " " + player + " " + command + " " + commandArgument);
+
+        //gameChat.broadcast(lobbyId, serverMessage + " " + player + " " + command + " " + commandArgument);
         gameChat.broadcast(lobbyId, serverMessage + "\n" + gameState.toString());
+        // Always check if you can flip the coin, this alters the gameState that is returned
+        if (gameState.readyToFlip()){
+            gameState.flip();
+            gameChat.broadcast(lobbyId, serverMessage + "\n" + gameState.toString());
+        }
     }
 }
