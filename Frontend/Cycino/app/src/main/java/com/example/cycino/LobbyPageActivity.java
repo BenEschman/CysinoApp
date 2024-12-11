@@ -173,6 +173,7 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
                     i.putExtra("USERNAME", username);
                     i.putExtra("UUID", currentUser);
                     i.putExtra("LOBBYID", lobbyID);
+                    startActivity(i);
                 }
                 if(currSelectedGame.equals("Blackjack")) {
 
@@ -180,18 +181,21 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
                         i2.putExtra("USERNAME",username);
                         i2.putExtra("UUID",currentUser);
                         i2.putExtra("LOBBYID",lobbyID);
+                        startActivity(i2);
                 }
                 if(currSelectedGame.equals("Coinflip")) {
                         Intent i3 = new Intent(LobbyPageActivity.this,CoinFlipActivity.class);
                         i3.putExtra("USERNAME",username);
                         i3.putExtra("UUID",currentUser);
                         i3.putExtra("LOBBYID",lobbyID);
+                        startActivity(i3);
                 }
                 if(currSelectedGame.equals("Poker")) {
                         Intent i4 = new Intent(LobbyPageActivity.this,PokerActivity.class);
                         i4.putExtra("USERNAME",username);
                         i4.putExtra("UUID",currentUser);
                         i4.putExtra("LOBBYID",lobbyID);
+                        startActivity(i4);
 
                 }
 
