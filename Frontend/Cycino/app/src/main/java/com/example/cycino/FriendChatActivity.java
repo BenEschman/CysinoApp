@@ -100,7 +100,7 @@ public class FriendChatActivity extends AppCompatActivity {
         });
 
         friendNameButton.setOnClickListener(v -> {
-            Intent fcIntent = new Intent(FriendChatActivity.this, ViewFriendActivity.class);
+            Intent fcIntent = new Intent(FriendChatActivity.this, HomePageActivity.class); //////////////////////
 
             fcIntent.putExtra("USER_ID", userID); // Current user's ID
             fcIntent.putExtra("USERNAME", username); // Current user's username

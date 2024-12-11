@@ -6,56 +6,24 @@
     android:padding="16dp">
 
     <!-- Username Input -->
-    <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter username"
-        android:padding="12dp"
-        android:background="@android:drawable/editbox_background"
-        android:inputType="text"
-        android:layout_alignParentTop="true" />
 
     <!-- Add User and Remove User Buttons -->
-    <LinearLayout
-        android:id="@+id/button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextUsername"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp">
-
-        <Button
-            android:id="@+id/buttonAddUser"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add User"
-            android:padding="12dp"
-            android:backgroundTint="@android:color/holo_green_light"
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/buttonRemoveUser"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Remove User"
-            android:padding="12dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
-    </LinearLayout>
 
     <!-- User List in ScrollView (Adjusted Height) -->
+    <TextView
+        android:id="@+id/currLobbyID"
+        android:layout_width="377dp"
+        android:layout_height="36dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="28dp" />
+
     <ScrollView
         android:id="@+id/scrollViewUserList"
         android:layout_width="377dp"
-        android:layout_height="450dp"
-        android:layout_below="@id/button_container"
-        android:layout_marginTop="8dp"
+        android:layout_height="560dp"
+        android:layout_below="@+id/currLobbyID"
+        android:layout_marginTop="30dp"
         android:fillViewport="true">
 
         <LinearLayout

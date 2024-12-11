@@ -1,17 +1,13 @@
 package com.example.cycino;
 
 import android.content.Intent;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,16 +18,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-
 public class HomePageActivity extends AppCompatActivity {
 
-    private Button lobby,leaderboard,friends,settings,logout, rulesBtn, bankBtn;
+    private Button startLobby,joinLobby, leaderboard,friends,settings,logout, rulesBtn, bankBtn;
     private TextView userNameText, chipText;
+    private EditText joinID;
     RequestQueue requestQueue;
 
     private String username;
@@ -50,7 +44,9 @@ public class HomePageActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(HomePageActivity.this);
 
-        lobby = findViewById(R.id.lobbyButton);
+        startLobby = findViewById(R.id.lobbyButton);
+        joinLobby = findViewById(R.id.joinLobbyButton);
+        joinID = findViewById(R.id.joinLobbyID);
         leaderboard = findViewById(R.id.leaderboardButton);
         friends = findViewById(R.id.friendsButton);
         settings = findViewById(R.id.settingsButton);
@@ -66,14 +62,26 @@ public class HomePageActivity extends AppCompatActivity {
         userNameText.setText(username);
         getOneUser(UUID);
 
-        lobby.setOnClickListener(new View.OnClickListener() {
+        startLobby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(HomePageActivity.this,BlackjackActivity.class);
+                Intent i = new Intent(HomePageActivity.this,LobbyPageActivity.class);
                 i.putExtra("USERNAME",username);
                 i.putExtra("UUID",UUID);
                 startActivity(i);
 
+            }
+        });
+
+        joinLobby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int lobbyID = Integer.parseInt(joinID.getText().toString());
+                Intent i = new Intent(HomePageActivity.this,LobbyPageActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",UUID);
+                i.putExtra("LOBBYID",lobbyID);
+                startActivity(i);
             }
         });
         leaderboard.setOnClickListener(new View.OnClickListener() {
