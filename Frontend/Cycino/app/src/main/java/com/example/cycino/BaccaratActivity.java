@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,19 +18,31 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+
 public class BaccaratActivity extends AppCompatActivity {
 
-    private int lobbyID = 2 ;
-    private String userUsername = "Filip" ;
-    private Button sendBtn, chatToggleBtn, tieBtn, bankerBtn, playerBtn, betButton;
+    private int userChips ;
+    private int lobbyID ;
+    private String userUsername ;
+    private int userID ;
+    private Button sendBtn, chatToggleBtn, tieBtn, bankerBtn, playerBtn, betButton, backButton, resetButton;
     private EditText msgEtx, betEditText;
-    private TextView msgTv, winnerTv, playerLabel, bankerLabel, playerScoreTv, bankerScoreTv;
+    private TextView msgTv, winnerTv, playerLabel, bankerLabel, playerScoreTv, bankerScoreTv, chipCountText;
     private ImageView playerCard1, playerCard2, playerCard3, bankerCard1, bankerCard2, bankerCard3 ;
     private ScrollView chatArea;
     private boolean chatOpen = true;
     private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/" + lobbyID + "/" + userUsername ;
     private int playerCardCount ;
     private int bankerCardCount ;
+    private RequestQueue requestQueue;
+    private String removeChipsUrl, addChipsUrl, getChipsUrl ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +71,28 @@ public class BaccaratActivity extends AppCompatActivity {
         bankerLabel = findViewById(R.id.bankerLabel);
         playerScoreTv = findViewById(R.id.playerScore);
         bankerScoreTv = findViewById(R.id.bankerScore);
+        chipCountText = findViewById(R.id.chipCountText);
+        requestQueue = Volley.newRequestQueue(this);
+        backButton = findViewById(R.id.backButton);
+        resetButton = findViewById(R.id.resetButton);
+
+
 
         playerBtn.setVisibility(View.GONE);
         bankerBtn.setVisibility(View.GONE);
         tieBtn.setVisibility(View.GONE);
 
-        // Get username from intent
-//        Intent inIntent = getIntent();
-//        username = inIntent.getStringExtra("USERNAME");
+        addChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/" + userID + "/" ;
+        removeChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/" + userID + "/" ;
+        getChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/get/" + userID ;
 
-        // Initialize WebSocket connection
+
+        ////////////////////////////////// IDK WHAT WE HAVE FOR LOBBY IN TERMS OF INTENT
+        Intent inIntent = getIntent();
+        userUsername = inIntent.getStringExtra("USERNAME");
+        userID = inIntent.getIntExtra("UUID",-1);
+        lobbyID = inIntent.getIntExtra("LOBBY",-2);
+
         String serverUrl = serverURL ;
         Intent serviceIntent = new Intent(this, WebSocketService.class);
         serviceIntent.setAction("CONNECT");
@@ -75,7 +100,7 @@ public class BaccaratActivity extends AppCompatActivity {
         serviceIntent.putExtra("url", serverUrl);
         startService(serviceIntent);
 
-
+        setChips(getChipsUrl) ;
 
         betButton.setOnClickListener(v -> {
             String betAmountString = betEditText.getText().toString().trim();
@@ -85,21 +110,13 @@ public class BaccaratActivity extends AppCompatActivity {
                 try {
                     int betAmount = Integer.parseInt(betAmountString); // Parse input as integer
 
-                    if (betAmount > 0) {
-                        // Bet is valid, hide the Bet Button and EditText
-                        betEditText.setVisibility(View.GONE);
-                        betButton.setVisibility(View.GONE);
+                    if (betAmount > 0 && betAmount <= userChips) {
 
-                        // Show the decision buttons
-                        playerBtn.setVisibility(View.VISIBLE);
-                        bankerBtn.setVisibility(View.VISIBLE);
-                        tieBtn.setVisibility(View.VISIBLE);
+                        handleBet(betAmount) ;
 
-                        // Optionally, display the bet amount in a Toast
-                        Toast.makeText(this, "Bet placed: " + betAmount, Toast.LENGTH_SHORT).show();
                     } else {
                         // Notify the user that the bet must be greater than 0
-                        Toast.makeText(this, "Bet must be a positive number", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Bet must be a valid number", Toast.LENGTH_SHORT).show();
                     }
                 } catch (NumberFormatException e) {
                     // Notify the user that the input is not a valid integer
@@ -110,7 +127,6 @@ public class BaccaratActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please enter a bet", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         // Set up send button listener
         sendBtn.setOnClickListener(v -> {
@@ -141,9 +157,21 @@ public class BaccaratActivity extends AppCompatActivity {
             }
         });
 
+        backButton.setOnClickListener(v -> {
+            Intent i = new Intent(BaccaratActivity.this,HomePageActivity.class);
+            i.putExtra("USERNAME", userUsername);
+            i.putExtra("UUID", userID);
+            startActivity(i);
+        });
+
         tieBtn.setOnClickListener(v -> handleDecision("TIE"));
         playerBtn.setOnClickListener(v -> handleDecision("PLAYER"));
         bankerBtn.setOnClickListener(v -> handleDecision("BANKER"));
+
+        resetButton.setOnClickListener(v -> {
+            resetGame() ;
+        });
+
     }
 
     // BroadcastReceiver for receiving WebSocket messages
@@ -172,49 +200,70 @@ public class BaccaratActivity extends AppCompatActivity {
         }
     };
 
-    private void handleBaccaratMessage(String gameInfo)
-    {
-        String[] lines = gameInfo.split("\n");
+    private void handleBaccaratMessage(String gameInfo) {
+        // Trim the entire message to remove leading and trailing newlines
+        gameInfo = gameInfo.trim();
 
-        String calls = null;
-        String gameState = null;
-        String playerScore = "";
-        String bankerScore = "";
-        String gameResult = null;
-        String playerCards = null;
-        String bankerCards = null;
+        // Split the message by newlines
+        String[] lines = gameInfo.split("\\r?\\n");
 
-        // Parse each line to extract data
+        // Debugging: Print each line to verify its content
         for (String line : lines) {
-            if (line.startsWith("CALLS:")) {
-                calls = line.substring("CALLS:".length()).trim();
-            }
-            else if (line.startsWith("PLAYER_HAND")) {
-                playerScore = line.substring("PLAYER_HAND ".length()).trim();
-            }
-            else if (line.startsWith("BANKER_HAND")) {
-                bankerScore = line.substring("BANKER_HAND ".length()).trim();
-            }
-            else if (line.startsWith("GAMESTATE:")) {
-                gameState = line.substring("GAMESTATE:".length()).trim();
-            } else if (line.startsWith("GAMERESULT:")) {
-                gameResult = line.substring("GAMERESULT:".length()).trim();
-            } else if (line.startsWith("PLAYER")) {
-                playerCards = line.substring("PLAYER".length()).trim();
-            } else if (line.startsWith("BANKER")) {
-                bankerCards = line.substring("BANKER".length()).trim();
+            line = line.trim(); // Ensure each line is trimmed
+            Log.d("BaccaratActivity", "Line: [" + line + "]");
+        }
+
+        // Initialize variables
+        String gameState = null;
+        String calls = null;
+        String bets = null ;
+        String playerScore = null ;
+        String bankerScore = null ;
+        String gameResult = null ;
+        String playerCards = null ;
+        String bankerCards = null ;
+
+        // Parse each line
+        for (String line : lines) {
+            if (line.contains("GAMESTATE:")) {
+                gameState = line.substring(line.indexOf("GAMESTATE:") + "GAMESTATE:".length()).trim();
+            } else if (line.contains("CALLS:")) {
+                calls = line.substring(line.indexOf("CALLS:") + "CALLS:".length()).trim();
+            } else if (line.contains("BETS:")) {
+                bets = line.substring(line.indexOf("BETS:") + "BETS:".length()).trim();
+            } else if (line.contains("PLAYER_HAND")) {
+                playerScore = line.substring(line.indexOf("PLAYER_HAND") + "PLAYER_HAND".length()).trim();
+            } else if (line.contains("BANKER_HAND")) {
+                bankerScore = line.substring(line.indexOf("BANKER_HAND") + "BANKER_HAND".length()).trim();
+            } else if (line.contains("GAMERESULT:")) {
+                gameResult = line.substring(line.indexOf("GAMERESULT:") + "GAMERESULT:".length()).trim();
+            } else if (line.contains("PLAYER")) {
+                playerCards = line.substring(line.indexOf("PLAYER_CARDS") + "PLAYER_CARDS".length()).trim();
+            } else if (line.contains("BANKER")) {
+                bankerCards = line.substring(line.indexOf("BANKER_CARDS") + "BANKER_CARDS".length()).trim();
             }
         }
 
-
-
-        if (playerCards != null && bankerCards != null && gameResult != null) {
-            startCardReveal(playerCards, bankerCards, gameResult, playerScore, bankerScore) ;
+        // Handle null gameState
+        if (gameState == null) {
+            Log.e("BaccaratActivity", "Invalid message: GAMESTATE not found");
+            Toast.makeText(this, "Error: Invalid game state", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        // Process gameState (example)
+        if (gameState.equals("OVER")) {
+            Log.d("BaccaratActivity", "Game is over. Starting reveal...");
+            startCardReveal(playerCards, bankerCards, gameResult, playerScore, bankerScore, calls, bets);
+        } else if (gameState.equals("ONGOING")) {
+            Log.d("BaccaratActivity", "Game is ongoing. Waiting for backend simulation...");
+        } else {
+            Log.e("BaccaratActivity", "Unexpected gameState: " + gameState);
+            Toast.makeText(this, "Error: Unexpected game state", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void startCardReveal(String playerCards, String bankerCards, String gameResult, String playerScore, String bankerScore) {
+    private void startCardReveal(String playerCards, String bankerCards, String gameResult, String playerScore, String bankerScore, String calls, String bets) {
         // Split the card strings
         String[] playerCardArray = playerCards.split(" ");
         String[] bankerCardArray = bankerCards.split(" ");
@@ -222,6 +271,8 @@ public class BaccaratActivity extends AppCompatActivity {
         // Initialize player and banker card counts
         playerCardCount = Integer.parseInt(playerCardArray[0]);
         bankerCardCount = Integer.parseInt(bankerCardArray[0]);
+
+        Log.d("BaccaratActivity", ""+ playerCardCount);
 
         // Combine cards in the order they are revealed (player first)
         String[] cardSequence = new String[playerCardCount + bankerCardCount];
@@ -238,10 +289,10 @@ public class BaccaratActivity extends AppCompatActivity {
         }
 
         // Start the sequential reveal
-        revealCardsSequentially(cardSequence, gameResult, bankerScore, playerScore);
+        revealCardsSequentially(cardSequence, gameResult, bankerScore, playerScore, calls, bets);
     }
 
-    private void revealCardsSequentially(String[] cardSequence, String winner, String bankerScore, String playerScore) {
+    private void revealCardsSequentially(String[] cardSequence, String winner, String bankerScore, String playerScore, String calls, String bets) {
         // ImageViews for player and banker cards
         ImageView[] playerCardViews = {playerCard1, playerCard2, playerCard3};
         ImageView[] bankerCardViews = {bankerCard1, bankerCard2, bankerCard3};
@@ -281,13 +332,46 @@ public class BaccaratActivity extends AppCompatActivity {
 
         // Schedule the updateWinner call after the last card reveal
         handler.postDelayed(() -> {
-            updateWinner(winner, bankerScore, playerScore); // Call updateWinner after all cards are revealed
-        }, totalDelay + 1000); // Add an extra 1 second to ensure smooth transition
+            // Call updateWinner, parseCalls, and parseBets after 2 seconds
+            updateWinner(winner, bankerScore, playerScore);
+
+            // Parse the user's result and bet only after all cards are revealed
+            String userResult = parseCalls(calls);
+            int userBet = parseBets(bets);
+
+            // Call handleResult after parsing the data
+            handleResult(userResult, userBet);
+
+            // Second delay for reset button visibility
+            handler.postDelayed(() -> resetButton.setVisibility(View.VISIBLE), 2000);
+        }, totalDelay + 2000); // Initial 2-second delay after cards are dealt
     }
 
-    private void handleBet(int betAmount)
-    {
+    private void handleBet(int betAmount) {
 
+        if (requestQueue == null) {
+            Toast.makeText(this, "Request queue is not initialized.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String betStr = "#BACCARAT: BET " + betAmount;
+        Intent checkConnectionIntent = new Intent("CheckWebSocketStatus");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(checkConnectionIntent);
+
+        Intent intent = new Intent("SendWebSocketMessage");
+        intent.putExtra("key", "chat1");
+        intent.putExtra("message", betStr);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+        betEditText.setVisibility(View.GONE);
+        betButton.setVisibility(View.GONE);
+
+        playerBtn.setVisibility(View.VISIBLE);
+        bankerBtn.setVisibility(View.VISIBLE);
+        tieBtn.setVisibility(View.VISIBLE);
+
+        Toast.makeText(this, "Bet placed: " + betAmount, Toast.LENGTH_SHORT).show();
+        handleRemoveChips(betAmount, removeChipsUrl) ;
     }
 
     void updateWinner(String winner, String bankerScore, String playerScore) {
@@ -302,6 +386,7 @@ public class BaccaratActivity extends AppCompatActivity {
 
     private void handleDecision(String decision)
     {
+
         hideDecisionButtons() ;
         playerLabel.setVisibility(View.VISIBLE);
         bankerLabel.setVisibility(View.VISIBLE);
@@ -333,6 +418,179 @@ public class BaccaratActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
     }
 
+    private void setChips(String getChipsUrl)
+    {
+        JsonObjectRequest getRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                getChipsUrl,
+                null,
+                response -> {
+                    try {
+                        // Handle the JSON response
+                        int status = response.getInt("status");
+                        if (status == 200) {
+                            userChips = response.getInt("chips");
+                            runOnUiThread(() -> chipCountText.setText("" + userChips));
+                        } else {
+                            String error = response.getString("error");
+                            Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Response parsing error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Toast.makeText(this, "Request failed. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+        );
+        requestQueue.add(getRequest);
+    }
+
+    private void handleAddChips(int addAmount, String addChipsUrl)
+    {
+        JsonObjectRequest putRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                addChipsUrl + addAmount,
+                null, // No body for this request
+                response -> {
+                    try {
+                        // Handle the JSON response
+                        int status = response.getInt("status");
+                        if (status == 200) {
+                            userChips = response.getInt("chips");
+                            chipCountText.setText("" + userChips);
+                        } else {
+                            String error = response.getString("error");
+                            Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Response parsing error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    // Handle errors
+                    Toast.makeText(this, "Request failed. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+        );
+        requestQueue.add(putRequest);
+    }
+
+
+
+    private void handleRemoveChips(int removeAmount, String removeChipsUrl)
+    {
+        JsonObjectRequest putRequest = new JsonObjectRequest(
+                Request.Method.PUT,
+                removeChipsUrl + removeAmount,
+                null, // No body for this request
+                response -> {
+                    try {
+                        // Handle the JSON response
+                        int status = response.getInt("status");
+                        if (status == 200) {
+                            userChips = response.getInt("chips");
+                            chipCountText.setText("" + userChips);
+                        } else {
+                            String error = response.getString("error");
+                            Toast.makeText(this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Response parsing error", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    // Handle errors
+                    Toast.makeText(this, "Request failed. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+        );
+        requestQueue.add(putRequest);
+    }
+
+    private String parseCalls(String calls) {
+        String[] callParts = calls.split(" ");
+
+        // Iterate through the parts to find the username
+        for (int i = 0; i < callParts.length; i += 2) {
+            String currentUser = callParts[i];
+            String result = callParts[i + 1];
+
+            // Check if the current username matches
+            if (currentUser.equals(userUsername)) {
+                return result; // Return the result (e.g., "WON", "LOST", "TIE")
+            }
+        }
+        // Return "Not Found" if the username is not in CALLS
+        return "Not Found";
+    }
+
+    private int parseBets(String bets) {
+        // Split the BETS string into parts
+        String[] betParts = bets.split(" ");
+
+        // Iterate through the parts to find the username and their bet
+        for (int i = 0; i < betParts.length; i += 2) {
+            String currentUser = betParts[i];
+            String betAmount = betParts[i + 1];
+
+            // Check if the current username matches
+            if (currentUser.equals(userUsername)) {
+                try {
+                    return Integer.parseInt(betAmount); // Parse and return the bet amount as an integer
+                } catch (NumberFormatException e) {
+                    Log.e("BaccaratActivity", "Error parsing bet amount: " + betAmount);
+                    return -1; // Return -1 to indicate an error
+                }
+            }
+        }
+        return -1;
+    }
+
+
+
+    private void handleResult(String userResult, int userBet)
+    {
+        if(userResult.equals("WIN"))
+        {
+            handleAddChips(userBet, addChipsUrl) ;
+            chipCountText.setText("" + userChips);
+            Toast.makeText(this, "Congrats! You just won" + userBet + "cyChips!", Toast.LENGTH_LONG).show();
+        }
+        else if(userResult.equals("LOST"))
+        {
+            Toast.makeText(this, "Better luck next time!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, "Error with calls." , Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void resetGame() {
+        // Set all card ImageViews to invisible
+        playerCard1.setVisibility(View.INVISIBLE);
+        playerCard2.setVisibility(View.INVISIBLE);
+        playerCard3.setVisibility(View.INVISIBLE);
+        bankerCard1.setVisibility(View.INVISIBLE);
+        bankerCard2.setVisibility(View.INVISIBLE);
+        bankerCard3.setVisibility(View.INVISIBLE);
+
+        // Set the winner TextView to invisible
+        winnerTv.setVisibility(View.INVISIBLE);
+
+        // Set the player and banker score TextViews to invisible
+        playerScoreTv.setVisibility(View.INVISIBLE);
+        bankerScoreTv.setVisibility(View.INVISIBLE);
+        resetButton.setVisibility(View.INVISIBLE);
+
+        // Make the bet EditText and bet Button visible
+        betEditText.setVisibility(View.VISIBLE);
+        betButton.setVisibility(View.VISIBLE);
+
+        // Optionally clear any existing text in the bet EditText
+        betEditText.setText("");
+
+        // Show a toast message to indicate the game has been reset
+        Toast.makeText(this, "Game has been reset. Place your bet!", Toast.LENGTH_SHORT).show();
+    }
 
 
 }

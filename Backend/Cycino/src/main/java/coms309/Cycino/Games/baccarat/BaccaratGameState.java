@@ -26,7 +26,7 @@ public class BaccaratGameState {
     }
 
 
-    private boolean readyToDeal(){
+    public boolean readyToDeal(){
         boolean responseMoves = true;
         Collection<String> moves = playerMoves.values();
         for (String move : moves) {
@@ -78,7 +78,7 @@ public class BaccaratGameState {
         return response;
     }
 
-    private int handValue(ArrayList<BaccaratCard> hand) {
+    public int handValue(ArrayList<BaccaratCard> hand) {
         int value = 0;
         for (int i = 0; i < hand.size(); i++) {
             value += hand.get(i).getValue();
@@ -194,8 +194,8 @@ public class BaccaratGameState {
             bankerCards += baccaratDeck.getBankerCards().get(i).toString();
             bankerCards += " ";
         }
-        return "\n" + "PLAYER " + baccaratDeck.getPlayerCards().size() + " " + playerCards +
-                "\n" + "BANKER " + baccaratDeck.getBankerCards().size() + " " + bankerCards;
+        return "\n" + "PLAYER_CARDS " + baccaratDeck.getPlayerCards().size() + " " + playerCards +
+                "\n" + "BANKER_CARDS " + baccaratDeck.getBankerCards().size() + " " + bankerCards;
     }
 
     @Override
@@ -211,11 +211,13 @@ public class BaccaratGameState {
         for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
             gameState += entry.getKey() + " " + entry.getValue() + " ";
         }
+        gameState = gameState.trim();
         gameState += "\n";
         gameState += "BETS: ";
         for(Map.Entry<String, Integer> entry : playerBets.entrySet()) {
             gameState += entry.getKey() + " " + entry.getValue() + " ";
         }
+        gameState = gameState.trim();
         if (win || tie){
             gameState += "\n" + "PLAYER_HAND" + " " + handValue(baccaratDeck.getPlayerCards());
             gameState += "\n" + "BANKER_HAND" + " " + handValue(baccaratDeck.getBankerCards());
@@ -228,8 +230,8 @@ public class BaccaratGameState {
             gameState += dealtCardsToString();
             resetState();
         } else{
-            gameState += "\n" + "PLAYER " + "NONE";
-            gameState += "\n" + "BANKER " + "NONE";
+            gameState += "\n" + "PLAYER_CARDS " + "NONE";
+            gameState += "\n" + "BANKER_CARDS " + "NONE";
         }
         return gameState;
     }

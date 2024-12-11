@@ -20,50 +20,70 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp" />
 
-    <!-- Baccarat Title -->
-    <TextView
-        android:id="@+id/baccaratTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BACCARAT"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:backgroundTint="#C41E3A"
-        android:textColor="#FFD700"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/backButton"
-        app:layout_constraintEnd_toStartOf="@id/chipCountText"
-        android:layout_marginTop="16dp" />
-
     <!-- Chip Count TextView -->
-    <TextView
-        android:id="@+id/chipCountText"
+    <LinearLayout
+        android:id="@+id/chipDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
         android:padding="8dp"
-        android:text="CyChips\n#1000"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#FFD700"
         android:background="#C41E3A"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp" />
-    <!-- Player TextView -->
+        android:layout_marginEnd="16dp">
+
+        <!-- ImageView for CyChip -->
+        <ImageView
+            android:id="@+id/cyChipImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="CyChip Icon"
+            android:src="@drawable/cychip"
+            android:layout_marginEnd="8dp" />
+
+        <!-- TextView for Chip Count -->
+        <TextView
+            android:id="@+id/chipCountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="100000"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFD700" />
+    </LinearLayout>
+
+
     <TextView
         android:id="@+id/playerLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Player"
         android:textSize="36sp"
-        android:textColor="#FFFFFF"
+        android:textColor="#C41E3A"
         android:textStyle="bold"
+        android:layout_marginTop="60dp"
         android:layout_marginBottom="8dp"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@id/baccaratTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/baccaratTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BACCARAT"
+        android:textSize="60sp"
+        android:textColor="#FFD700"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:layout_marginTop="119dp"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/playerLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -111,10 +131,9 @@
         android:layout_height="wrap_content"
         android:text="Banker"
         android:textSize="36sp"
-        android:textColor="#FFFFFF"
+        android:textColor="#C41E3A"
         android:textStyle="bold"
         android:layout_marginTop="150dp"
-        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/playerCards"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -156,22 +175,39 @@
             android:visibility="invisible" />
     </LinearLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Game"
+        android:textSize="16sp"
+        android:backgroundTint="#C41E3A"
+        android:visibility="invisible"
+        android:padding="10dp"
+        android:textColor="#FFD700"
+        android:textStyle="bold"
+        android:layout_marginTop="52dp"
+        app:layout_constraintTop_toBottomOf="@id/bankerCards"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/winnerTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="16dp"
+        android:padding="3dp"
         android:text="Winner: TBD"
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textColor="#FFD700"
+        android:textSize="32sp"
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/bankerLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/betInputSection" />
+
 
     <TextView
         android:id="@+id/playerScore"
@@ -182,7 +218,7 @@
         android:text="Player Score: 0"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/winnerTextView"
@@ -198,7 +234,7 @@
         android:text="Banker Score: 0"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/playerScore"
@@ -257,6 +293,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/playerButton"
         android:layout_width="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#F44336"
         android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -266,6 +304,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bankerButton"
         android:layout_width="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#000000"
         android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -275,6 +315,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/tieButton"
         android:layout_width="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#06402B"
         android:textStyle="bold"
         android:layout_height="wrap_content"
         android:text="Tie"
@@ -319,9 +361,10 @@
     android:textStyle="bold"
     android:layout_width="0dp"
     android:layout_height="50dp"
+    android:textColor="#FFFFFF"
     android:layout_weight="1"
     android:hint="Type a message"
-    android:textSize="16sp" />
+    android:textSize="20sp" />
 
 <com.google.android.material.button.MaterialButton
     android:id="@+id/toggleChat"

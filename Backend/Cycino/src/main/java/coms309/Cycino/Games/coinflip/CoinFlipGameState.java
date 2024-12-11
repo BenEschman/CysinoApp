@@ -26,7 +26,7 @@ public class CoinFlipGameState {
         playerMoves.put(player, move);
     }
 
-    private boolean readyToFlip(){
+    public boolean readyToFlip(){
         boolean responseMoves = true;
         Collection<String> moves = playerMoves.values();
         for (String move : moves) {
@@ -101,7 +101,7 @@ public class CoinFlipGameState {
 
     private void changeChipCount(String player, int betAmount, boolean win){
         if (win){
-            playerBets.put(player, betAmount * 2);
+            playerBets.put(player, betAmount);
         } else {
             playerBets.put(player, betAmount * -1);
         }

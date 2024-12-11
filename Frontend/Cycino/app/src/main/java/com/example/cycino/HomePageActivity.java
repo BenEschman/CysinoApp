@@ -30,7 +30,7 @@ import java.io.File;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    private Button lobby,leaderboard,friends,settings, rulesBtn ;
+    private Button lobby,leaderboard,friends,settings, rulesBtn, bankBtn ;
 
     private String username;
     private Integer UUID;
@@ -51,6 +51,7 @@ public class HomePageActivity extends AppCompatActivity {
         friends = findViewById(R.id.friendsButton);
         settings = findViewById(R.id.settingsButton);
         rulesBtn = findViewById(R.id.rulesButton);
+        bankBtn = findViewById(R.id.bankButton);
 
         lobby.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +97,16 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(HomePageActivity.this,RulesActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",UUID);
+                startActivity(i);
+            }
+        });
+
+        bankBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomePageActivity.this,BankActivity.class);
                 i.putExtra("USERNAME",username);
                 i.putExtra("UUID",UUID);
                 startActivity(i);
