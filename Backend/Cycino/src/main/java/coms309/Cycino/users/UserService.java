@@ -88,6 +88,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public void saveUser(User u){
+        userRepository.save(u);
+    }
+
     public boolean deleteUser(long id){
         if(getUser(id) != null) {
             userRepository.delete(getUser(id));
