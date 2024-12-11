@@ -131,7 +131,14 @@ public class LobbyService {
         Set<User> players = l.getPlayers();
         response.put("status", "200 ok");
         //response.put("lobby", l);
-        response.put("players", players);
+        Set<Long> ids = new HashSet<>();
+
+        players.forEach(user -> {
+            if (user != null) {
+                ids.add(user.getId());
+            }
+        });
+        response.put("players", ids);
         response.put("size", players.size());
         for(User u: players){
             if(u.getRole().equals(Enums.Roles.LOBBYHOST)){
