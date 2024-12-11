@@ -157,7 +157,7 @@ public class BaccaratActivity extends AppCompatActivity {
             i.putExtra("USERNAME", userUsername);
             i.putExtra("UUID", userID);
             startActivity(i);
-                });
+        });
 
         tieBtn.setOnClickListener(v -> handleDecision("TIE"));
         playerBtn.setOnClickListener(v -> handleDecision("PLAYER"));
@@ -206,23 +206,32 @@ public class BaccaratActivity extends AppCompatActivity {
         // Initialize variables
         String gameState = null;
         String calls = null;
+        String bets = null ;
+        String playerScore = null ;
+        String bankerScore = null ;
+        String gameResult = null ;
+        String playerCards = null ;
+        String bankerCards = null ;
 
         // Parse each line
         for (String line : lines) {
             if (line.contains("GAMESTATE:")) {
                 gameState = line.substring(line.indexOf("GAMESTATE:") + "GAMESTATE:".length()).trim();
-                Log.d("BaccaratActivity", "Parsed gameState: " + gameState);
             } else if (line.contains("CALLS:")) {
                 calls = line.substring(line.indexOf("CALLS:") + "CALLS:".length()).trim();
-                Log.d("BaccaratActivity", "Parsed calls: " + calls);
+            } else if (line.contains("BETS:")) {
+                bets = line.substring(line.indexOf("BETS:") + "BETS:".length()).trim();
             } else if (line.contains("PLAYER_HAND")) {
-                String playerHand = line.substring(line.indexOf("PLAYER_HAND") + "PLAYER_HAND".length()).trim();
-                Log.d("BaccaratActivity", "Parsed playerHand: " + playerHand);
+                playerScore = line.substring(line.indexOf("PLAYER_HAND") + "PLAYER_HAND".length()).trim();
             } else if (line.contains("BANKER_HAND")) {
-                String bankerHand = line.substring(line.indexOf("BANKER_HAND") + "BANKER_HAND".length()).trim();
-                Log.d("BaccaratActivity", "Parsed bankerHand: " + bankerHand);
+                bankerScore = line.substring(line.indexOf("BANKER_HAND") + "BANKER_HAND".length()).trim();
+            } else if (line.contains("GAMERESULT:")) {
+                gameResult = line.substring(line.indexOf("GAMERESULT:") + "GAMERESULT:".length()).trim();
+            } else if (line.contains("PLAYER")) {
+                playerCards = line.substring(line.indexOf("PLAYER_CARDS") + "PLAYER_CARDS".length()).trim();
+            } else if (line.contains("BANKER")) {
+                bankerCards = line.substring(line.indexOf("BANKER_CARDS") + "BANKER_CARDS".length()).trim();
             }
-            // Add similar parsing logic for other fields if needed
         }
 
         // Handle null gameState
@@ -235,7 +244,8 @@ public class BaccaratActivity extends AppCompatActivity {
         // Process gameState (example)
         if (gameState.equals("OVER")) {
             Log.d("BaccaratActivity", "Game is over. Starting reveal...");
-            // Add logic to handle the 'OVER' state
+            startCardReveal(playerCards, bankerCards, gameResult, playerScore, bankerScore);
+
         } else if (gameState.equals("ONGOING")) {
             Log.d("BaccaratActivity", "Game is ongoing. Waiting for backend simulation...");
             // Add logic to handle the 'ONGOING' state
@@ -253,6 +263,8 @@ public class BaccaratActivity extends AppCompatActivity {
         // Initialize player and banker card counts
         playerCardCount = Integer.parseInt(playerCardArray[0]);
         bankerCardCount = Integer.parseInt(bankerCardArray[0]);
+
+        Log.d("BaccaratActivity", ""+ playerCardCount);
 
         // Combine cards in the order they are revealed (player first)
         String[] cardSequence = new String[playerCardCount + bankerCardCount];
