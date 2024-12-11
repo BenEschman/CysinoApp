@@ -47,21 +47,13 @@ public class LeaderboardActivity extends AppCompatActivity{
 
 
     /**
-     * LinearLayout for player Names
+     * LinearLayouts for player Names, Scores and Wins
      */
-    private LinearLayout lbNames;
+    private LinearLayout lbNames, lbScores, lbWins;
     /**
-     * LinearLayout for player Scores
+     *  Buttons to select tab and return to home page
      */
-    private LinearLayout lbScores;
-    /**
-     *  LinearLayout for player Wins
-     */
-    private LinearLayout lbWins;
-    /**
-     *  Button to select blacjack tab
-     */
-    private Button blackjackButton;
+    private Button blackjackButton, pokerButton, returnButton;
     /**
      * TextView to show current game selected
      */
@@ -74,13 +66,12 @@ public class LeaderboardActivity extends AppCompatActivity{
      */
     int items;
     /**
-     * List of usernames
-     */
-    List<String> userNames = new ArrayList<String>();
-    /**
      * Empty JSONArray for HTTP Reponses
      */
     JSONArray responseArr;
+    String[] userNames;
+
+
 
 
 
@@ -90,21 +81,40 @@ public class LeaderboardActivity extends AppCompatActivity{
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_leaderboard);
 
+        Intent intent = getIntent();
+        String username = intent.getStringExtra("USERNAME");
+        Integer UUID = intent.getIntExtra("UUID",-1);
+
         lbNames = findViewById(R.id.lb_names);
         lbScores = findViewById(R.id.lb_scores);
         lbWins = findViewById(R.id.lb_wins);
         titleText = findViewById(R.id.text_leaderboard_title);
         blackjackButton = findViewById(R.id.blackjackLbButton);
+        pokerButton = findViewById(R.id.pokerLbButton);
+        returnButton = findViewById(R.id.lbReturn);
 
         requestQueue = Volley.newRequestQueue(LeaderboardActivity.this);
 
         titleText.setPadding(0,150,0,0);
         titleText.setTextSize(40);
+        titleText.setTextColor(0xFFFFFFFF);
 
         blackjackButton.setText("Blackjack");
 
         getBlackjackStats();
         resetLeaderboard();
+
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LeaderboardActivity.this, HomePageActivity.class);
+                intent.putExtra("USERNAME",username);
+                intent.putExtra("UUID",UUID);
+                startActivity(intent);
+            }
+        });
+
+
 
 
         blackjackButton.setOnClickListener(new View.OnClickListener() {
@@ -114,12 +124,14 @@ public class LeaderboardActivity extends AppCompatActivity{
                     resetLeaderboard();
                     getBlackjackStats();
 
+                myWait(1000);
+
 
                 for (int i = 0; i < items; i++) {
 
                     try {
                         JSONObject jObj = responseArr.getJSONObject(i);
-                        updateLeaderboard(userNames.get(i),jObj);
+                        updateLeaderboard(userNames[i],jObj);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -128,6 +140,32 @@ public class LeaderboardActivity extends AppCompatActivity{
 
             }
         });
+
+        pokerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                resetLeaderboard();
+                getPokerStats();
+
+                myWait(1000);
+
+
+                for (int i = 0; i < items; i++) {
+
+                    try {
+                        JSONObject jObj = responseArr.getJSONObject(i);
+                        updateLeaderboard(userNames[i],jObj);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+
+            }
+        });
+
+
     }
 
     /**
@@ -149,10 +187,13 @@ public class LeaderboardActivity extends AppCompatActivity{
         scoreTitle.setText("Chips");
 
         nameTitle.setTextSize(28);
+        nameTitle.setTextColor(0xFFFFFFFF);
         nameTitle.setPadding(10,0,0,0);
         winsTitle.setTextSize(28);
+        winsTitle.setTextColor(0xFFFFFFFF);
         winsTitle.setGravity(gravity.RIGHT);
         scoreTitle.setTextSize(28);
+        scoreTitle.setTextColor(0xFFFFFFFF);
         scoreTitle.setGravity(gravity.RIGHT);
         scoreTitle.setPadding(0,0,10,0);
 
@@ -193,11 +234,13 @@ public class LeaderboardActivity extends AppCompatActivity{
         // set some properties of rowTextView or something
         nameView.setText(name);
         nameView.setTextSize(20);
+        nameView.setTextColor(0xFFFFFFFF);
         nameView.setGravity(gravity.LEFT);
         nameView.setPadding(10,0,0,0);
 
         winView.setText(jObj.getString("wins"));
         winView.setTextSize(20);
+        winView.setTextColor(0xFFFFFFFF);
         winView.setGravity(gravity.RIGHT);
         winView.setPadding(10,0,0,0);
 
@@ -205,6 +248,7 @@ public class LeaderboardActivity extends AppCompatActivity{
 
         scoreView.setText(score.substring(0,score.length()-2));
         scoreView.setTextSize(20);
+        scoreView.setTextColor(0xFFFFFFFF);
         scoreView.setGravity(gravity.RIGHT);
         scoreView.setPadding(0,0,10,0);
 
@@ -231,18 +275,59 @@ public class LeaderboardActivity extends AppCompatActivity{
                     @Override
                     public void onResponse(JSONArray response) {
                         Toast.makeText(getApplicationContext(),"It worked", Toast.LENGTH_LONG).show();
-                        System.out.println(response.toString());
+                        System.out.println(response);
                         responseArr = response;
                         items = response.length();
+                        userNames = new String[items];
 
                         try{
 
                         for (int i = 0; i < items; i++) {
                             JSONObject jObj = response.getJSONObject(i);
-                                getOneName(jObj.getInt("userId"));
+                                getOneName(jObj.getInt("userId"), i);
                                 System.out.println(jObj.getInt("userId") + " " + i);
 
                         }}
+                        catch(JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(),"It failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void getPokerStats() {
+        //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/stats/all/POKER";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Toast.makeText(getApplicationContext(),"It worked", Toast.LENGTH_LONG).show();
+                        System.out.println(response);
+                        responseArr = response;
+                        items = response.length();
+                        userNames = new String[items];
+
+                        try{
+
+                            for (int i = 0; i < items; i++) {
+                                JSONObject jObj = response.getJSONObject(i);
+                                getOneName(jObj.getInt("userId"), i);
+                                System.out.println(jObj.getInt("userId") + " " + i);
+
+                            }}
                         catch(JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -267,7 +352,7 @@ public class LeaderboardActivity extends AppCompatActivity{
      * @param id
      *
      */
-    private void getOneName(Integer id) {
+    private void getOneName(Integer id, Integer loopVal) {
         //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
 
@@ -276,7 +361,7 @@ public class LeaderboardActivity extends AppCompatActivity{
                         @Override
                         public synchronized void onResponse(JSONObject response) {
                             try {
-                                userNames.add(response.getString("firstName") + " " + response.getString("lastName"));
+                               userNames[loopVal] = response.getString("firstName") + " " + response.getString("lastName");
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
@@ -290,6 +375,23 @@ public class LeaderboardActivity extends AppCompatActivity{
             });
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void myWait(int waitTime) {
+        class MyRunnable implements Runnable {
+            public synchronized void run() {
+                // Code to be executed in the new thread
+
+                try {
+                    wait(waitTime);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }
+        Thread thread = new Thread(new MyRunnable());
+        thread.start();
     }
 
 

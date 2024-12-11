@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,22 +45,7 @@ import java.util.Map;
  * covering everything a host might need to do in preparation for the game.
  *
  */
-public class LobbyPageActivity extends AppCompatActivity {
-
-    /**
-     * EditText for entering a username to add or remove from the lobby.
-     */
-    private EditText editTextUsername;
-
-    /**
-     * Button to add a user to the lobby.
-     */
-    private Button buttonAddUser;
-
-    /**
-     * Button to remove a user from the lobby.
-     */
-    private Button buttonRemoveUser;
+public class LobbyPageActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     /**
      * Button to start the game from the lobby.
@@ -88,15 +77,25 @@ public class LobbyPageActivity extends AppCompatActivity {
      */
     private LinearLayout userListContainer;
 
+    RequestQueue queue;
+
+    private Spinner selectedGame;
+    private String currSelectedGame;
+
+    private String username;
+
+    private TextView lobbyNum;
     /**
      * ID of the current lobby.
      */
-    private int lobbyID = 53; // Temporary value for testing purposes.
+    private int lobbyID; // Temporary value for testing purposes.
 
     /**
      * ID of the current user.
      */
-    private int currentUser = 4;
+    private int currentUser;
+
+    String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/";
 
     /**
      * List of users currently in the lobby.
@@ -104,61 +103,62 @@ public class LobbyPageActivity extends AppCompatActivity {
     private ArrayList<JSONObject> userList = new ArrayList<>();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobbypage);
 
+        queue = Volley.newRequestQueue(this);
+
         // Initialize UI elements
-        editTextUsername = findViewById(R.id.editTextUsername);
-        buttonAddUser = findViewById(R.id.buttonAddUser);
-        buttonRemoveUser = findViewById(R.id.buttonRemoveUser);
         buttonStartGame = findViewById(R.id.buttonStartGame);
         buttonDeleteLobby = findViewById(R.id.buttonDeleteLobby);
         buttonBackToHome = findViewById(R.id.buttonBackToHome);
+        lobbyNum = findViewById(R.id.currLobbyID);
         buttonChangeSettings = findViewById(R.id.buttonChangeSettings);
         scrollViewUserList = findViewById(R.id.scrollViewUserList);
         userListContainer = findViewById(R.id.userListContainer);
+        selectedGame = findViewById(R.id.gameSelection);
 
+
+        selectedGame.setOnItemSelectedListener(this);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.games_array,
+                android.R.layout.simple_spinner_item
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectedGame.setAdapter(adapter);
+
+
+        Intent i = getIntent();
+        username = i.getStringExtra("USERNAME");
+        currentUser = i.getIntExtra("UUID",-1);
+        lobbyID = i.getIntExtra("LOBBYID",-1);
 
         // Load existing users in the lobby.
-        loadUsersInLobby(lobbyID);
+
+
+        if (lobbyID == -1) {
+            createLobby();
+        }
+
+        else {
+            addUserByID();
+            lobbyNum.setText("Lobby: "+lobbyID);
+        }
+
+
+
 
         /**
          * Sets up the "Add User" button.
          * When clicked, retrieves the username from the input field and attempts to add the user to the lobby.
          * Displays a message if the field is empty.
          */
-        buttonAddUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = editTextUsername.getText().toString().trim();
-                if (!username.isEmpty()) {
-                    getAddUser(username);
-                } else {
-                    Toast.makeText(LobbyPageActivity.this, "Enter a valid username", Toast.LENGTH_SHORT).show();
-                    editTextUsername.setText(""); // Clear the input field
-                }
-            }
-        });
-
-        /**
-         * Sets up the "Remove User" button.
-         * When clicked, retrieves the username from the input field and attempts to remove the user from the lobby.
-         * Notifies the user if the input field is empty.
-         */
-        buttonRemoveUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = editTextUsername.getText().toString().trim();
-                if (!username.isEmpty()) {
-                    getDeleteUser(username);
-                } else {
-                    Toast.makeText(LobbyPageActivity.this, "Enter a valid username", Toast.LENGTH_SHORT).show();
-                    editTextUsername.setText(""); // Clear the input field
-                }
-            }
-        });
 
         /**
          * Sets up the "Start Game" button.
@@ -167,7 +167,38 @@ public class LobbyPageActivity extends AppCompatActivity {
         buttonStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Placeholder for starting game logic
+
+                if(currSelectedGame.equals("Baccarat")) {
+                    Intent i = new Intent(LobbyPageActivity.this, BaccaratActivity.class);
+                    i.putExtra("USERNAME", username);
+                    i.putExtra("UUID", currentUser);
+                    i.putExtra("LOBBYID", lobbyID);
+                    startActivity(i);
+                }
+                if(currSelectedGame.equals("Blackjack")) {
+
+                        Intent i2 = new Intent(LobbyPageActivity.this,BlackjackActivity.class);
+                        i2.putExtra("USERNAME",username);
+                        i2.putExtra("UUID",currentUser);
+                        i2.putExtra("LOBBYID",lobbyID);
+                        startActivity(i2);
+                }
+                if(currSelectedGame.equals("Coinflip")) {
+                        Intent i3 = new Intent(LobbyPageActivity.this,CoinFlipActivity.class);
+                        i3.putExtra("USERNAME",username);
+                        i3.putExtra("UUID",currentUser);
+                        i3.putExtra("LOBBYID",lobbyID);
+                        startActivity(i3);
+                }
+                if(currSelectedGame.equals("Poker")) {
+                        Intent i4 = new Intent(LobbyPageActivity.this,PokerActivity.class);
+                        i4.putExtra("USERNAME",username);
+                        i4.putExtra("UUID",currentUser);
+                        i4.putExtra("LOBBYID",lobbyID);
+                        startActivity(i4);
+
+                }
+
                 Toast.makeText(LobbyPageActivity.this, "Starting game...", Toast.LENGTH_SHORT).show();
             }
         });
@@ -181,6 +212,10 @@ public class LobbyPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Placeholder for deleting lobby logic
                 deleteLobby(lobbyID) ;
+                Intent intent = new Intent(LobbyPageActivity.this, HomePageActivity.class);
+                intent.putExtra("USERNAME",username);
+                intent.putExtra("UUID",currentUser);
+                startActivity(intent);
             }
         });
 
@@ -193,7 +228,11 @@ public class LobbyPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Placeholder for navigating back to home
                 Toast.makeText(LobbyPageActivity.this, "Going back to home", Toast.LENGTH_SHORT).show();
-                finish(); // Closes the activity
+                Intent intent = new Intent(LobbyPageActivity.this, HomePageActivity.class);
+                intent.putExtra("USERNAME",username);
+                intent.putExtra("UUID",currentUser);
+                removeUserByID();
+                startActivity(intent);
             }
         });
 
@@ -210,6 +249,71 @@ public class LobbyPageActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    private void createLobby() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url+"create/"+currentUser, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the successful response here
+                        try {
+                            String status = response.getString("status");
+                            lobbyID = response.getInt("lobbyId");
+                            lobbyNum.setText("Lobby: "+lobbyID);
+                            System.out.println(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle the error response
+                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                });
+        // Add the request to the RequestQueue
+
+
+        queue.add(jsonObjectRequest);
+    }
+
+    private void addUserByID() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"add/"+lobbyID+"/"+currentUser, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+                        lobbyNum.setText("Lobby: "+lobbyID);
+                        loadUsersInLobby(lobbyID);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+        queue.add(jsonObjectRequest);
+    }
+
+    private void removeUserByID() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"remove/"+lobbyID+"/"+currentUser, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
 
     /**
@@ -229,6 +333,7 @@ public class LobbyPageActivity extends AppCompatActivity {
         userTextView.setTextSize(20);
         userListContainer.addView(userTextView);
     }
+
     /**
      * Attempts to add a user to the lobby by sending a PUT request to the server.
      * Checks if the user is already in the lobby before making the server call, avoiding duplicates.
@@ -545,7 +650,7 @@ public class LobbyPageActivity extends AppCompatActivity {
     private void deleteLobby(int lobbyID)
     {
         // Create the correct URL with correct endpoints to delete the endpoint
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/delete/" + lobbyID;
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/delete/" + lobbyID + "/"+ currentUser;
         // Create a JSON object request to delete the lobby
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
@@ -679,5 +784,33 @@ public class LobbyPageActivity extends AppCompatActivity {
         // Add the request to the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+
+        switch (position) {
+            case 0:
+                currSelectedGame = "Baccarat";
+                break;
+            case 1:
+                currSelectedGame = "Blackjack";
+                break;
+            case 2:
+                currSelectedGame = "Coinflip";
+                break;
+
+            case 3:
+                currSelectedGame = "Poker";
+                break;
+
+        }
+
+        buttonStartGame.setText("Start "+ currSelectedGame);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // TODO Auto-generated method stub
     }
 }

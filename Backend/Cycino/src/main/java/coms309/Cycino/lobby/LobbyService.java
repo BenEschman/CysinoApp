@@ -31,6 +31,7 @@ public class LobbyService {
         Map<String, Object> response = new HashMap<>();
         User user = userService.getUser(u);
         user.setRole(Enums.Roles.LOBBYHOST);
+        userService.saveUser(user);
         Enums.Roles role = user.getRole();
         if(role.ordinal() == 0){
             response.put("status", 405);
@@ -68,6 +69,7 @@ public class LobbyService {
         for(User u : getLobby(id).getPlayers()){
             if(u.getRole().equals(Enums.Roles.LOBBYHOST)){
                 u.setRole(Enums.Roles.EXPERIENCED);
+                userService.saveUser(u);
                 break;
             }
         }

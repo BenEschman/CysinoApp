@@ -23,8 +23,8 @@ public class UserpageActivity extends AppCompatActivity {
     private MaterialButton backButton, chatButton, friendUserButton;
     private ImageView profilePicture;
     private TextView usernameTV, userBioTV, userRoleTV, fullNameTV, phoneNumberTV;
-    private String userUsername = "Filip";
-    private int userID = 2;
+    private String userUsername ;
+    private int userID ;
     private RequestQueue requestQueue;
     public String serverUrl ;
     private String userFirstName, userLastName, userRole, userPhoneNumber, userBio ;
@@ -49,15 +49,35 @@ public class UserpageActivity extends AppCompatActivity {
         phoneNumberTV = findViewById(R.id.phoneNumber);
 
 
-//        Uncomment when done
-//        Intent inIntent = getIntent();
-//        userUsername = inIntent.getStringExtra("USERNAME");
-//        userID = inIntent.getIntExtra("UUID",-1);
+
+
+
+        Intent inIntent = getIntent();
+        userUsername = inIntent.getStringExtra("USERNAME");
+        userID = inIntent.getIntExtra("UUID",-1);
 
         getUserInfo();
 
-        backButton.setOnClickListener(v -> {
+        int[] profilePictures = {
+                R.drawable.cycinopp1,
+                R.drawable.cycinopp2,
+                R.drawable.cycinopp3,
+                R.drawable.cycinopp4,
+                R.drawable.cycinopp5,
+                R.drawable.cycinopp6,
+                R.drawable.cycinopp7
+        };
 
+        int index = userID % profilePictures.length; // Ensure the index is within bounds
+        profilePicture.setImageResource(profilePictures[index]);
+
+
+        backButton.setOnClickListener(v -> {
+            Intent backIntent = new Intent(UserpageActivity.this, FriendPageActivity.class); // Replace FriendChatActivity with the correct previous activity class
+            backIntent.putExtra("USERNAME", userUsername);
+            backIntent.putExtra("lUUID", userID);
+            startActivity(backIntent);
+            finish();
 
 
         }); // Close the activity and go back

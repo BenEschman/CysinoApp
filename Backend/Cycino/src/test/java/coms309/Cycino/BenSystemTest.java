@@ -117,13 +117,12 @@ public class BenSystemTest {
         Map<String, Object> responseMap2 = objectMapper2.readValue(jsonResponse2, Map.class);
 
         for(String s: responseMap2.keySet()){
-            if(s != "null" && !s.equals("status")){
+            if(s != "dealer" && !s.equals("status")){
                 Assert.assertEquals(((ArrayList<Card>)(responseMap2.get(s))).size(), 2);
-            } else if(s == "null"){
+            } else if(s == "dealer"){
                 Assert.assertEquals(((ArrayList<Card>)(responseMap2.get(s))).size(), 3);
             }
         }
-
     }
 
     @Test

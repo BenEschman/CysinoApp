@@ -1,131 +1,142 @@
 package com.example.cycino;
 
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-
+import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
 
 public class ViewFriendActivity extends AppCompatActivity {
 
-    private Button friendsButton;
-    RequestQueue requestQueue;
-    private LinearLayout viewLayout;
-    private TextView nameText, biographyText;
-    private JSONObject user;
+    // Declare UI elements
+    private MaterialButton backButton ;
+    private ImageView profilePicture;
+    private TextView usernameTV, userBioTV, userRoleTV, fullNameTV, phoneNumberTV;
+    private String currentUsername ;
+    private int currentUserID ;
+    private int userID ;
+    private RequestQueue requestQueue;
+    public String serverUrl ;
+    private String userFirstName, userLastName, userRole, userPhoneNumber, userBio, userUsername ;
+    private int chips ;
 
-
-    /**
-     * @param savedInstanceState
-     */
-    protected void onCreate(Bundle savedInstanceState){
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_viewfriend);
-        friendsButton = findViewById(R.id.fPage);
-        viewLayout = findViewById(R.id.layout_view);
-        nameText = findViewById(R.id.userNameText);
-        biographyText = findViewById(R.id.biographyText);
+        setContentView(R.layout.activity_userpage); // Link to your XML layout
 
+        Intent prevIntent = getIntent();
+        currentUserID = prevIntent.getIntExtra("lUUID", -1); // Default to -1 if not found
+        userID = prevIntent.getIntExtra("UUID", -1); // Default to -1 if not found
+        currentUsername = prevIntent.getStringExtra("USERNAME");
 
-        requestQueue = Volley.newRequestQueue(ViewFriendActivity.this);
-        friendsButton.setText("Return to Friends Page");
+        requestQueue = Volley.newRequestQueue(this);
 
-        Intent intent = getIntent();
-        Integer userID = intent.getIntExtra("UUID",0);
-        Integer loggedInUser = intent.getIntExtra("lUUID",0);
-        String userName = intent.getStringExtra("USERNAME");
-
-        System.out.println(userID);
-
-
-        getOneUser(userID);
-
-
-        //getAllUsers();
+        // Initialize UI elements
+        backButton = findViewById(R.id.backButton);
+        profilePicture = findViewById(R.id.profilePicture);
+        usernameTV = findViewById(R.id.username);
+        userBioTV = findViewById(R.id.userBio);
+        userRoleTV = findViewById(R.id.userRole);
+        fullNameTV = findViewById(R.id.fullName);
+        phoneNumberTV = findViewById(R.id.phoneNumber);
 
 
 
-        friendsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ViewFriendActivity.this, FriendPageActivity.class);
-                intent.putExtra("UUID",loggedInUser);
-                intent.putExtra("USERNAME",userName);
-                startActivity(intent);
-            }
+
+        int[] profilePictures = {
+                R.drawable.cycinopp1,
+                R.drawable.cycinopp2,
+                R.drawable.cycinopp3,
+                R.drawable.cycinopp4,
+                R.drawable.cycinopp5,
+                R.drawable.cycinopp6,
+                R.drawable.cycinopp7
+        };
+
+        int index = userID % profilePictures.length; // Ensure the index is within bounds
+        profilePicture.setImageResource(profilePictures[index]);
+
+
+        getUserInfo();
+
+        backButton.setOnClickListener(v -> {
+            Intent backIntent = new Intent(ViewFriendActivity.this, FriendPageActivity.class); // Replace FriendChatActivity with the correct previous activity class
+            backIntent.putExtra("USERNAME", currentUsername);
+            backIntent.putExtra("lUUID", currentUserID);
+            startActivity(backIntent);
+            finish(); // Close the current activity
         });
 
 
+        // Placeholder for profile picture click event
+        profilePicture.setOnClickListener(view -> {
+            // Show preset image selection dialog or perform other action
+            Toast.makeText(this, "Change Profile Picture coming soon!", Toast.LENGTH_SHORT).show();
+        });
     }
 
-    /**
-     * @param user
-     */
-    private void showOneUser(JSONObject user) {
-        this.user = user;
-        TextView nameOut = new TextView(this);
-        TextView phoneNumOut = new TextView(this);
-
-        nameOut.setTextSize(30);
-        phoneNumOut.setTextSize(20);
-
-
-        try {
-
-            String out = user.getString("firstName") + " " + user.getString("lastName");
-            String biography = user.getString("userBiography");
-
-            nameText.setText(out);
-            biographyText.setText(biography);
-
-
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+    private void setUserInfo()
+    {
+        usernameTV.setText(userUsername);
+        fullNameTV.setText(userFirstName + " " + userLastName) ;
+        userBioTV.setText(userBio) ;
+        userRoleTV.setText(userRole) ;
+        phoneNumberTV.setText(userPhoneNumber) ;
     }
 
-    /**
-     * @param id
-     */
-        private void getOneUser(Integer id) {
-            //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
-         String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
+    private void getUserInfo() {
+        serverUrl = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID;
+        JsonObjectRequest getRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                serverUrl,
+                null,
+                response -> {
+                    try {
+                        // Extract fields directly from the response JSON
+                        userUsername = response.getString("username");
+                        userFirstName = response.getString("firstName");
+                        userLastName = response.getString("lastName");
+                        userPhoneNumber = response.getString("phoneNumber");
+                        chips = response.getInt("chips");
+                        userRole = response.getString("role");
+                        userBio = response.getString("userBiography");
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
+                        // Call setUserInfo to update the UI
+                        setUserInfo();
 
-                            showOneUser(response);
-
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    Toast.makeText(getApplicationContext(),"view failed", Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        // Handle JSON parsing errors
+                        Toast.makeText(this, "Response parsing error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    // Handle request errors
+                    Toast.makeText(this, "Request failed. Please check your connection.", Toast.LENGTH_SHORT).show();
                 }
-            });
+        );
 
-            // Add the request to the RequestQueue
-            requestQueue.add(jsonObjectRequest);
-        }
+        // Add the request to the queue
+        requestQueue.add(getRequest);
+    }
+
+    private void setProfilePicture()
+    {
+
+    }
+
+
 
 }

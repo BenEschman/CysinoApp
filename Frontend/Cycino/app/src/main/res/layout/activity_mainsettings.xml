@@ -54,61 +54,19 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/notificationsSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enable Notifications:      "
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:textStyle="bold"
-        android:textColor="#B31B1B"
-        android:switchMinWidth="80dp"
-        android:thumbTextPadding="24dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        app:thumbTint="#FFD700"
-        app:trackTint="#FFD700"
-        app:layout_constraintTop_toBottomOf="@id/pageTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="15dp"
-        app:layout_constraintHorizontal_bias="0.5" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/onlineStatusSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show Online Status:       "
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-        android:textStyle="bold"
-        android:textColor="#B31B1B"
-        android:switchMinWidth="80dp"
-        android:thumbTextPadding="24dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        app:thumbTint="#FFD700"
-        app:trackTint="#FFD700"
-        app:layout_constraintTop_toBottomOf="@id/notificationsSwitch"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5" />
-
-
-    <!-- Reset Leaderboard Button -->
-
-    <!-- Account Settings Button -->
     <Button
         android:id="@+id/resetLeaderboardButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="100dp"
         android:text="Reset Leaderboard"
         android:textColor="#671A1A"
         android:textStyle="bold"
         app:backgroundTint="#006400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/onlineStatusSwitch"
+        app:layout_constraintTop_toBottomOf="@id/pageTitle"
         app:layout_constraintWidth_percent="0.8" />
 
     <com.google.android.material.button.MaterialButton

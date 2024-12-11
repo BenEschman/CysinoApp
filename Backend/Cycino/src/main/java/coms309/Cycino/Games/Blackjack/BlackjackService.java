@@ -111,6 +111,18 @@ public class BlackjackService {
         }
         user.addChips(-1 * bet);
         blj.getHand(user).addBet(bet);
+        boolean bets = true;
+        for(PlayerHands hand: blj.getHands()){
+            if (hand.getPlayer() != null && hand.getBet() == 0) {
+                System.out.println(hand.getBet());
+                bets = false;
+                break;
+            }
+        }
+        if(bets){
+            start(lobby);
+            //GameChat.broadcast(l.getId(), "#Blackjack start next: " + blj.getOrder().get(0));
+        }
         repo.save(blj.getHand(user));
         response.put("status", 200);
         return response;
@@ -141,9 +153,10 @@ public class BlackjackService {
             temp += " finish";
             response.put("string", temp);
         }
-        if(response.containsValue("string")){
+        if(response.containsKey("string"))
             GameChat.broadcast(lobbyId, (String) response.get("string"));
-        }
+        else
+            GameChat.broadcast(lobbyId, "#Blackjack");
         return response;
     }
 
@@ -173,9 +186,8 @@ public class BlackjackService {
             temp += " finish";
             response.put("string", temp);
         }
-        if(response.containsValue("string")){
-            GameChat.broadcast(lobbyId, (String) response.get("string"));
-        }
+        GameChat.broadcast(lobbyId, (String) response.get("string"));
+
         return response;
     }
 
@@ -205,9 +217,9 @@ public class BlackjackService {
             response.put("string", temp);
 
         }
-        if(response.containsValue("string")){
-            GameChat.broadcast(lobbyId, (String) response.get("string"));
-        }
+
+        GameChat.broadcast(lobbyId, (String) response.get("string"));
+
         return response;
     }
 
@@ -293,7 +305,7 @@ public class BlackjackService {
             repo.save(hand);
         }
         response.put("status", "200 ok");
-        GameChat.broadcast(lobbyId, "next: " + bj.getOrder().get(0));
+        GameChat.broadcast(lobbyId, "#Blackjack ,next: " + bj.getOrder().get(0));
         return response;
     }
 
