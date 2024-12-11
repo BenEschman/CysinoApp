@@ -78,7 +78,7 @@ public class BaccaratGameState {
         return response;
     }
 
-    private int handValue(ArrayList<BaccaratCard> hand) {
+    public int handValue(ArrayList<BaccaratCard> hand) {
         int value = 0;
         for (int i = 0; i < hand.size(); i++) {
             value += hand.get(i).getValue();
@@ -211,11 +211,13 @@ public class BaccaratGameState {
         for(Map.Entry<String, String> entry : playerMoves.entrySet()) {
             gameState += entry.getKey() + " " + entry.getValue() + " ";
         }
+        gameState = gameState.trim();
         gameState += "\n";
         gameState += "BETS: ";
         for(Map.Entry<String, Integer> entry : playerBets.entrySet()) {
             gameState += entry.getKey() + " " + entry.getValue() + " ";
         }
+        gameState = gameState.trim();
         if (win || tie){
             gameState += "\n" + "PLAYER_HAND" + " " + handValue(baccaratDeck.getPlayerCards());
             gameState += "\n" + "BANKER_HAND" + " " + handValue(baccaratDeck.getBankerCards());
