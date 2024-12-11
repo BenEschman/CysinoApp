@@ -656,6 +656,66 @@ public class BlackjackActivity extends AppCompatActivity {
         hitButton.setVisibility(View.GONE);
         startButton.setVisibility(View.VISIBLE);
 
+
+    }
+
+    private void finishUpdate() {
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url+"gethands/"+lobbyID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+                        System.out.println(response);
+                        try {
+
+                            JSONArray dealerCards = response.getJSONArray("dealer");
+
+                            String result = response.getString(userID.toString());
+                            resultText.setText("You " + result + " " + currBet.toString());
+                            resultText.setVisibility(View.VISIBLE);
+
+                            for (int i = 0; i < dealerCards.length(); i++) {
+                                JSONObject card = dealerCards.getJSONObject(i);
+                                if (i == 1) {
+                                    JSONObject card2 = dealerCards.getJSONObject(1);
+
+                                    String card2S = card2.getString("suit").toLowerCase() + "_" + card2.getString("number");
+                                    dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+card2S+".png")));
+
+                                }
+
+                                if (i > 1) {
+                                    String cardS = card.getString("suit").toLowerCase() + "_" + card.getString("number");
+                                    addDealerCard(cardS);
+                                }
+
+                                System.out.println(card);
+
+                            }
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+        requestQueue.add(jsonObjectRequest);
+
+        standButton.setVisibility(View.GONE);
+        hitButton.setVisibility(View.GONE);
+        startButton.setVisibility(View.VISIBLE);
+
+
     }
 
     private void updateHands() {
@@ -1153,6 +1213,12 @@ public class BlackjackActivity extends AppCompatActivity {
                             if (cmd.contains("finish") && playerIDs[0] == userID) {
                                 finishGame();
                             }
+                            if (cmd.contains("finish") && playerIDs[0] != userID) {
+                                finishUpdate();
+                            }
+
+
+
                         }
 
                     }
