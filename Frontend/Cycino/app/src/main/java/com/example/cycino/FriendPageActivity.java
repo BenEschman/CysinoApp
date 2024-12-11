@@ -47,7 +47,7 @@ public class FriendPageActivity extends AppCompatActivity {
     /**
      * Back Button
      */
-    private Button backBtn;
+    private Button backButton;
     /**
      * Array of Buttons to go to chat
      */
@@ -62,6 +62,9 @@ public class FriendPageActivity extends AppCompatActivity {
     private LinearLayout[] profileContainer;
     private RequestQueue requestQueue;
 
+    private EditText addFriendEditText ;
+    private Button addFriendBtn ;
+
     /**
      * JSONArray of all of user's followers
      */
@@ -70,13 +73,22 @@ public class FriendPageActivity extends AppCompatActivity {
      * Array of user's follower's IDs
      */
     Integer[] friendsID;
+
+    Integer userID;
+    String username;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendpage);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+        addFriendBtn = findViewById(R.id.addFriendButton);
+        addFriendEditText = findViewById(R.id.addFriendEditText);
 
-        backBtn.findViewById(R.id.fBackBtn);
+        backButton = findViewById(R.id.backButton);
         followerName = new TextView[]{
                 findViewById(R.id.friend1Name),
                 findViewById(R.id.friend2Name),
@@ -112,13 +124,25 @@ public class FriendPageActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
 
-        int userID = intent.getIntExtra("UUID",-1);
-        String username = intent.getStringExtra("USERNAME");
-        userName.setText(username);
+        userID = intent.getIntExtra("UUID",-1);
+        username = intent.getStringExtra("USERNAME");
+
+        userID = 4;
+        username = "Sam";
+
+        userName.setText(username + "'s Following List:");
         getFollowerList(userID);
         //getUserName(userID);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        addFriendBtn.setOnClickListener(v -> {
+            String friendInput = addFriendEditText.getText().toString().trim();
+            getUserByUsername(friendInput) ;
+
+
+        });
+
+
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(FriendPageActivity.this,HomePageActivity.class);
@@ -267,106 +291,10 @@ public class FriendPageActivity extends AppCompatActivity {
                     }
                 }
         );
-
         requestQueue.add(jsonObjectRequest);
     }
 
-    /**
-     * Unfollows another user by entering both the current user's ID, and the ID of the user that is attempting to be unfollowed.
-     * @param userID
-     * @param followingID
-     *
-     */
-    private void unfollowUser(final int userID, final int followingID) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/unfollow/" + followingID;
 
-        // Create the JSON object for the request body
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.DELETE, url, null, // Changed to POST
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(getApplicationContext(), "Successfully unfollowed user " + followingID, Toast.LENGTH_SHORT).show();
-                                // Refresh the follower list to reflect the update
-                                getFollowerList(userID);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Failed to unfollow user " + followingID, Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing response", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error sending request", Toast.LENGTH_LONG).show();
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                return headers;
-            }
-        };
-
-        requestQueue.add(jsonObjectRequest);
-    }
-
-    /**
-     * Mutes the notifications from a different user
-     * @param userId
-     * @param followingId
-     *
-     */
-    private void muteNotis(final int userId, final int followingId) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userId + "/follow/update";
-
-        // Create the JSON object for the request body
-        JSONObject muteNotisObject = new JSONObject();
-        try {
-            muteNotisObject.put("followingID", followingId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT, url, muteNotisObject, // Changed to POST
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(getApplicationContext(), "Successfully changed user's notification setting of" + followingId, Toast.LENGTH_SHORT).show();
-                                // Refresh the follower list to reflect the update
-                                getFollowerList(userId);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Failed to change user " + followingId + "notification setting.", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing response", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error sending request", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        requestQueue.add(jsonObjectRequest);
-    }
 
     /**
      * Gets the usernames of all of the user's followers.
@@ -383,7 +311,6 @@ public class FriendPageActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
 
                         try {
                             followerName[loopI].setText(response.getString("firstName") + " " + response.getString("lastName"));
@@ -417,4 +344,46 @@ public class FriendPageActivity extends AppCompatActivity {
 
         }
     }
+
+    private void getUserByUsername(String username) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + username;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        // Extract the "user" object from the response
+                        JSONObject userObject = response.getJSONObject("user");
+
+                        // Extract user details from the "user" object
+                        int followingID = userObject.getInt("id");
+                        String firstName = userObject.getString("firstName");
+                        String lastName = userObject.getString("lastName");
+
+                        // Display a toast message with the user details
+                        Toast.makeText(getApplicationContext(), "User: " + firstName + " " + lastName, Toast.LENGTH_SHORT).show();
+
+                        // Call followUser with the extracted followingID
+                        followUser(userID, followingID);
+
+                    } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(), "Error parsing response in getUserByUsername.", Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    // Handle error
+                    Toast.makeText(getApplicationContext(), "Username not found or request failed.", Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
+
+
+
+
+
 }
