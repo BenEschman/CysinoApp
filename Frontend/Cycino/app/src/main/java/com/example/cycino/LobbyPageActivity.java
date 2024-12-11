@@ -168,31 +168,35 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View v) {
 
-                switch (currSelectedGame) {
-                    case "Baccarat":
-                        Intent i = new Intent(LobbyPageActivity.this,BaccaratActivity.class);
-                        i.putExtra("USERNAME",username);
-                        i.putExtra("UUID",currentUser);
-                        i.putExtra("LOBBYID",lobbyID);
-                        break;
-                    case "Blackjack":
+                if(currSelectedGame.equals("Baccarat")) {
+                    Intent i = new Intent(LobbyPageActivity.this, BaccaratActivity.class);
+                    i.putExtra("USERNAME", username);
+                    i.putExtra("UUID", currentUser);
+                    i.putExtra("LOBBYID", lobbyID);
+                    startActivity(i);
+                }
+                if(currSelectedGame.equals("Blackjack")) {
+
                         Intent i2 = new Intent(LobbyPageActivity.this,BlackjackActivity.class);
                         i2.putExtra("USERNAME",username);
                         i2.putExtra("UUID",currentUser);
                         i2.putExtra("LOBBYID",lobbyID);
-                        break;
-                    case "Coinflip":
+                        startActivity(i2);
+                }
+                if(currSelectedGame.equals("Coinflip")) {
                         Intent i3 = new Intent(LobbyPageActivity.this,CoinFlipActivity.class);
                         i3.putExtra("USERNAME",username);
                         i3.putExtra("UUID",currentUser);
                         i3.putExtra("LOBBYID",lobbyID);
-                        break;
-                    case "Poker":
+                        startActivity(i3);
+                }
+                if(currSelectedGame.equals("Poker")) {
                         Intent i4 = new Intent(LobbyPageActivity.this,PokerActivity.class);
                         i4.putExtra("USERNAME",username);
                         i4.putExtra("UUID",currentUser);
                         i4.putExtra("LOBBYID",lobbyID);
-                        break;
+                        startActivity(i4);
+
                 }
 
                 Toast.makeText(LobbyPageActivity.this, "Starting game...", Toast.LENGTH_SHORT).show();
@@ -208,6 +212,10 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
             public void onClick(View v) {
                 // Placeholder for deleting lobby logic
                 deleteLobby(lobbyID) ;
+                Intent intent = new Intent(LobbyPageActivity.this, HomePageActivity.class);
+                intent.putExtra("USERNAME",username);
+                intent.putExtra("UUID",currentUser);
+                startActivity(intent);
             }
         });
 
@@ -642,7 +650,7 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
     private void deleteLobby(int lobbyID)
     {
         // Create the correct URL with correct endpoints to delete the endpoint
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/delete/" + lobbyID;
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/lobby/delete/" + lobbyID + "/"+ currentUser;
         // Create a JSON object request to delete the lobby
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
