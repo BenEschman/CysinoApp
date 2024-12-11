@@ -37,17 +37,22 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private EditText editPhoneNumber;
 
     //testing
-    private String userUsername = "evam";
-    private String userPassword = "12345" ;
-    private int userID = 3 ;
+    private String userUsername;
+    private String userPassword = "123" ;
+    private Integer userID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountsettings);
 
+        Intent intent = getIntent();
+        userID = intent.getIntExtra("UUID",-1);
+        userUsername = intent.getStringExtra("USERNAME");
+
         // Initialize UI elements
-        backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.bbackButton);
         btnChangeUsername = findViewById(R.id.btnChangeUsername);
         btnChangePassword = findViewById(R.id.btnChangePassword);
         btnChangeFirstName = findViewById(R.id.btnChangeFirstName);
@@ -65,6 +70,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AccountSettingsActivity.this, MainSettingsActivity.class);
+                intent.putExtra("UUID",userID);
+                intent.putExtra("USERNAME",userUsername);
                 startActivity(intent); // Start MainActivity
             }
         });
@@ -135,8 +142,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // deleteAccount(username);
-                Toast.makeText(AccountSettingsActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
+                deleteAccount(userUsername);
+                Toast.makeText(AccountSettingsActivity.this, "Account deleted" + userID, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(AccountSettingsActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
     }

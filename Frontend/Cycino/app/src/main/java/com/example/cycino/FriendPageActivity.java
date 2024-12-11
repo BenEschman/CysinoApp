@@ -76,10 +76,6 @@ public class FriendPageActivity extends AppCompatActivity {
 
     Integer userID;
     String username;
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +85,7 @@ public class FriendPageActivity extends AppCompatActivity {
         removeFriendBtn = findViewById(R.id.unfriendButton);
         addFriendEditText = findViewById(R.id.addFriendEditText);
 
-        backButton = findViewById(R.id.backButton);
+        backBtn = findViewById(R.id.fBackBtn);
         followerName = new TextView[]{
                 findViewById(R.id.friend1Name),
                 findViewById(R.id.friend2Name),
@@ -141,7 +137,13 @@ public class FriendPageActivity extends AppCompatActivity {
         userID = 4 ;
         username = "Sam" ;
 
-        userName.setText(username + "'s Following List:");
+        userID = intent.getIntExtra("UUID",-1);
+        username = intent.getStringExtra("USERNAME");
+
+        userID = 4;
+        username = "Sam";
+
+        userName.setText(username);
         getFollowerList(userID);
 
         addFriendBtn.setOnClickListener(v -> {

@@ -34,6 +34,8 @@ import java.util.Map;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    public String username;
+    public String password;
     /**
      * EditText for entering the username.
      */

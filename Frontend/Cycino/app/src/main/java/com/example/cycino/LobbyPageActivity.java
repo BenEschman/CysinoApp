@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,7 +44,7 @@ import java.util.Map;
  * covering everything a host might need to do in preparation for the game.
  *
  */
-public class LobbyPageActivity extends AppCompatActivity {
+public class LobbyPageActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     /**
      * EditText for entering a username to add or remove from the lobby.
@@ -88,6 +91,9 @@ public class LobbyPageActivity extends AppCompatActivity {
      */
     private LinearLayout userListContainer;
 
+    private Spinner selectedGame;
+    private String currSelectedGame;
+
     /**
      * ID of the current lobby.
      */
@@ -102,6 +108,8 @@ public class LobbyPageActivity extends AppCompatActivity {
      * List of users currently in the lobby.
      */
     private ArrayList<JSONObject> userList = new ArrayList<>();
+
+    private String[] games = {"Baccarat","Blackjack","Coinflip","Poker"};
 
 
     @Override
@@ -119,6 +127,20 @@ public class LobbyPageActivity extends AppCompatActivity {
         buttonChangeSettings = findViewById(R.id.buttonChangeSettings);
         scrollViewUserList = findViewById(R.id.scrollViewUserList);
         userListContainer = findViewById(R.id.userListContainer);
+        selectedGame = findViewById(R.id.gameSelection);
+
+
+        selectedGame.setOnItemSelectedListener(this);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.games_array,
+                android.R.layout.simple_spinner_item
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectedGame.setAdapter(adapter);
+
 
 
         // Load existing users in the lobby.
@@ -679,5 +701,33 @@ public class LobbyPageActivity extends AppCompatActivity {
         // Add the request to the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+
+        switch (position) {
+            case 0:
+                currSelectedGame = "Baccarat";
+                break;
+            case 1:
+                currSelectedGame = "Blackjack";
+                break;
+            case 2:
+                currSelectedGame = "Coinflip";
+                break;
+
+            case 3:
+                currSelectedGame = "Poker";
+                break;
+
+        }
+
+        buttonStartGame.setText("Start "+ currSelectedGame);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // TODO Auto-generated method stub
     }
 }

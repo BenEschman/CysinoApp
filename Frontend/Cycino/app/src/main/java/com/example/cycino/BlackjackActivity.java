@@ -12,8 +12,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
 
 import android.os.Environment;
 import android.util.Log;
@@ -38,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Arrays;
 
 
 /**
@@ -55,17 +54,13 @@ public class BlackjackActivity extends AppCompatActivity {
     /**
      * ImageView for card
      */
-    private ImageView dCard1,dCard2, p1Card1, p1Card2, p2Card1, p2Card2;
+    private ImageView dCard1,dCard2, p1Card1, p1Card2, p2Card1, p2Card2, p3Card1, p3Card2, p4Card1, p4Card2;
 
-    /**
-     * TextView for game info
-     */
-    private TextView dScore, pScore, winStatus;
 
     /**
      * LinearLayout for card formatting
      */
-    private LinearLayout dCards, p1Cards, p2Cards, cardR1, cardR2;
+    private LinearLayout dCards, p1Cards, p2Cards, p3Cards, p4Cards, cardR1, cardR2;
 
     /**
      * Button for Hit
@@ -80,10 +75,6 @@ public class BlackjackActivity extends AppCompatActivity {
      */
     private Button startButton;
     /**
-     * Button for Split
-     */
-    private Button splitButton;
-    /**
      * Button for Deal
      */
     private Button dealButton;
@@ -97,7 +88,7 @@ public class BlackjackActivity extends AppCompatActivity {
     /**
      * Current Lobby ID
      */
-    private static Integer lobbyID = 56;
+    private static Integer lobbyID = 1;
     /**
      * User's user ID
      */
@@ -111,10 +102,15 @@ public class BlackjackActivity extends AppCompatActivity {
      * number of cards player has
      */
     private int p1CardNum = 0;
+    private int p2CardNum = 0;
+    private int p3CardNum = 0;
+    private int p4CardNum = 0;
+
     /**
      * Number of players in game
      */
     private Integer numPlayers;
+    private Integer[] playerIDs;
 
     /**
      * ImageView for extra cards
@@ -124,12 +120,19 @@ public class BlackjackActivity extends AppCompatActivity {
      * ImageView for extra cards
      */
     private ImageView p1x1, p1x2, p1x3, p1x4, p1x5;
+    private ImageView p2x1, p2x2, p2x3, p2x4, p2x5;
+    private ImageView p3x1, p3x2, p3x3, p3x4, p3x5;
+    private ImageView p4x1, p4x2, p4x3, p4x4, p4x5;
 
+
+    private Button raiseBet, lowerBet,betBtn;
+    private TextView currBetText, resultText, currChipText;
+    private Integer currBet = 0;
 
     /**
      * Chat Buttons
      */
-    private Button sendBtn, chatToggleBtn, backBtn, imageBtn;
+    private Button sendBtn, chatToggleBtn, backBtn;
     /**
      * Chat message box
      */
@@ -160,6 +163,8 @@ public class BlackjackActivity extends AppCompatActivity {
      */
     File sdcard;
 
+    String deckName = "Deck1";
+
     /**
      * @param savedInstanceState
      */
@@ -170,89 +175,29 @@ public class BlackjackActivity extends AppCompatActivity {
         sdcard = Environment.getExternalStorageDirectory();
         requestQueue = Volley.newRequestQueue(BlackjackActivity.this);
 
+        getXMLIDs();
+        setNumHands();
+
         Intent inIntent = getIntent();
         username = inIntent.getStringExtra("USERNAME");
         userID = inIntent.getIntExtra("UUID",-1);
+        lobbyID = inIntent.getIntExtra("LOBBYID",-1);
 
+        numPlayers = 2;
+        username = "Sam";
+        userID = 4;
+        lobbyID = 1;
 
+        currBetText.setText(currBet.toString());
 
-        Integer playerNum = 1;
-
-        dCard1 = findViewById(R.id.dealerCard1);
-        dCard2 = findViewById(R.id.dealerCard2);
-        p1Card1 = findViewById(R.id.player1Card1);
-        p1Card2 = findViewById(R.id.player1Card2);
-        p2Card1 = findViewById(R.id.player2Card1);
-        p2Card2 = findViewById(R.id.player2Card2);
-
-        dScore = findViewById(R.id.dScore);
-        pScore = findViewById(R.id.pScore);
-        winStatus = findViewById(R.id.winStatus);
-
-        dCards = findViewById(R.id.dealerCards);
-        p1Cards = findViewById(R.id.player1Cards);
-        p2Cards = findViewById(R.id.player2Cards);
-
-        cardR1 = findViewById(R.id.cardsR1);
-        cardR2 = findViewById(R.id.cardsR2);
-
-        hitButton = findViewById(R.id.hitButton);
-        standButton = findViewById(R.id.standButton);
-        startButton = findViewById(R.id.startButton);
-        splitButton = findViewById(R.id.splitButton);
-        dealButton = findViewById(R.id.dealButton);
-        doubleButton = findViewById(R.id.doubleButton);
-
-        sendBtn = (Button) findViewById(R.id.sendBtn);
-        chatToggleBtn = (Button) findViewById(R.id.backMainBtn);
-        msgEtx = (EditText) findViewById(R.id.msgEdt);
-        msgTv = (TextView) findViewById(R.id.tx1);
-        chatArea = findViewById(R.id.chatView);
-        backBtn = findViewById(R.id.backButton);
-        imageBtn = findViewById(R.id.imageBtn);
-
-        hitButton.setText("HIT");
-        hitButton.setTextColor(0xFFFFFFFF);
-        hitButton.setBackgroundColor(0xFFFF0000);
         hitButton.setVisibility(View.GONE);
-
-        standButton.setText("STAND");
-        standButton.setTextColor(0xFFFFFFFF);
-        standButton.setBackgroundColor(0xFFFF0000);
         standButton.setVisibility(View.GONE);
-
-        splitButton.setText("SPLIT");
-        splitButton.setTextColor(0xFFFFFFFF);
-        splitButton.setBackgroundColor(0xFFFF0000);
-        splitButton.setVisibility(View.GONE);
-
-        doubleButton.setText("DOUBLE");
-        doubleButton.setTextColor(0xFFFFFFFF);
-        doubleButton.setBackgroundColor(0xFFFF0000);
         doubleButton.setVisibility(View.GONE);
-
-        dealButton.setText("DEAL");
-        dealButton.setTextColor(0xFFFFFFFF);
-        dealButton.setBackgroundColor(0xFFFF0000);
         dealButton.setVisibility(View.GONE);
+        betBtn.setVisibility(View.GONE);
+        resultText.setVisibility(View.GONE);
 
-        startButton.setText("START GAME");
-        startButton.setTextColor(0xFFFFFFFF);
-        startButton.setBackgroundColor(0xFFFF0000);
-
-        ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
-                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                    // Callback is invoked after the user selects a media item or closes the
-                    // photo picker.
-                    if (uri != null) {
-                        Log.d("PhotoPicker", "Selected URI: " + uri);
-
-                    } else {
-                        Log.d("PhotoPicker", "No media selected");
-                    }
-                });
-
-        String serverUrl = serverURL + "1/" + username;
+        String serverUrl = serverURL + "/" + lobbyID + "/" + username;
         Intent serviceIntent = new Intent(this, WebSocketService.class);
         serviceIntent.setAction("CONNECT");
         serviceIntent.putExtra("key", "chat1");
@@ -279,21 +224,11 @@ public class BlackjackActivity extends AppCompatActivity {
 
         });
 
-        imageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pickMedia.launch(new PickVisualMediaRequest.Builder()
-                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                        .build());
-            }
-        });
-
         /* back button listener */
         chatToggleBtn.setOnClickListener(view -> {
 
                     if (chatOpen) {
                         sendBtn.setVisibility(View.GONE);
-                        imageBtn.setVisibility(View.GONE);
                         msgEtx.setVisibility(View.GONE);
                         chatArea.setVisibility(View.GONE);
                         chatToggleBtn.setText("Open Chat");
@@ -302,7 +237,6 @@ public class BlackjackActivity extends AppCompatActivity {
                     } else {
 
                         sendBtn.setVisibility(View.VISIBLE);
-                        imageBtn.setVisibility(View.VISIBLE);
                         msgEtx.setVisibility(View.VISIBLE);
                         chatArea.setVisibility(View.VISIBLE);
                         chatToggleBtn.setText("Close Chat");
@@ -315,6 +249,7 @@ public class BlackjackActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent i = new Intent(BlackjackActivity.this,HomePageActivity.class);
                 i.putExtra("USERNAME",username);
                 i.putExtra("UUID",userID);
@@ -325,9 +260,9 @@ public class BlackjackActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startGame(numPlayers,playerNum,lobbyID);
+                startGame(numPlayers,lobbyID);
                 startButton.setVisibility(View.GONE);
-                dealButton.setVisibility(View.VISIBLE);
+                betBtn.setVisibility(View.VISIBLE);
                 dCards.setVisibility(View.VISIBLE);
 
 
@@ -355,6 +290,44 @@ public class BlackjackActivity extends AppCompatActivity {
             }
         });
 
+        betBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (currBet > 0) {
+                    bet();
+                    betBtn.setVisibility(View.GONE);
+                }
+
+                else {
+                    Toast.makeText(BlackjackActivity.this, "Bet can not be 0", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        lowerBet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (currBet > 0) {
+                    currBet -= 10;
+                }
+                currBetText.setText(currBet.toString());
+
+            }
+
+        });
+        raiseBet.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+
+                currBet += 10;
+                currBetText.setText(currBet.toString());
+            }
+
+        });
+
 
 
     }
@@ -363,16 +336,39 @@ public class BlackjackActivity extends AppCompatActivity {
      *
      * Starts the game. Sets up all frontend components, makes calls to backend to start a new game.
      * @param numPlayers
-     * @param playerNum
      * @param lobbyID
      */
-    private void startGame(int numPlayers, int playerNum, int lobbyID) {
+    private void startGame(int numPlayers, int lobbyID) {
+
+
+        p1CardNum = 2;
+        p2CardNum = 2;
+        p3CardNum = 2;
+        p4CardNum = 2;
+        dCardNum = 2;
+
+        resultText.setVisibility(View.GONE);
 
         p1Cards.removeView(p1x1);
         p1Cards.removeView(p1x2);
         p1Cards.removeView(p1x3);
         p1Cards.removeView(p1x4);
         p1Cards.removeView(p1x5);
+        p2Cards.removeView(p2x1);
+        p2Cards.removeView(p2x2);
+        p2Cards.removeView(p2x3);
+        p2Cards.removeView(p2x4);
+        p2Cards.removeView(p2x5);
+        p3Cards.removeView(p3x1);
+        p3Cards.removeView(p3x2);
+        p3Cards.removeView(p3x3);
+        p3Cards.removeView(p3x4);
+        p3Cards.removeView(p3x5);
+        p4Cards.removeView(p4x1);
+        p4Cards.removeView(p4x2);
+        p4Cards.removeView(p4x3);
+        p4Cards.removeView(p4x4);
+        p4Cards.removeView(p4x5);
         dCards.removeView(d1x1);
         dCards.removeView(d1x2);
         dCards.removeView(d1x3);
@@ -381,39 +377,21 @@ public class BlackjackActivity extends AppCompatActivity {
 
         String cardBack = "card_back";
 
-        dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
-        dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
+        dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
 
-        if (numPlayers > 0) {
+        p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
 
-            cardR1.setVisibility(View.VISIBLE);
-            p1Cards.setVisibility(View.VISIBLE);
-            p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
-            p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
+        p2Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p2Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
 
-        }
+        p3Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p3Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
 
-        if (numPlayers > 1) {
+        p4Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p4Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
 
-
-            cardR2.setVisibility(View.VISIBLE);
-            p2Cards.setVisibility(View.VISIBLE);
-            p2Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
-            p2Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardBack+".png")));
-
-
-            switch (playerNum) {
-                case 1:
-                    p1Cards.setBackgroundColor(0xFF06402B);
-                    break;
-
-                case 2:
-                    p2Cards.setBackgroundColor(0xFF06402B);
-                    break;
-
-            }
-
-        }
 
         JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.DELETE, url+"delete/"+lobbyID, null,
                 new Response.Listener<JSONObject>() {
@@ -437,7 +415,6 @@ public class BlackjackActivity extends AppCompatActivity {
                         // Handle the successful response here
                         try {
                             String status = response.getString("status");
-                            setNumPlayers(response.getInt("players"));
                             System.out.println(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -468,12 +445,8 @@ public class BlackjackActivity extends AppCompatActivity {
      */
     private void deal(){
 
-        winStatus.setText("");
 
-        p1CardNum = 2;
-        dCardNum = 2;
 
-                //splitButton.setVisibility(View.VISIBLE);
                 standButton.setVisibility(View.VISIBLE);
                 hitButton.setVisibility(View.VISIBLE);
                 dealButton.setVisibility(View.GONE);
@@ -502,13 +475,12 @@ public class BlackjackActivity extends AppCompatActivity {
                             JSONObject card2 = response.getJSONObject("card2");
 
                             Integer score = response.getInt("score");
-                            dScore.setText("Dealer Score: "+ (score-card2.getInt("value")));
 
                             String card1S = card1.getString("suit").toLowerCase() + "_" + card1.getString("number");
                             String card2S = card2.getString("suit").toLowerCase() + "_" + card2.getString("number");
 
-                            dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card1S+".png")));
-                            //dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card2S+".png")));
+                            dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+card1S+".png")));
+                            //dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+card2S+".png")));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -523,55 +495,17 @@ public class BlackjackActivity extends AppCompatActivity {
             }
         });
 
-        JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest(Request.Method.GET, url+"gethand/"+lobbyID+"/"+userID, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public synchronized void onResponse(JSONObject response) {
-
-                        try {
-                            JSONObject card1 = response.getJSONObject("card1");
-                            JSONObject card2 = response.getJSONObject("card2");
-
-                            Integer score = response.getInt("score");
-                            pScore.setText("Your Score: "+score);
-
-                            String card1S = card1.getString("suit").toLowerCase() + "_" + card1.getString("number");
-                            String card2S = card2.getString("suit").toLowerCase() + "_" + card2.getString("number");
-
-                            p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card1S+".png")));
-                            p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card2S+".png")));
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
 
 
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        class MyRunnable implements Runnable {
-            public synchronized void run() {
-                // Code to be executed in the new thread
-                requestQueue.add(jsonObjectRequest);
                 try {
-                    wait(500);
+                    requestQueue.add(jsonObjectRequest);
+                    Thread.sleep(500);
+                    requestQueue.add(jsonObjectRequest2);
+                    Thread.sleep(500);
+                    updateHands();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                requestQueue.add(jsonObjectRequest2);
-                requestQueue.add(jsonObjectRequest3);
-
-            }
-        }
-        Thread thread = new Thread(new MyRunnable());
-        thread.start();
-
-
 
     }
 
@@ -583,25 +517,7 @@ public class BlackjackActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
-                        try {
-                            JSONObject card = response.getJSONObject("card");
-                            String cardS  = card.getString("suit").toLowerCase() + "_" + card.getString("number");
-                            Integer score = response.getInt("score");
-
-                            pScore.setText("Your Score: "+score);
-
-                            System.out.println(response);
-
-                            addPlayer1Card(cardS);
-
-                            if (score >= 21) {
-                                    finishGame();
-
-                            }
-
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
+                        updateHands();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -627,16 +543,6 @@ public class BlackjackActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
-                        try {
-                            System.out.println(response);
-                            Integer score = response.getInt("score");
-                            pScore.setText("Your Score: "+score);
-
-                            finishGame();
-
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -651,6 +557,27 @@ public class BlackjackActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    private void bet() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url+"bet/"+lobbyID+"/"+userID+"/"+currBet, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+        // Add the request to the RequestQueue
+
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
     /**
      *Shows the rest of the dealers hand and finishes up the game
      */
@@ -660,13 +587,17 @@ public class BlackjackActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public synchronized void onResponse(JSONObject response) {
-
+                        System.out.println(response);
                         try {
-                            System.out.println(response);
+
                             JSONArray dealerCards = response.getJSONArray("dealer");
-                            winStatus.setText(response.getString(userID.toString()));
                             Integer score = response.getInt("dscore");
-                            dScore.setText("Dealer Score: "+score);
+
+
+
+                            String result = response.getString(userID.toString());
+                            resultText.setText("You " + result + " " + currBet.toString());
+                            resultText.setVisibility(View.VISIBLE);
 
                             for (int i = 0; i < dealerCards.length(); i++) {
                                 JSONObject card = dealerCards.getJSONObject(i);
@@ -674,7 +605,7 @@ public class BlackjackActivity extends AppCompatActivity {
                                     JSONObject card2 = dealerCards.getJSONObject(1);
 
                                     String card2S = card2.getString("suit").toLowerCase() + "_" + card2.getString("number");
-                                    dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+card2S+".png")));
+                                    dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+card2S+".png")));
 
                                 }
 
@@ -710,6 +641,110 @@ public class BlackjackActivity extends AppCompatActivity {
 
     }
 
+    private void updateHands() {
+        getUserChips();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url+"gethands/"+lobbyID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+
+                        JSONArray dealerCards;
+                        JSONArray user1Cards;
+                        JSONArray user2Cards;
+                        JSONArray user3Cards;
+                        JSONArray user4Cards;
+
+                        try {
+
+                            dealerCards = response.getJSONArray("dealer");
+                            JSONObject dcard1 = dealerCards.getJSONObject(0);
+                            String dcard1S = dcard1.getString("suit").toLowerCase() + "_" + dcard1.getString("number");
+                            dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+dcard1S+".png")));
+
+                            user1Cards = response.getJSONArray(playerIDs[0].toString());
+                            JSONObject p1card1 = user1Cards.getJSONObject(0);
+                            JSONObject p1card2 = user1Cards.getJSONObject(1);
+                            String p1card1S = p1card1.getString("suit").toLowerCase() + "_" + p1card1.getString("number");
+                            String p1card2S = p1card2.getString("suit").toLowerCase() + "_" + p1card2.getString("number");
+                            p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p1card1S+".png")));
+                            p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p1card2S+".png")));
+
+                            if (user1Cards.length() > 2 && p1CardNum != user1Cards.length()) {
+                                for (int i = p1CardNum; i < user1Cards.length(); i++) {
+                                    JSONObject card = user1Cards.getJSONObject(i);
+                                    String cardS = card.getString("suit").toLowerCase() + "_" + card.getString("number");
+                                    addPlayer1Card(cardS);
+                                }
+                            }
+
+                            if (numPlayers > 1) {
+                                user2Cards = response.getJSONArray(playerIDs[1].toString());
+                                JSONObject p2card1 = user2Cards.getJSONObject(0);
+                                JSONObject p2card2 = user2Cards.getJSONObject(1);
+                                String p2card1S = p2card1.getString("suit").toLowerCase() + "_" + p2card1.getString("number");
+                                String p2card2S = p2card2.getString("suit").toLowerCase() + "_" + p2card2.getString("number");
+                                p2Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p2card1S+".png")));
+                                p2Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p2card2S+".png")));
+
+                                if (user2Cards.length() > 2 && p2CardNum != user2Cards.length()) {
+                                    for (int i = p2CardNum; i < user2Cards.length(); i++) {
+                                        JSONObject card = user2Cards.getJSONObject(i);
+                                        String cardS = card.getString("suit").toLowerCase() + "_" + card.getString("number");
+                                        addPlayer2Card(cardS);
+                                    }
+                                }
+                            }
+                            if (numPlayers > 2) {
+                                user3Cards = response.getJSONArray(playerIDs[2].toString());
+                                JSONObject p3card1 = user3Cards.getJSONObject(0);
+                                JSONObject p3card2 = user3Cards.getJSONObject(1);
+                                String p3card1S = p3card1.getString("suit").toLowerCase() + "_" + p3card1.getString("number");
+                                String p3card2S = p3card2.getString("suit").toLowerCase() + "_" + p3card2.getString("number");
+                                p3Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p3card1S+".png")));
+                                p3Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p3card2S+".png")));
+                                if (user3Cards.length() > 2 && p3CardNum != user3Cards.length()) {
+                                    for (int i = p3CardNum; i < user3Cards.length(); i++) {
+                                        JSONObject card = user3Cards.getJSONObject(i);
+                                        String cardS = card.getString("suit").toLowerCase() + "_" + card.getString("number");
+                                        addPlayer3Card(cardS);
+                                    }
+                                }
+                            }
+                            if (numPlayers > 3) {
+                                user4Cards = response.getJSONArray(playerIDs[3].toString());
+                                JSONObject p4card1 = user4Cards.getJSONObject(0);
+                                JSONObject p4card2 = user4Cards.getJSONObject(1);
+                                String p4card1S = p4card1.getString("suit").toLowerCase() + "_" + p4card1.getString("number");
+                                String p4card2S = p4card2.getString("suit").toLowerCase() + "_" + p4card2.getString("number");
+                                p4Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p4card1S+".png")));
+                                p4Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+p4card2S+".png")));
+                                if (user4Cards.length() > 2 && p4CardNum != user4Cards.length()) {
+                                    for (int i = p4CardNum; i < user4Cards.length(); i++) {
+                                        JSONObject card = user4Cards.getJSONObject(i);
+                                        String cardS = card.getString("suit").toLowerCase() + "_" + card.getString("number");
+                                        addPlayer4Card(cardS);
+                                    }
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
     /**
      * Adds a card to dealer's hand
      * @param cardS
@@ -722,7 +757,7 @@ public class BlackjackActivity extends AppCompatActivity {
 
 
         ImageView dCardNew = new ImageView(this);
-        dCardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardS+".png")));
+        dCardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardS+".png")));
         dCardNew.setLayoutParams(param);
         dCardNew.setPadding(2,2,2,2);
         dCards.addView(dCardNew);
@@ -759,7 +794,7 @@ public class BlackjackActivity extends AppCompatActivity {
 
 
         ImageView p1CardNew = new ImageView(this);
-        p1CardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+cardS+".png")));
+        p1CardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardS+".png")));
         p1CardNew.setLayoutParams(param);
         p1CardNew.setPadding(2,2,2,2);
         p1Cards.addView(p1CardNew);
@@ -784,6 +819,106 @@ public class BlackjackActivity extends AppCompatActivity {
 
     }
 
+    private void addPlayer2Card(String cardS) {
+
+        p2CardNum++;
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+
+        ImageView p2CardNew = new ImageView(this);
+        p2CardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardS+".png")));
+        p2CardNew.setLayoutParams(param);
+        p2CardNew.setPadding(2,2,2,2);
+        p2Cards.addView(p2CardNew);
+
+        switch (p2CardNum){
+            case 3:
+                p2x1 = p2CardNew;
+                break;
+            case 4:
+                p2x2 = p2CardNew;
+                break;
+            case 5:
+                p2x3 = p2CardNew;
+                break;
+            case 6:
+                p2x4 = p2CardNew;
+                break;
+            case 7:
+                p2x5 = p2CardNew;
+                break;
+        }
+
+    }
+
+    private void addPlayer3Card(String cardS) {
+
+        p3CardNum++;
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+
+        ImageView p3CardNew = new ImageView(this);
+        p3CardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardS+".png")));
+        p3CardNew.setLayoutParams(param);
+        p3CardNew.setPadding(2,2,2,2);
+        p1Cards.addView(p3CardNew);
+
+        switch (p3CardNum){
+            case 3:
+                p3x1 = p3CardNew;
+                break;
+            case 4:
+                p3x2 = p3CardNew;
+                break;
+            case 5:
+                p3x3 = p3CardNew;
+                break;
+            case 6:
+                p3x4 = p3CardNew;
+                break;
+            case 7:
+                p3x5 = p3CardNew;
+                break;
+        }
+
+    }
+
+    private void addPlayer4Card(String cardS) {
+
+        p4CardNum++;
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+
+        ImageView p4CardNew = new ImageView(this);
+        p4CardNew.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardS+".png")));
+        p4CardNew.setLayoutParams(param);
+        p4CardNew.setPadding(2,2,2,2);
+        p1Cards.addView(p4CardNew);
+
+        switch (p4CardNum){
+            case 3:
+                p4x1 = p4CardNew;
+                break;
+            case 4:
+                p4x2 = p4CardNew;
+                break;
+            case 5:
+                p4x3 = p4CardNew;
+                break;
+            case 6:
+                p4x4 = p4CardNew;
+                break;
+            case 7:
+                p4x5 = p4CardNew;
+                break;
+        }
+
+    }
+
+
     /**
      * Timer in a new thread
      * @param waitTime
@@ -805,6 +940,172 @@ public class BlackjackActivity extends AppCompatActivity {
         thread.start();
     }
 
+    private void setNumHands() {
+
+        String cardBack = "card_back";
+
+        dCard1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        dCard2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+
+        p1Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p1Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+
+        p2Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p2Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+
+        p3Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p3Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+
+        p4Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+        p4Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
+
+        JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.GET, "http://coms-3090-052.class.las.iastate.edu:8080/lobby/" + lobbyID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+
+                        JSONArray playersArray;
+
+                        try {
+                            Integer np = response.getInt("size");
+                            playersArray = response.getJSONArray("players");
+
+                            playerIDs = new Integer[np];
+
+                            for (int i = 0; i < playersArray.length(); i++) {
+
+                                playerIDs[i] = playersArray.getInt(i);
+
+                            }
+                            hideHands(np);
+
+
+    System.out.println(Arrays.toString(playerIDs));
+
+                            System.out.println("NUMPLAYERS" + response.getInt("size"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest2);
+    }
+
+    private void hideHands(Integer numP) {
+        numPlayers = numP;
+
+        dCards.setVisibility(View.VISIBLE);
+        p1Cards.setVisibility(View.VISIBLE);
+        if (playerIDs[0] == userID) {
+            p1Cards.setBackgroundColor(0xFF32CD32);
+        }
+        if(numP > 1) {
+            p2Cards.setVisibility(View.VISIBLE);
+            if (playerIDs[1] == userID) {
+                p2Cards.setBackgroundColor(0xFF32CD32);
+            }
+        }
+        if(numP > 2) {
+            p3Cards.setVisibility(View.VISIBLE);
+            if (playerIDs[2] == userID) {
+                p3Cards.setBackgroundColor(0xFF32CD32);
+            }
+        }
+        if(numP > 3) {
+            p4Cards.setVisibility(View.VISIBLE);
+            if (playerIDs[3] == userID) {
+                p4Cards.setBackgroundColor(0xFF32CD32);
+            }
+        }
+    }
+
+    private void getUserChips() {
+
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/chips/get/"+userID;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            int currChips = response.getInt("chips");
+                            setChipText(currChips);
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(),"view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void setChipText(Integer chips) {
+
+        currChipText.setText("Chips: " + chips.toString());
+    }
+
+    private void getXMLIDs() {
+
+        dCard1 = findViewById(R.id.dealerCard1);
+        dCard2 = findViewById(R.id.dealerCard2);
+        p1Card1 = findViewById(R.id.player1Card1);
+        p1Card2 = findViewById(R.id.player1Card2);
+        p2Card1 = findViewById(R.id.player2Card1);
+        p2Card2 = findViewById(R.id.player2Card2);
+        p3Card1 = findViewById(R.id.player3Card1);
+        p3Card2 = findViewById(R.id.player3Card2);
+        p4Card1 = findViewById(R.id.player4Card1);
+        p4Card2 = findViewById(R.id.player4Card2);
+
+        dCards = findViewById(R.id.dealerCards);
+        p1Cards = findViewById(R.id.player1Cards);
+        p2Cards = findViewById(R.id.player2Cards);
+        p3Cards = findViewById(R.id.player3Cards);
+        p4Cards = findViewById(R.id.player4Cards);
+
+        cardR1 = findViewById(R.id.cardsR1);
+        cardR2 = findViewById(R.id.cardsR2);
+
+        hitButton = findViewById(R.id.hitButton);
+        standButton = findViewById(R.id.standButton);
+        startButton = findViewById(R.id.startButton);
+        dealButton = findViewById(R.id.dealButton);
+        doubleButton = findViewById(R.id.doubleButton);
+
+        sendBtn = (Button) findViewById(R.id.bsendBtn);
+        chatToggleBtn = (Button) findViewById(R.id.bbackMainBtn);
+        msgEtx = (EditText) findViewById(R.id.bmsgEdt);
+        msgTv = (TextView) findViewById(R.id.btx1);
+        chatArea = findViewById(R.id.bchatView);
+        backBtn = findViewById(R.id.bbackButton);
+
+        currBetText = findViewById(R.id.bCurrBet);
+        resultText = findViewById(R.id.bResult);
+        currChipText = findViewById(R.id.bCurrChips);
+        raiseBet = findViewById(R.id.bRaiseBet);
+        lowerBet = findViewById(R.id.bLowerBet);
+        betBtn = findViewById(R.id.bbetButton);
+
+    }
+
         private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -812,7 +1113,30 @@ public class BlackjackActivity extends AppCompatActivity {
                 if ("chat1".equals(key)) {
                     String message = intent.getStringExtra("message");
 
-                    if (message.contains("DONOTSEND")) {
+                    if (message.contains("#Blackjack")) {
+                        updateHands();
+                        String[] commands = message.split(",");
+
+                        for (String cmd : commands) {
+
+                            if (cmd.contains("next")) {
+                                String intMessage = cmd.replaceAll("[^\\d.]", "");
+                                int nextPlayer = Integer.parseInt(intMessage);
+                                System.out.println("Next player "+ nextPlayer);
+                                if (nextPlayer == userID) {
+                                    hitButton.setVisibility(View.VISIBLE);
+                                    standButton.setVisibility(View.VISIBLE);
+                                }
+                                else {
+                                    hitButton.setVisibility(View.INVISIBLE);
+                                    standButton.setVisibility(View.INVISIBLE);
+                                }
+                            }
+
+                            if (cmd.contains("finish")) {
+                                finishGame();
+                            }
+                        }
 
                     }
                     else {
@@ -841,16 +1165,6 @@ public class BlackjackActivity extends AppCompatActivity {
             super.onStop();
             LocalBroadcastManager.getInstance(this).unregisterReceiver(messageReceiver);
         }
-
-    /**
-     * Setter for global numPlayers variable
-     * @param num
-     */
-        private void setNumPlayers(int num) {
-            numPlayers = num;
-        }
-
-
 }
 
 
