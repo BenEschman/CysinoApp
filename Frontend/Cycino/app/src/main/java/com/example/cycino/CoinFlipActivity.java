@@ -184,6 +184,17 @@ public class CoinFlipActivity extends AppCompatActivity{
                 startGame();
             }
         });
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(CoinFlipActivity.this,LobbyPageActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",userID);
+                i.putExtra("LOBBYID",lobbyID);
+                startActivity(i);
+            }
+        });
     }
 
     private void setNumHands() {

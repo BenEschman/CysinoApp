@@ -165,6 +165,12 @@ public class PokerActivity extends AppCompatActivity {
                     }
                 });
                 requestQueue.add(jsonObjectRequest);
+
+                Intent i = new Intent(PokerActivity.this,LobbyPageActivity.class);
+                i.putExtra("USERNAME",username);
+                i.putExtra("UUID",userID);
+                i.putExtra("LOBBYID",lobbyID);
+                startActivity(i);
             }
         });
 

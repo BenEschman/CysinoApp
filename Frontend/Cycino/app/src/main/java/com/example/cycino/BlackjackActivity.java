@@ -247,9 +247,10 @@ public class BlackjackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(BlackjackActivity.this,HomePageActivity.class);
+                Intent i = new Intent(BlackjackActivity.this,LobbyPageActivity.class);
                 i.putExtra("USERNAME",username);
                 i.putExtra("UUID",userID);
+                i.putExtra("LOBBYID",lobbyID);
                 startActivity(i);
             }
         });
