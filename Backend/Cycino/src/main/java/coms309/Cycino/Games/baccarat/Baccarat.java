@@ -35,7 +35,7 @@ public class Baccarat {
         }
         // Always check if we are ready to deal cards, this alters the gameState that is returned
         gameState.dealCards();
-        gameChat.broadcast(lobbyId, serverMessage + " " + player + " " + command + " " + commandArgument);
+        //gameChat.broadcast(lobbyId, serverMessage + " " + player + " " + command + " " + commandArgument);
         gameChat.broadcast(lobbyId, serverMessage + "\n" + gameState.toString());
     }
 }
