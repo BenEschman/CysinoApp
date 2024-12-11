@@ -15,7 +15,7 @@
         android:text="GAME HERE" />
 
     <Button
-        android:id="@+id/backMainBtn"
+        android:id="@+id/bbackMainBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -27,7 +27,7 @@
         android:layout_height="150dp">
 
         <TextView
-            android:id="@+id/tx1"
+            android:id="@+id/btx1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
@@ -41,14 +41,14 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/msgEdt"
+            android:id="@+id/bmsgEdt"
             android:layout_width="320dp"
             android:layout_height="50dp"
             android:hint="message"
             android:textSize="20dp" />
 
         <Button
-            android:id="@+id/sendBtn"
+            android:id="@+id/bsendBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send" />

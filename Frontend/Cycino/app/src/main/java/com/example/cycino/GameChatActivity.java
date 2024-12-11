@@ -8,14 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import org.java_websocket.handshake.ServerHandshake;
 
 public class GameChatActivity extends AppCompatActivity {
 
@@ -39,10 +36,10 @@ public class GameChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gamechat);
 
         /* initialize UI elements */
-        sendBtn = (Button) findViewById(R.id.sendBtn);
-        backMainBtn = (Button) findViewById(R.id.backMainBtn);
-        msgEtx = (EditText) findViewById(R.id.msgEdt);
-        msgTv = (TextView) findViewById(R.id.tx1);
+        sendBtn = (Button) findViewById(R.id.bsendBtn);
+        backMainBtn = (Button) findViewById(R.id.bbackMainBtn);
+        msgEtx = (EditText) findViewById(R.id.bmsgEdt);
+        msgTv = (TextView) findViewById(R.id.btx1);
         gameArea = findViewById(R.id.gameArea);
         chatArea = findViewById(R.id.chatView);
 
