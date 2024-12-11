@@ -247,6 +247,23 @@ public class BlackjackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.DELETE, url+"delete/"+lobbyID, null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public synchronized void onResponse(JSONObject response) {
+
+
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                requestQueue.add(jsonObjectRequest2);
+
                 Intent i = new Intent(BlackjackActivity.this,LobbyPageActivity.class);
                 i.putExtra("USERNAME",username);
                 i.putExtra("UUID",userID);
@@ -390,51 +407,53 @@ public class BlackjackActivity extends AppCompatActivity {
         p4Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
         p4Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
 
-
-        JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.DELETE, url+"delete/"+lobbyID, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public synchronized void onResponse(JSONObject response) {
+        if (playerIDs[0] == userID) {
 
 
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
-            }
-        });
+            JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.DELETE, url + "delete/" + lobbyID, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public synchronized void onResponse(JSONObject response) {
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url+"create/"+lobbyID, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Handle the successful response here
-                        try {
-                            String status = response.getString("status");
-                            System.out.println(response);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle the error response
-                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
-                    }
-                });
-        // Add the request to the RequestQueue
-        RequestQueue queue = Volley.newRequestQueue(this);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+                }
+            });
 
-        queue.add(jsonObjectRequest2);
-        myWait(1000);
-        queue.add(jsonObjectRequest);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, url + "create/" + lobbyID, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // Handle the successful response here
+                            try {
+                                String status = response.getString("status");
+                                System.out.println(response);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle the error response
+                            Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                            error.printStackTrace();
+                        }
+                    });
+            // Add the request to the RequestQueue
+            RequestQueue queue = Volley.newRequestQueue(this);
 
+            queue.add(jsonObjectRequest2);
+            myWait(1000);
+            queue.add(jsonObjectRequest);
 
+        }
 
     }
 
@@ -1131,7 +1150,7 @@ public class BlackjackActivity extends AppCompatActivity {
                                 }
                             }
 
-                            if (cmd.contains("finish")) {
+                            if (cmd.contains("finish") && playerIDs[0] == userID) {
                                 finishGame();
                             }
                         }
