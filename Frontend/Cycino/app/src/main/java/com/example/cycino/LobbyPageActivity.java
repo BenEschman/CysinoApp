@@ -212,6 +212,10 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
             public void onClick(View v) {
                 // Placeholder for deleting lobby logic
                 deleteLobby(lobbyID) ;
+                Intent intent = new Intent(LobbyPageActivity.this, HomePageActivity.class);
+                intent.putExtra("USERNAME",username);
+                intent.putExtra("UUID",currentUser);
+                startActivity(intent);
             }
         });
 
