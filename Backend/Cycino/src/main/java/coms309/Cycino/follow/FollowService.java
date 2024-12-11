@@ -16,6 +16,8 @@ public class FollowService {
     private FollowRepository followRepository;;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UsersRepository repo;
 
     public List<Follow> getFollowingList(Long uid) {
         User user = userService.getUser(uid);
@@ -84,6 +86,7 @@ public class FollowService {
             if (item.getFollowingID() == unfollowID) {
                 user.removeFollow(item);
                 followRepository.delete(item);
+                repo.save(user);
                 return true;
             }
         }

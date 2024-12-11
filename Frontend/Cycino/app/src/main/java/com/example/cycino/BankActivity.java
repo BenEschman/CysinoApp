@@ -47,6 +47,7 @@ public class BankActivity extends AppCompatActivity {
         Intent inIntent = getIntent();
         username = inIntent.getStringExtra("USERNAME");
         userID = inIntent.getIntExtra("UUID",-1);
+        System.out.println("user Id: " + userID);
 
         // Initialize UI elements
         chipIcon = findViewById(R.id.chipIcon);
@@ -63,6 +64,7 @@ public class BankActivity extends AppCompatActivity {
         setChips();
 
         addChipsButton.setOnClickListener(v -> {
+            System.out.println("user Id: " + userID);
             String inputText = chipInput.getText().toString().trim();
             if (inputText.isEmpty()) {
                 Toast.makeText(this, "Please enter a valid chip amount", Toast.LENGTH_SHORT).show();
