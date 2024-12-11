@@ -62,7 +62,7 @@ public class BlackJackLogic {
 
 
     public static void checkSplit(PlayerHands hand){
-        if(hand.getHand().size() == 2 && hand.getHand().get(0).getValue() == hand.getHand().get(1).getValue()){
+        if(hand.getHand().size() == 2 && hand.getHand().get(0).getValue1() == hand.getHand().get(1).getValue1()){
             hand.split(true);
         }
     }
@@ -75,9 +75,9 @@ public class BlackJackLogic {
             return score + 1;
         }
 
-        if(score + c.getValue() > 21){
+        if(score + c.getValue1() > 21){
             for(Card card: hand){
-                if(card.getNumber().equals("ACE") && card.getValue() != 1){
+                if(card.getNumber().equals("ACE") && card.getValue1() != 1){
                     card.setNumber(1);
                     score -= 10;
                     break;
@@ -85,7 +85,7 @@ public class BlackJackLogic {
             }
         }
 
-        return score + c.getValue();
+        return score + c.getValue1();
     }
 
     public static Map<String, Object> stand(PlayerHands hand, BlackJack b){
@@ -161,13 +161,13 @@ public class BlackJackLogic {
         else
             result += " action: ";
         result += action;
-        result += "update next: ";
+        result += ",update";
         if(Objects.equals(action, "stand") || hand.getScore() >= 21) {
             int index = b.getOrder().indexOf(user.getId());
             if (index + 1 >= b.getOrder().size()) {
-                result += "finish";
+                result += ",finish";
             } else {
-                result += "next: " + b.getOrder().get(index + 1);
+                result += ",next: " + b.getOrder().get(index + 1);
             }
         }
         return result;
