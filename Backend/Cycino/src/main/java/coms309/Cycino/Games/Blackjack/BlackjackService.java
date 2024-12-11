@@ -131,7 +131,7 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
-        response = BlackJackLogic.hit(blj.getHand(user),blj.getCards());
+        response = BlackJackLogic.hit(blj, blj.getHand(user),blj.getCards());
         for(PlayerHands hand: blj.getHands()){
             repo.save(hand);
         }
@@ -166,7 +166,7 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
-        response = BlackJackLogic.stand(blj.getHand(user));
+        response = BlackJackLogic.stand(blj.getHand(user), blj);
         if(end(blj, id) && response.containsKey("string")){
             response.putAll(finish(lobbyId));
             String temp = (String) response.get("string");
@@ -194,7 +194,7 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
-        response = BlackJackLogic.doubleBJ(blj.getHand(user),blj.getCards() ,user);
+        response = BlackJackLogic.doubleBJ(blj, blj.getHand(user),blj.getCards() ,user);
         for(PlayerHands hand: blj.getHands()){
             repo.save(hand);
         }
@@ -340,7 +340,13 @@ public class BlackjackService {
         }
         response.put("status", "200 ok");
         Set<PlayerHands> hands = blj.getHands();
-        response.put("hands", hands);
+        for(PlayerHands hand: hands){
+            if(hand.getPlayer() == null){
+                response.put("dealer", hand.getHand());
+                continue;
+            }
+            response.put(hand.getPlayer().getId() + "", hand.getHand());
+        }
         return response;
     }
 
@@ -367,7 +373,7 @@ public class BlackjackService {
             }
         }
         while(playerHands.getScore() < 17){
-            BlackJackLogic.hit(playerHands, blj.getCards());
+            BlackJackLogic.hit(blj, playerHands, blj.getCards());
             repo.save(playerHands);
         }
         response.put("dealer", playerHands.getHand());
