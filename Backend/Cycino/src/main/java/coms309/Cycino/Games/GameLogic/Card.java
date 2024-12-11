@@ -42,6 +42,13 @@ public class Card implements Serializable {
         return value + " of " + suit.toString();
     }
 
+    public int getValue1() {
+       if(number > 10 && number != 14)
+           return 10;
+       if(number == 14)
+           return 11;
+       return number;
+    }
     public int getValue() {
         return number;
     }

@@ -47,7 +47,7 @@ public class FriendPageActivity extends AppCompatActivity {
     /**
      * Back Button
      */
-    private Button backBtn;
+    private Button backButton;
     /**
      * Array of Buttons to go to chat
      */
@@ -62,6 +62,9 @@ public class FriendPageActivity extends AppCompatActivity {
     private LinearLayout[] profileContainer;
     private RequestQueue requestQueue;
 
+    private EditText addFriendEditText ;
+    private Button addFriendBtn, removeFriendBtn ;
+
     /**
      * JSONArray of all of user's followers
      */
@@ -70,18 +73,27 @@ public class FriendPageActivity extends AppCompatActivity {
      * Array of user's follower's IDs
      */
     Integer[] friendsID;
+
+    Integer userID;
+    String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendpage);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+        addFriendBtn = findViewById(R.id.addFriendButton);
+        removeFriendBtn = findViewById(R.id.unfriendButton);
+        addFriendEditText = findViewById(R.id.addFriendEditText);
 
-        backBtn.findViewById(R.id.fBackBtn);
+        backBtn = findViewById(R.id.fBackBtn);
         followerName = new TextView[]{
                 findViewById(R.id.friend1Name),
                 findViewById(R.id.friend2Name),
                 findViewById(R.id.friend3Name),
                 findViewById(R.id.friend4Name),
+                findViewById(R.id.friend5Name),
+                findViewById(R.id.friend6Name),
+                findViewById(R.id.friend7Name),
         };
 
         chatButton = new Button[]{
@@ -89,6 +101,9 @@ public class FriendPageActivity extends AppCompatActivity {
                 findViewById(R.id.friend2Chat),
                 findViewById(R.id.friend3Chat),
                 findViewById(R.id.friend4Chat),
+                findViewById(R.id.friend5Chat),
+                findViewById(R.id.friend6Chat),
+                findViewById(R.id.friend7Chat),
         };
 
         profileButton = new Button[]{
@@ -96,6 +111,9 @@ public class FriendPageActivity extends AppCompatActivity {
                 findViewById(R.id.friend2Profile),
                 findViewById(R.id.friend3Profile),
                 findViewById(R.id.friend4Profile),
+                findViewById(R.id.friend5Profile),
+                findViewById(R.id.friend6Profile),
+                findViewById(R.id.friend7Profile),
         };
 
         profileContainer = new LinearLayout[] {
@@ -103,22 +121,44 @@ public class FriendPageActivity extends AppCompatActivity {
                 findViewById(R.id.friend2LL),
                 findViewById(R.id.friend3LL),
                 findViewById(R.id.friend4LL),
+                findViewById(R.id.friend5LL),
+                findViewById(R.id.friend6LL),
+                findViewById(R.id.friend7LL),
         };
 
         userName = findViewById(R.id.userName);
 
-        friendsID = new Integer[4];
+        friendsID = new Integer[7];
 
         Intent intent = getIntent();
+        userID = intent.getIntExtra("UUID",-1);
+        username = intent.getStringExtra("USERNAME");
 
+        userID = 4 ;
+        username = "Sam" ;
 
-        int userID = intent.getIntExtra("UUID",-1);
-        String username = intent.getStringExtra("USERNAME");
+        userID = intent.getIntExtra("UUID",-1);
+        username = intent.getStringExtra("USERNAME");
+
+        userID = 4;
+        username = "Sam";
+
         userName.setText(username);
         getFollowerList(userID);
-        //getUserName(userID);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        addFriendBtn.setOnClickListener(v -> {
+            String friendInput = addFriendEditText.getText().toString().trim();
+            getUserByUsername(friendInput) ;
+            addFriendEditText.setText("") ;
+        });
+        removeFriendBtn.setOnClickListener(v -> {
+            String friendInput = addFriendEditText.getText().toString().trim();
+            getUserByUsernameRemove(friendInput) ;
+            addFriendEditText.setText("") ;
+        });
+
+
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(FriendPageActivity.this,HomePageActivity.class);
@@ -172,9 +212,119 @@ public class FriendPageActivity extends AppCompatActivity {
 
             }
         });
+        profileButton[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
+                intent.putExtra("UUID",friendsID[4]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
 
+            }
+        });
+        profileButton[5].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
+                intent.putExtra("UUID",friendsID[5]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
 
+            }
+        });
+        profileButton[6].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, ViewFriendActivity.class);
+                intent.putExtra("UUID",friendsID[6]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
 
+            }
+        });
+
+        chatButton[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, FriendChatActivity.class);
+                intent.putExtra("UUID",friendsID[0]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+            }
+        });
+
+        chatButton[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, FriendChatActivity.class);
+                intent.putExtra("UUID",friendsID[1]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+
+            }
+        });
+
+        chatButton[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, FriendChatActivity.class);
+                intent.putExtra("UUID",friendsID[2]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+
+            }
+        });
+
+        chatButton[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, FriendChatActivity.class);
+                intent.putExtra("UUID",friendsID[3]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+
+            }
+        });
+
+        chatButton[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, FriendChatActivity.class);
+                intent.putExtra("UUID",friendsID[4]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+
+            }
+        });
+
+        chatButton[5].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, FriendChatActivity.class);
+                intent.putExtra("UUID",friendsID[5]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+            }
+        });
+        chatButton[6].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendPageActivity.this, FriendChatActivity.class);
+                intent.putExtra("UUID",friendsID[6]);
+                intent.putExtra("lUUID",userID);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -186,34 +336,27 @@ public class FriendPageActivity extends AppCompatActivity {
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            friends = response;
-                            showUserEntries(response.length());
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject follower = response.getJSONObject(i);
-                                Integer followingId = follower.getInt("followingID");
-                                friendsID[i] = followingId;
-                                getUserName(followingId,i);
+                response -> {
+                    try {
+                        // Clear the current UI first
+                        clearFollowerListUI();
 
-                                //followerName[i].setText(getUserName(followingId));
-
-                            }
-                            System.out.println(friendsID);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing JSON data", Toast.LENGTH_LONG).show();
+                        friends = response;
+                        showUserEntries(response.length());
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject follower = response.getJSONObject(i);
+                            Integer followingId = follower.getInt("followingID");
+                            friendsID[i] = followingId;
+                            getUserName(followingId, i); // Fetch and set the username
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Error parsing JSON data", Toast.LENGTH_LONG).show();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error fetching data", Toast.LENGTH_LONG).show();
-                    }
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error fetching data", Toast.LENGTH_LONG).show();
                 }
         );
 
@@ -267,106 +410,10 @@ public class FriendPageActivity extends AppCompatActivity {
                     }
                 }
         );
-
         requestQueue.add(jsonObjectRequest);
     }
 
-    /**
-     * Unfollows another user by entering both the current user's ID, and the ID of the user that is attempting to be unfollowed.
-     * @param userID
-     * @param followingID
-     *
-     */
-    private void unfollowUser(final int userID, final int followingID) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/unfollow/" + followingID;
 
-        // Create the JSON object for the request body
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.DELETE, url, null, // Changed to POST
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(getApplicationContext(), "Successfully unfollowed user " + followingID, Toast.LENGTH_SHORT).show();
-                                // Refresh the follower list to reflect the update
-                                getFollowerList(userID);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Failed to unfollow user " + followingID, Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing response", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error sending request", Toast.LENGTH_LONG).show();
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                return headers;
-            }
-        };
-
-        requestQueue.add(jsonObjectRequest);
-    }
-
-    /**
-     * Mutes the notifications from a different user
-     * @param userId
-     * @param followingId
-     *
-     */
-    private void muteNotis(final int userId, final int followingId) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userId + "/follow/update";
-
-        // Create the JSON object for the request body
-        JSONObject muteNotisObject = new JSONObject();
-        try {
-            muteNotisObject.put("followingID", followingId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.PUT, url, muteNotisObject, // Changed to POST
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(getApplicationContext(), "Successfully changed user's notification setting of" + followingId, Toast.LENGTH_SHORT).show();
-                                // Refresh the follower list to reflect the update
-                                getFollowerList(userId);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Failed to change user " + followingId + "notification setting.", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing response", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error sending request", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        requestQueue.add(jsonObjectRequest);
-    }
 
     /**
      * Gets the usernames of all of the user's followers.
@@ -375,32 +422,25 @@ public class FriendPageActivity extends AppCompatActivity {
      *
      */
     private void getUserName(Integer id, Integer loopI) {
-        //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
-        String out = null;
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + id;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
-
-                        try {
-                            followerName[loopI].setText(response.getString("firstName") + " " + response.getString("lastName"));
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-
-
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        // Set the username in the TextView instead of first and last name
+                        String username = response.getString("username");
+                        followerName[loopI].setText(username);
+                        profileContainer[loopI].setVisibility(View.VISIBLE); // Ensure container is visible
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(getApplicationContext(),"view failed", Toast.LENGTH_LONG).show();
-            }
-        });
+                },
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error fetching user data", Toast.LENGTH_LONG).show();
+                }
+        );
 
         // Add the request to the RequestQueue
         requestQueue.add(jsonObjectRequest);
@@ -417,4 +457,114 @@ public class FriendPageActivity extends AppCompatActivity {
 
         }
     }
+
+    private void getUserByUsername(String username) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + username;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        // Extract the "user" object from the response
+                        JSONObject userObject = response.getJSONObject("user");
+
+                        // Extract user details from the "user" object
+                        int followingID = userObject.getInt("id");
+                        String firstName = userObject.getString("firstName");
+                        String lastName = userObject.getString("lastName");
+
+                        // Display a toast message with the user details
+                        Toast.makeText(getApplicationContext(), "User: " + firstName + " " + lastName, Toast.LENGTH_SHORT).show();
+
+                        // Call followUser with the extracted followingID
+                        followUser(userID, followingID);
+
+                    } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(), "Error parsing response in getUserByUsername.", Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    // Handle error
+                    Toast.makeText(getApplicationContext(), "Username not found or request failed.", Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void getUserByUsernameRemove(String username) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/contains/" + username;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        // Extract the "user" object from the response
+                        JSONObject userObject = response.getJSONObject("user");
+
+                        // Extract user details from the "user" object
+                        int followingID = userObject.getInt("id");
+                        String firstName = userObject.getString("firstName");
+                        String lastName = userObject.getString("lastName");
+
+                        // Display a toast message with the user details
+                        Toast.makeText(getApplicationContext(), "User: " + firstName + " " + lastName, Toast.LENGTH_SHORT).show();
+
+                        // Call followUser with the extracted followingID
+                        unfollowUser(userID, followingID);
+
+                    } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(), "Error parsing response in getUserByUsername.", Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    // Handle error
+                    Toast.makeText(getApplicationContext(), "Username not found or request failed.", Toast.LENGTH_SHORT).show();
+                }
+        );
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void unfollowUser(final int userID, final int unfollowingID) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/" + userID + "/unfollow/" + unfollowingID;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.DELETE, url, null,
+                response -> {
+                    try {
+                        String status = response.getString("status");
+                        if (status.equals("200 OK")) {
+                            Toast.makeText(getApplicationContext(), "Successfully unfollowed user " + unfollowingID, Toast.LENGTH_SHORT).show();
+                            // Clear UI and fetch the updated follower list
+                            clearFollowerListUI();
+                            getFollowerList(userID);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Failed to unfollow user " + unfollowingID, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Error parsing response", Toast.LENGTH_LONG).show();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error sending request", Toast.LENGTH_LONG).show();
+                }
+        );
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void clearFollowerListUI() {
+        for (int i = 0; i < profileContainer.length; i++) {
+            profileContainer[i].setVisibility(View.GONE); // Hide all containers
+            followerName[i].setText(""); // Clear the text of follower names
+            friendsID[i] = null; // Reset the friendsID array
+        }
+    }
+
+
 }

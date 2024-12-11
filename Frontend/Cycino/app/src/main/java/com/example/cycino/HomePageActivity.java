@@ -30,7 +30,9 @@ import java.io.File;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    private Button lobby,leaderboard,friends,settings, rulesBtn, bankBtn ;
+    private Button lobby,leaderboard,friends,settings,logout, rulesBtn, bankBtn;
+    private TextView userNameText, chipText;
+    RequestQueue requestQueue;
 
     private String username;
     private Integer UUID;
@@ -46,12 +48,23 @@ public class HomePageActivity extends AppCompatActivity {
         username = intent.getStringExtra("USERNAME");
         UUID = intent.getIntExtra("UUID",-1);
 
+        requestQueue = Volley.newRequestQueue(HomePageActivity.this);
+
         lobby = findViewById(R.id.lobbyButton);
         leaderboard = findViewById(R.id.leaderboardButton);
         friends = findViewById(R.id.friendsButton);
         settings = findViewById(R.id.settingsButton);
         rulesBtn = findViewById(R.id.rulesButton);
         bankBtn = findViewById(R.id.bankButton);
+
+        userNameText = findViewById(R.id.hpUsername);
+        chipText = findViewById(R.id.hpChips);
+
+        //username = "Sam";
+        //UUID = 4;
+        //userNameText.setText("LOG IN BYPASSED");
+        userNameText.setText(username);
+        getOneUser(UUID);
 
         lobby.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,5 +127,39 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
 
+    }
+    private void getOneUser(Integer id) {
+        //String url = "https://10c011fe-3b08-4ae2-96a7-71049edb34ae.mock.pstmn.io/getData";
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/users/"+id;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getApplicationContext(),"view worked", Toast.LENGTH_LONG).show();
+
+                        try {
+                            int currChips = response.getInt("chips");
+                            setChipText(currChips);
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(),"view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Add the request to the RequestQueue
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void setChipText(Integer chips) {
+        chipText.setText("Chips: " + chips.toString());
     }
 }

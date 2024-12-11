@@ -36,7 +36,8 @@ public class PokerLogic {
             }
         }
         for(PlayerHands hand: winners.keySet()){
-            hand.getPlayer().addChips(poker.getPot() / winners.size());
+            if(hand.getPlayer() != null)
+                hand.getPlayer().addChips(poker.getPot() / winners.size());
         }
         return winners;
     }

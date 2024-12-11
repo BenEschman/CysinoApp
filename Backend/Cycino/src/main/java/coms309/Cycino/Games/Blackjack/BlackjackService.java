@@ -111,6 +111,18 @@ public class BlackjackService {
         }
         user.addChips(-1 * bet);
         blj.getHand(user).addBet(bet);
+        boolean bets = true;
+        for(PlayerHands hand: blj.getHands()){
+            if (hand.getPlayer() != null && hand.getBet() == 0) {
+                System.out.println(hand.getBet());
+                bets = false;
+                break;
+            }
+        }
+        if(bets){
+            start(lobby);
+            //GameChat.broadcast(l.getId(), "#Blackjack start next: " + blj.getOrder().get(0));
+        }
         repo.save(blj.getHand(user));
         response.put("status", 200);
         return response;
@@ -131,7 +143,7 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
-        response = BlackJackLogic.hit(blj.getHand(user),blj.getCards());
+        response = BlackJackLogic.hit(blj, blj.getHand(user),blj.getCards());
         for(PlayerHands hand: blj.getHands()){
             repo.save(hand);
         }
@@ -141,9 +153,10 @@ public class BlackjackService {
             temp += " finish";
             response.put("string", temp);
         }
-        if(response.containsValue("string")){
+        if(response.containsKey("string"))
             GameChat.broadcast(lobbyId, (String) response.get("string"));
-        }
+        else
+            GameChat.broadcast(lobbyId, "#Blackjack");
         return response;
     }
 
@@ -166,16 +179,15 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
-        response = BlackJackLogic.stand(blj.getHand(user));
+        response = BlackJackLogic.stand(blj.getHand(user), blj);
         if(end(blj, id) && response.containsKey("string")){
             response.putAll(finish(lobbyId));
             String temp = (String) response.get("string");
             temp += " finish";
             response.put("string", temp);
         }
-        if(response.containsValue("string")){
-            GameChat.broadcast(lobbyId, (String) response.get("string"));
-        }
+        GameChat.broadcast(lobbyId, (String) response.get("string"));
+
         return response;
     }
 
@@ -194,7 +206,7 @@ public class BlackjackService {
             response.put("error", "game not started yet");
             return response;
         }
-        response = BlackJackLogic.doubleBJ(blj.getHand(user),blj.getCards() ,user);
+        response = BlackJackLogic.doubleBJ(blj, blj.getHand(user),blj.getCards() ,user);
         for(PlayerHands hand: blj.getHands()){
             repo.save(hand);
         }
@@ -205,9 +217,9 @@ public class BlackjackService {
             response.put("string", temp);
 
         }
-        if(response.containsValue("string")){
-            GameChat.broadcast(lobbyId, (String) response.get("string"));
-        }
+
+        GameChat.broadcast(lobbyId, (String) response.get("string"));
+
         return response;
     }
 
@@ -293,7 +305,7 @@ public class BlackjackService {
             repo.save(hand);
         }
         response.put("status", "200 ok");
-        GameChat.broadcast(lobbyId, "next: " + bj.getOrder().get(0));
+        GameChat.broadcast(lobbyId, "#Blackjack ,next: " + bj.getOrder().get(0));
         return response;
     }
 
@@ -340,7 +352,13 @@ public class BlackjackService {
         }
         response.put("status", "200 ok");
         Set<PlayerHands> hands = blj.getHands();
-        response.put("hands", hands);
+        for(PlayerHands hand: hands){
+            if(hand.getPlayer() == null){
+                response.put("dealer", hand.getHand());
+                continue;
+            }
+            response.put(hand.getPlayer().getId() + "", hand.getHand());
+        }
         return response;
     }
 
@@ -367,7 +385,7 @@ public class BlackjackService {
             }
         }
         while(playerHands.getScore() < 17){
-            BlackJackLogic.hit(playerHands, blj.getCards());
+            BlackJackLogic.hit(blj, playerHands, blj.getCards());
             repo.save(playerHands);
         }
         response.put("dealer", playerHands.getHand());

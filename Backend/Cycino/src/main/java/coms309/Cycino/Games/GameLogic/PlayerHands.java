@@ -5,6 +5,7 @@ import coms309.Cycino.users.User;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,7 +22,8 @@ public class PlayerHands implements Serializable {
     @JoinColumn(name = "hand_id", nullable = true)
     private User player;
     @OneToMany
-    private Set<Card> hand;
+    private final Set<Card> hand;
+    private final ArrayList<String> ordered;
     private int score;
     private boolean stand = false;
     private int bet;
@@ -36,16 +38,19 @@ public class PlayerHands implements Serializable {
 
     public PlayerHands(){
         hand = new HashSet<>();
+        ordered = new ArrayList<>();
     }
     public PlayerHands(User player, Game game){
         this.player = player;
         this.game = game;
         hand = new HashSet<>();
+        ordered = new ArrayList<>();
     }
 
     public PlayerHands(Game b){
         this.game = b;
         hand = new HashSet<>();
+        ordered = new ArrayList<>();
         dealer = true;
     }
 
@@ -66,10 +71,19 @@ public class PlayerHands implements Serializable {
     }
 
     public ArrayList<Card> getHand(){
-        return new ArrayList<>(hand);
+        ArrayList<Card> c = new ArrayList<>();
+        while(c.size() < hand.size()){
+            for(Card card : hand){
+                if(c.size() < hand.size() && card.img().equals(ordered.get(c.size()))){
+                    c.add(card);
+                }
+            }
+        }
+        return c;
     }
 
     public void add(Card c){
+        ordered.add(c.img());
         hand.add(c);
     }
 
@@ -104,6 +118,7 @@ public class PlayerHands implements Serializable {
     public Card splitHand(){
         ArrayList<Card> hand = new ArrayList<>(this.hand);
         Card c = hand.remove(1);
+        ordered.remove(c.img());
         this.hand.remove(c);
         return c;
     }
@@ -122,10 +137,12 @@ public class PlayerHands implements Serializable {
 
     public void addAll(Collection<Card> cards){
         hand.addAll(cards);
+        cards.forEach(card -> ordered.add(card.img()));
     }
 
     public void reset(){
         hand.removeAll(hand);
+        ordered.removeAll(ordered);
         score = 0;
         bet = 0;
         split = false;

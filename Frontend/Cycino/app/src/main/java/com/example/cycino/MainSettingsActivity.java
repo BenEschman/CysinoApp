@@ -55,20 +55,25 @@ public class MainSettingsActivity extends AppCompatActivity {
     private TextView minBetTV ;
     private TextView maxBetTV ;
     private TextView deckNumberTV ;
-    private int userID = 7;
+    private int userID;
     private int dealerStandOn ;
     private int minBet ;
     private int maxBet ;
     private int numberOfDecks ;
 
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainsettings); // Link the XML layout to this Java file
 
+        Intent intent = getIntent();
+        userID = intent.getIntExtra("UUID",-1);
+        username = intent.getStringExtra("USERNAME");
+
         // Initialize UI elements
-        backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.bbackButton);
         logOutButton = findViewById(R.id.logOutButton);
         notificationsSwitch = findViewById(R.id.notificationsSwitch);
         accountSettingsButton = findViewById(R.id.accountSettingsButton);
@@ -109,6 +114,8 @@ public class MainSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Handle back button click
                 Intent intent = new Intent(MainSettingsActivity.this, HomePageActivity.class);
+                intent.putExtra("UUID",userID);
+                intent.putExtra("USERNAME",username);
                 startActivity(intent); // Start the HomePagePlaceholder activity
             }
         });
@@ -118,6 +125,8 @@ public class MainSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Handle account settings button click
                 Intent intent = new Intent(MainSettingsActivity.this, AccountSettingsActivity.class);
+                intent.putExtra("UUID",userID);
+                intent.putExtra("USERNAME",username);
                 startActivity(intent); // Start the AccountSettings activity
             }
         });

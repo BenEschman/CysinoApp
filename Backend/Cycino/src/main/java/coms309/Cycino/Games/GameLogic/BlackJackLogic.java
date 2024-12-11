@@ -6,14 +6,11 @@ import coms309.Cycino.lobby.Lobby;
 import coms309.Cycino.users.User;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class BlackJackLogic {
 
-    public static Map<String, Object> hit(PlayerHands hand, Deck cards){
+    public static Map<String, Object> hit(BlackJack b, PlayerHands hand, Deck cards){
         Map<String, Object> result = new HashMap<>();
         int score = hand.getScore();
         hand.split(false);
@@ -30,14 +27,14 @@ public class BlackJackLogic {
         if(score > 21){
             result.put("result", "bust");
             if(hand.getPlayer() != null)
-                result.put("string", createMessage(hand, "hit", c));
+                result.put("string", createMessage(b, hand, "hit", c));
             return result;
         }
 
         if(score == 21){
             result.put("result", "blackjack");
             if(hand.getPlayer() != null)
-                result.put("string", createMessage(hand, "hit", c));
+                result.put("string", createMessage(b, hand, "hit", c));
             return result;
         }
         return result;
@@ -65,7 +62,7 @@ public class BlackJackLogic {
 
 
     public static void checkSplit(PlayerHands hand){
-        if(hand.getHand().size() == 2 && hand.getHand().get(0).getValue() == hand.getHand().get(1).getValue()){
+        if(hand.getHand().size() == 2 && hand.getHand().get(0).getValue1() == hand.getHand().get(1).getValue1()){
             hand.split(true);
         }
     }
@@ -78,9 +75,9 @@ public class BlackJackLogic {
             return score + 1;
         }
 
-        if(score + c.getValue() > 21){
+        if(score + c.getValue1() > 21){
             for(Card card: hand){
-                if(card.getNumber().equals("ACE") && card.getValue() != 1){
+                if(card.getNumber().equals("ACE") && card.getValue1() != 1){
                     card.setNumber(1);
                     score -= 10;
                     break;
@@ -88,10 +85,10 @@ public class BlackJackLogic {
             }
         }
 
-        return score + c.getValue();
+        return score + c.getValue1();
     }
 
-    public static Map<String, Object> stand(PlayerHands hand){
+    public static Map<String, Object> stand(PlayerHands hand, BlackJack b){
         Map<String, Object> response = new HashMap<>();
         hand.stand();
         response.put("status", "200 ok");
@@ -100,12 +97,12 @@ public class BlackJackLogic {
         if(hand.getScore() > 21)
             response.put("bust", true);
         else response.put("bust", false);
-        response.put("string", createMessage(hand, "stand", null));
+        response.put("string", createMessage(b, hand, "stand", null));
 
         return response;
     }
 
-    public static Map<String, Object> doubleBJ(PlayerHands hand, Deck deck, User user){
+    public static Map<String, Object> doubleBJ(BlackJack b,PlayerHands hand, Deck deck, User user){
         Map<String, Object> response = new HashMap<>();
         if(hand.getBet() > user.getChips()){
             response.put("status", "500");
@@ -119,7 +116,7 @@ public class BlackJackLogic {
         response = check(hand);
         response.put("card", c);
         hand.stand();
-        response.put("string", createMessage(hand, "double", c));
+        response.put("string", createMessage(b, hand, "double", c));
         return response;
     }
 
@@ -155,15 +152,24 @@ public class BlackJackLogic {
         return response;
     }
 
-    private static String createMessage(PlayerHands hand, String action, Card c){
+    private static String createMessage(BlackJack b, PlayerHands hand, String action, Card c){
         User user = hand.getPlayer();
-        String result = "user: ";
+        String result = "#Blackjack User: ";
         result += user.getId() + " img: ";
         if(c != null)
             result += c.img() + " action: ";
         else
             result += " action: ";
         result += action;
+        result += ",update";
+        if(Objects.equals(action, "stand") || hand.getScore() >= 21) {
+            int index = b.getOrder().indexOf(user.getId());
+            if (index + 1 >= b.getOrder().size()) {
+                result += ",finish";
+            } else {
+                result += ",next: " + b.getOrder().get(index + 1);
+            }
+        }
         return result;
     }
 }
