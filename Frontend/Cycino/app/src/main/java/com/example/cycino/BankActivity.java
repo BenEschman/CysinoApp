@@ -32,12 +32,8 @@ public class BankActivity extends AppCompatActivity {
 
 
     // set user info
-    int userID  ;
-    String username ;
     int userChips ;
-    String addUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/" + userID + "/" ;
-    String removeUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/" + userID + "/" ;
-    String getUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/get/" + userID ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +41,11 @@ public class BankActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bank); // Ensure this matches your XML filename
 
         Intent inIntent = getIntent();
-        username = inIntent.getStringExtra("USERNAME");
-        userID = inIntent.getIntExtra("UUID",-1);
+        String username = inIntent.getStringExtra("USERNAME");
+        int userID = inIntent.getIntExtra("UUID",-1);
         System.out.println("user Id: " + userID);
+
+
 
         // Initialize UI elements
         chipIcon = findViewById(R.id.chipIcon);
@@ -61,7 +59,7 @@ public class BankActivity extends AppCompatActivity {
 
 
         // Example of setting up UI elements (you can remove these once you add logic)
-        setChips();
+        setChips(userID);
 
         addChipsButton.setOnClickListener(v -> {
             String inputText = chipInput.getText().toString().trim();
@@ -81,7 +79,7 @@ public class BankActivity extends AppCompatActivity {
                     return;
                 }
                 // Call handleAddChips with the valid addAmount
-                handleAddChips(addAmount);
+                handleAddChips(addAmount, userID);
 
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Enter a number.", Toast.LENGTH_SHORT).show();
@@ -107,7 +105,7 @@ public class BankActivity extends AppCompatActivity {
                 }
 
                 // Call handleAddChips with the valid addAmount
-                handleRemoveChips(removeAmount);
+                handleRemoveChips(removeAmount, userID);
 
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Enter a number.", Toast.LENGTH_SHORT).show();
@@ -128,8 +126,9 @@ public class BankActivity extends AppCompatActivity {
 
 
 
-    private void setChips()
+    private void setChips(int userID)
     {
+        String getUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/get/" + userID ;
         JsonObjectRequest getRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 getUrl,
@@ -157,8 +156,9 @@ public class BankActivity extends AppCompatActivity {
         requestQueue.add(getRequest);
     }
 
-    private void handleAddChips(int addAmount)
+    private void handleAddChips(int addAmount, int userID)
     {
+        String addUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/" + userID + "/" ;
         JsonObjectRequest putRequest = new JsonObjectRequest(
                 Request.Method.PUT,
                 addUrl + addAmount,
@@ -189,8 +189,9 @@ public class BankActivity extends AppCompatActivity {
         requestQueue.add(putRequest);
     }
 
-    private void handleRemoveChips(int removeAmount)
+    private void handleRemoveChips(int removeAmount, int userID)
     {
+        String removeUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/" + userID + "/" ;
         JsonObjectRequest putRequest = new JsonObjectRequest(
                 Request.Method.PUT,
                 removeUrl + removeAmount,

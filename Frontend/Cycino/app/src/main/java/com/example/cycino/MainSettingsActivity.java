@@ -73,7 +73,7 @@ public class MainSettingsActivity extends AppCompatActivity {
         username = intent.getStringExtra("USERNAME");
 
         // Initialize UI elements
-        backButton = findViewById(R.id.bbackButton);
+        backButton = findViewById(R.id.backButton);
         logOutButton = findViewById(R.id.logOutButton);
         notificationsSwitch = findViewById(R.id.notificationsSwitch);
         accountSettingsButton = findViewById(R.id.accountSettingsButton);
