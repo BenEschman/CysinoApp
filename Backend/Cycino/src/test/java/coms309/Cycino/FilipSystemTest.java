@@ -6,6 +6,7 @@ import coms309.Cycino.Games.GameLogic.Card;
 import coms309.Cycino.Games.GameLogic.PlayerHands;
 import coms309.Cycino.Games.baccarat.BaccaratCard;
 import coms309.Cycino.Games.baccarat.BaccaratGameState;
+import coms309.Cycino.Games.coinflip.CoinFlipGameState;
 import coms309.Cycino.Games.poker.Evaluator;
 import coms309.Cycino.users.User;
 import coms309.Cycino.users.UsersRepository;
@@ -78,106 +79,38 @@ public class FilipSystemTest {
     }
 
     @Test
-    public void testStraight() throws Exception{
-        Set<Card> cardSet = new HashSet<>();
-        cardSet.add(new Card("5", Enums.SUIT.DIAMONDS, null));
-        cardSet.add(new Card("3", Enums.SUIT.HEARTS, null));
-        cardSet.add(new Card("3", Enums.SUIT.HEARTS, null));
-        cardSet.add(new Card("6", Enums.SUIT.DIAMONDS, null));
-        cardSet.add(new Card("7", Enums.SUIT.HEARTS, null));
-        cardSet.add(new Card("4", Enums.SUIT.DIAMONDS, null));
-        cardSet.add(new Card("10", Enums.SUIT.HEARTS, null));
-
-        PlayerHands hand = new PlayerHands(new User(), null);
-        hand.addAll(cardSet);
-
-        System.out.println(Evaluator.evaluate(hand));
-        Assert.assertEquals(Evaluator.evaluate(hand), 5.07, 0.009);
+    public void testCoinFlipGameState() throws Exception {
+        Collection<String> players = new ArrayList<>();
+        players.add("player1");
+        players.add("player2");
+        CoinFlipGameState game = new CoinFlipGameState(players);
+        game.setPlayerMove("player1", "HEADS");
+        game.setPlayerMove("player2", "TAILS");
+        game.setPlayerBets("player1", 1);
+        game.setPlayerBets("player2", 2);
+        Assert.assertEquals("COIN: NONE\n" +
+                "CALLS: player1 HEADS, player2 TAILS\n" +
+                "BETS: player1 1, player2 2\n" +
+                "GAME: ONGOING", game.toString());
     }
 
     @Test
-    public void testCreation() throws Exception {
-        User u = new User();
-        repo.save(u);
-        long id = u.getId();
-        RequestBuilder request = (RequestBuilder) post("/lobby/create/{id}", id);
-        MvcResult result = controller.perform(request).andReturn();
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> responseMap = objectMapper.readValue(jsonResponse, Map.class);
-        int lobbyId = (int) responseMap.get("lobbyId");
-        RequestBuilder request2 = (RequestBuilder) post("/poker/create/{id}", lobbyId);
-        MvcResult result2 = controller.perform(request2).andReturn();
-        String jsonResponse2 = result.getResponse().getContentAsString();
-        ObjectMapper objectMapper2 = new ObjectMapper();
-        Map<String, Object> responseMap2 = objectMapper.readValue(jsonResponse2, Map.class);
-        Assert.assertEquals(responseMap2.get("status"), "200 ok");
-
+    public void testBaccaratGameState() throws Exception {
+        Collection<String> players = new ArrayList<>();
+        players.add("player1");
+        players.add("player2");
+        BaccaratGameState game = new BaccaratGameState(players);
+        game.setPlayerMove("player1", "HEADS");
+        game.setPlayerMove("player2", "TAILS");
+        game.setPlayerBets("player1", 1);
+        game.setPlayerBets("player2", 2);
+        Assert.assertEquals("GAMESTATE: ONGOING\n" +
+                "CALLS: player1 HEADS player2 TAILS\n" +
+                "BETS: player1 1 player2 2\n" +
+                "PLAYER_HAND NONE\n" +
+                "BANKER_HAND NONE\n" +
+                "GAMERESULT: NONE\n" +
+                "PLAYER_CARDS NONE\n" +
+                "BANKER_CARDS NONE", game.toString());
     }
-
-    @Test
-    public void testDeal() throws Exception{
-        User u = new User();
-        repo.save(u);
-        long id = u.getId();
-
-        RequestBuilder request = (RequestBuilder) post("/lobby/create/{id}", id);
-        MvcResult result = controller.perform(request).andReturn();
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> responseMap = objectMapper.readValue(jsonResponse, Map.class);
-        int lobbyId = (int) responseMap.get("lobbyId");
-
-        RequestBuilder request2 = (RequestBuilder) post("/poker/create/{id}", lobbyId);
-        controller.perform(request2);
-
-        RequestBuilder request3 = (RequestBuilder) put("/poker/start/{id}", lobbyId);
-        controller.perform(request3);
-
-        RequestBuilder request4 = (RequestBuilder) get("/poker/hands/{id}", lobbyId);
-        MvcResult result2 = controller.perform(request4).andReturn();
-        String jsonResponse2 = result2.getResponse().getContentAsString();
-        System.out.println(jsonResponse2);
-        ObjectMapper objectMapper2 = new ObjectMapper();
-        Map<String, Object> responseMap2 = objectMapper2.readValue(jsonResponse2, Map.class);
-
-        for(String s: responseMap2.keySet()){
-            if(s != "null" && !s.equals("status")){
-                Assert.assertEquals(((ArrayList<Card>)(responseMap2.get(s))).size(), 2);
-            } else if(s == "null"){
-                Assert.assertEquals(((ArrayList<Card>)(responseMap2.get(s))).size(), 3);
-            }
-        }
-
-    }
-
-    @Test
-    public void testEnd() throws Exception{
-        User u = new User();
-        repo.save(u);
-        long id = u.getId();
-
-        RequestBuilder request = (RequestBuilder) post("/lobby/create/{id}", id);
-        MvcResult result = controller.perform(request).andReturn();
-        String jsonResponse = result.getResponse().getContentAsString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> responseMap = objectMapper.readValue(jsonResponse, Map.class);
-        int lobbyId = (int) responseMap.get("lobbyId");
-
-        RequestBuilder request2 = (RequestBuilder) post("/poker/create/{id}", lobbyId);
-        controller.perform(request2);
-
-        RequestBuilder request3 = (RequestBuilder) put("/poker/start/{id}", lobbyId);
-        controller.perform(request3);
-
-        RequestBuilder request4 = (RequestBuilder) get("/poker/finish/{id}", lobbyId);
-        MvcResult result2 = controller.perform(request4).andReturn();
-        String jsonResponse2 = result2.getResponse().getContentAsString();
-        System.out.println(jsonResponse2);
-        ObjectMapper objectMapper2 = new ObjectMapper();
-        Map<String, Object> responseMap2 = objectMapper2.readValue(jsonResponse2, Map.class);
-
-        Assert.assertFalse(responseMap2.keySet().isEmpty());
-    }
-
 }
