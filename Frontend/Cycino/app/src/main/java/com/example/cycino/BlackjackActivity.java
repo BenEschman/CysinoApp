@@ -670,9 +670,6 @@ public class BlackjackActivity extends AppCompatActivity {
                         try {
 
                             JSONArray dealerCards = response.getJSONArray("dealer");
-                            Integer score = response.getInt("dscore");
-
-
 
                             String result = response.getString(userID.toString());
                             resultText.setText("You " + result + " " + currBet.toString());
