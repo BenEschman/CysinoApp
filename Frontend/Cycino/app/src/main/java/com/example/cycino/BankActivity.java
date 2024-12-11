@@ -64,7 +64,6 @@ public class BankActivity extends AppCompatActivity {
         setChips();
 
         addChipsButton.setOnClickListener(v -> {
-            System.out.println("user Id: " + userID);
             String inputText = chipInput.getText().toString().trim();
             if (inputText.isEmpty()) {
                 Toast.makeText(this, "Please enter a valid chip amount", Toast.LENGTH_SHORT).show();
