@@ -80,9 +80,6 @@ public class PokerActivity extends AppCompatActivity {
         userID = inIntent.getIntExtra("UUID", -1);
         lobbyID = inIntent.getIntExtra("LOBBYID",-1);
 
-        username = "Sam";
-        userID = 4;
-        lobbyID = 1;
 
         getXMLIDs();
         setNumHands();

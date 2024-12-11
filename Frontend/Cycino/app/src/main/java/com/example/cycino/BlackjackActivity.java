@@ -183,10 +183,7 @@ public class BlackjackActivity extends AppCompatActivity {
         userID = inIntent.getIntExtra("UUID",-1);
         lobbyID = inIntent.getIntExtra("LOBBYID",-1);
 
-        numPlayers = 2;
-        username = "Sam";
-        userID = 4;
-        lobbyID = 1;
+
 
         currBetText.setText(currBet.toString());
 
