@@ -216,7 +216,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/friend4Chat"
+                android:id="@+id/friend5Chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -334,9 +334,25 @@
             android:layout_weight="1"
             android:hint="Enter Username to Add Friend"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:backgroundTint="#FFD700"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
+
+        <!-- Unfriend Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/unfriendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unfriend"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#8C1515"
+            android:textColor="#FFD700"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/addFriendContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addFriendButton"

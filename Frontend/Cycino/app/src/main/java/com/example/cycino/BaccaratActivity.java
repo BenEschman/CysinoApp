@@ -28,9 +28,9 @@ import org.json.JSONException;
 public class BaccaratActivity extends AppCompatActivity {
 
     private int userChips ;
-    private int lobbyID ;
-    private String userUsername ;
-    private int userID ;
+    private int userID = 2 ;
+    private String userUsername = "Filip" ;
+    private int lobbyID = 2;
     private Button sendBtn, chatToggleBtn, tieBtn, bankerBtn, playerBtn, betButton, backButton, resetButton;
     private EditText msgEtx, betEditText;
     private TextView msgTv, winnerTv, playerLabel, bankerLabel, playerScoreTv, bankerScoreTv, chipCountText;
@@ -88,10 +88,11 @@ public class BaccaratActivity extends AppCompatActivity {
 
 
         ////////////////////////////////// IDK WHAT WE HAVE FOR LOBBY IN TERMS OF INTENT
-        Intent inIntent = getIntent();
-        userUsername = inIntent.getStringExtra("USERNAME");
-        userID = inIntent.getIntExtra("UUID",-1);
-        lobbyID = inIntent.getIntExtra("LOBBY",-2);
+//        Intent inIntent = getIntent();
+//        userUsername = inIntent.getStringExtra("USERNAME");
+//        userID = inIntent.getIntExtra("UUID",-1);
+//        lobbyID = inIntent.getIntExtra("LOBBY",-2);
+
 
         String serverUrl = serverURL ;
         Intent serviceIntent = new Intent(this, WebSocketService.class);
