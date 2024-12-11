@@ -39,6 +39,7 @@
             android:textColor="#FFFFFF"
             android:backgroundTint="#FF0000"
             android:padding="8dp" />
+
     </RelativeLayout>
 
     <!-- Chat Messages Area with White Background -->
