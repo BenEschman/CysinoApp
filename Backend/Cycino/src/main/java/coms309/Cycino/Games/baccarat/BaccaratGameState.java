@@ -194,8 +194,8 @@ public class BaccaratGameState {
             bankerCards += baccaratDeck.getBankerCards().get(i).toString();
             bankerCards += " ";
         }
-        return "\n" + "PLAYER " + baccaratDeck.getPlayerCards().size() + " " + playerCards +
-                "\n" + "BANKER " + baccaratDeck.getBankerCards().size() + " " + bankerCards;
+        return "\n" + "PLAYER_CARDS " + baccaratDeck.getPlayerCards().size() + " " + playerCards +
+                "\n" + "BANKER_CARDS " + baccaratDeck.getBankerCards().size() + " " + bankerCards;
     }
 
     @Override
@@ -230,8 +230,8 @@ public class BaccaratGameState {
             gameState += dealtCardsToString();
             resetState();
         } else{
-            gameState += "\n" + "PLAYER " + "NONE";
-            gameState += "\n" + "BANKER " + "NONE";
+            gameState += "\n" + "PLAYER_CARDS " + "NONE";
+            gameState += "\n" + "BANKER_CARDS " + "NONE";
         }
         return gameState;
     }
