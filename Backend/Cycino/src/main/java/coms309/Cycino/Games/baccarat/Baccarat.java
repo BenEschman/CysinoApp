@@ -33,9 +33,13 @@ public class Baccarat {
         } else if (command.equals("BET")){
             gameState.setPlayerBets(player, Integer.parseInt(commandArgument));
         }
-        // Always check if we are ready to deal cards, this alters the gameState that is returned
-        gameState.dealCards();
+
         //gameChat.broadcast(lobbyId, serverMessage + " " + player + " " + command + " " + commandArgument);
         gameChat.broadcast(lobbyId, serverMessage + "\n" + gameState.toString());
+        // Always check if we are ready to deal cards, this alters the gameState that is returned
+        if (gameState.readyToDeal()){
+            gameState.dealCards();
+            gameChat.broadcast(lobbyId, serverMessage + "\n" + gameState.toString());
+        }
     }
 }

@@ -26,7 +26,7 @@ public class BaccaratGameState {
     }
 
 
-    private boolean readyToDeal(){
+    public boolean readyToDeal(){
         boolean responseMoves = true;
         Collection<String> moves = playerMoves.values();
         for (String move : moves) {
