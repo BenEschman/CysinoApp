@@ -51,14 +51,9 @@ public class ViewFriendActivity extends AppCompatActivity {
         Integer loggedInUser = intent.getIntExtra("lUUID",0);
         String userName = intent.getStringExtra("USERNAME");
 
-        System.out.println(userID);
 
 
         getOneUser(userID);
-
-
-        //getAllUsers();
-
 
 
         friendsButton.setOnClickListener(new View.OnClickListener() {
