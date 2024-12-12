@@ -610,7 +610,42 @@ public class PokerActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
             }
         });
+        JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.GET, url+"hands/"+lobbyID, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public synchronized void onResponse(JSONObject response) {
+
+
+                        try {
+                            JSONArray dealerCards = response.getJSONArray("1");
+
+
+                                JSONObject dco1 = dealerCards.getJSONObject(0);
+                                JSONObject dco2 = dealerCards.getJSONObject(1);
+
+                                String dcard1S = dco1.getString("suit").toLowerCase() + "_" + dco1.getString("number");
+                                String dcard2S = dco2.getString("suit").toLowerCase() + "_" + dco2.getString("number");
+
+                                p1c2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+dcard1S+".png")));
+                                p2c2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+dcard2S+".png")));
+
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "view failed", Toast.LENGTH_LONG).show();
+            }
+        });
+
         requestQueue.add(jsonObjectRequest);
+        requestQueue.add(jsonObjectRequest2);
 
     }
 
