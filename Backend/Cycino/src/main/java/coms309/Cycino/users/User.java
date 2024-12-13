@@ -21,7 +21,7 @@ import java.util.*;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Long id;
     private String username;
@@ -72,7 +72,9 @@ public class User implements Serializable {
     )
     private Set<GroupChat> groupChats = new HashSet<>();
 
-    public User(){}
+    public User(){
+        chips = 1000;
+    }
 
     public User(Long id, String firstName, String lastName, String phoneNumber, Enums.Roles role, String userBiography, List<Follow> followList, LoginInfo loginInfo, BlackJackSettings blackJackSettings) {
         this.id = id;
@@ -91,6 +93,10 @@ public class User implements Serializable {
     public void addGroupChat(GroupChat groupChat){
         groupChats.add(groupChat);
         groupChat.getUsers().add(this);
+    }
+
+    public void setUserName(String username){
+        this.username = username;
     }
 
     public void removeGroupChat(GroupChat groupChat){

@@ -253,35 +253,44 @@
             android:id="@+id/pokerButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <Button
                 android:id="@+id/pCheckButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Check" />
+                android:text="Check"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
             <Button
                 android:id="@+id/pRaiseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Raise" />
+                android:text="Raise"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
             <Button
                 android:id="@+id/pFoldButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Fold" />
+                android:text="Fold"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
             <Button
                 android:id="@+id/pStartButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Start" />
+                android:text="Start"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
         </LinearLayout>
 
@@ -296,7 +305,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:backgroundTint="@color/gold"
+                android:text="Lower Bet"
+                android:textColor="@color/cardinal" />
 
             <TextView
                 android:id="@+id/pCurrBet"
@@ -312,7 +323,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:backgroundTint="@color/gold"
+                android:text="Raise Bet"
+                android:textColor="@color/cardinal" />
 
         </LinearLayout>
 
@@ -327,14 +340,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Close Chat" />
+                android:text="Close Chat"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
             <Button
                 android:id="@+id/pbackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Back to Lobby" />
+                android:text="Back to Lobby"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
 
         </LinearLayout>
@@ -373,7 +390,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Send"
-                android:textColor="@color/white" />
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
         </LinearLayout>
 
     </LinearLayout>

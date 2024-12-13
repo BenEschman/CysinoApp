@@ -19,7 +19,7 @@ public class LoginService {
     @Autowired
     private LoginRepository loginRepository;
     @Autowired
-    private UserService userService;
+    private UsersRepository repo;
 
     public Map<String, Object> checkInfo(String username, String password){
         Map<String, Object> response = new HashMap<>();
@@ -71,8 +71,10 @@ public class LoginService {
     }
 
     public void addUser(LoginInfo user){
-        User user2 = userService.create(user);
+        User user2 = new User();
         user.setUser(user2);
+        user2.setUserName(user.getUsername());
+        repo.save(user2);
         loginRepository.save(user);
     }
 
@@ -95,7 +97,7 @@ public class LoginService {
         LoginInfo login = getUser(username);
         User u = login.getUser();
         if(u != null){
-            userService.deleteUser(u.getId());
+            repo.delete(u);
             loginRepository.deleteById(login.getId());
             response.put("status", "200 ok");
             return response;
