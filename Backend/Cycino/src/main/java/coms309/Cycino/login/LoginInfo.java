@@ -3,6 +3,7 @@ package coms309.Cycino.login;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import coms309.Cycino.users.User;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -18,7 +19,7 @@ public class LoginInfo implements Serializable {
     private String password;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JsonIgnore
     private User user;
 
