@@ -34,6 +34,7 @@ public class User implements Serializable {
     private String userBiography;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private BlackJackSettings blackJackSettings;
 
 
