@@ -83,7 +83,9 @@
             android:id="@+id/cStartGame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start Game" />
+            android:text="Start Game"
+            android:backgroundTint="@color/gold"
+            android:textColor="@color/cardinal"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,21 +97,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Heads" />
+                android:text="Heads"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
             <Button
                 android:id="@+id/cBetBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Bet" />
+                android:text="Bet"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
             <Button
                 android:id="@+id/cTailsBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tails" />
+                android:text="Tails"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
         </LinearLayout>
 
         <TextView
@@ -132,7 +140,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:backgroundTint="@color/gold"
+                android:text="Lower Bet"
+                android:textColor="@color/cardinal" />
 
             <TextView
                 android:id="@+id/cCurrBet"
@@ -148,7 +158,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:backgroundTint="@color/gold"
+                android:text="Raise Bet"
+                android:textColor="@color/cardinal" />
 
         </LinearLayout>
 
@@ -163,14 +175,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
-                android:text="Close Chat" />
+                android:text="Close Chat"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
             <Button
                 android:id="@+id/cbackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Back to Lobby" />
+                android:text="Back to Lobby"
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal"/>
 
 
         </LinearLayout>
@@ -210,7 +226,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Send"
-                android:textColor="@color/white" />
+                android:backgroundTint="@color/gold"
+                android:textColor="@color/cardinal" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
