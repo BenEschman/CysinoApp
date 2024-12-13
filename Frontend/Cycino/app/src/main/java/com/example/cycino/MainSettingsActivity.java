@@ -65,6 +65,9 @@ public class MainSettingsActivity extends AppCompatActivity {
         int userID = intent.getIntExtra("UUID",-1);
         String username = intent.getStringExtra("USERNAME");
 
+        Toast.makeText(MainSettingsActivity.this, "" + userID, Toast.LENGTH_SHORT).show();
+
+
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
         logOutButton = findViewById(R.id.logOutButton);
