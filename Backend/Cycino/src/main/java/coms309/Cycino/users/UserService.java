@@ -19,6 +19,8 @@ public class UserService {
     private UsersRepository userRepository;
     @Autowired
     private UserStatsController statsController;
+    @Autowired
+    private LoginService loginService;
 
     public User getUser(String firstName, String lastName){
 
@@ -38,8 +40,8 @@ public class UserService {
 //                return u;
 //            }
 //        }
-        return userRepository.findById(id).orElse(null);
-       // return null;
+        LoginInfo login = loginService.getUser(id);
+        return login.getUser();
     }
 
     public boolean create(User user, long id){
