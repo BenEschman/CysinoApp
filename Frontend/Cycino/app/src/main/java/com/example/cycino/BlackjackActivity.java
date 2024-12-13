@@ -88,7 +88,7 @@ public class BlackjackActivity extends AppCompatActivity {
     /**
      * Current Lobby ID
      */
-    private static Integer lobbyID = 1;
+    private static Integer lobbyID;
     /**
      * User's user ID
      */
