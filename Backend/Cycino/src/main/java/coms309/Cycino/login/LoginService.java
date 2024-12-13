@@ -73,7 +73,6 @@ public class LoginService {
     public void addUser(LoginInfo user){
         User user2 = userService.create(user);
         user.setUser(user2);
-        user2.setId(user.getId());
         loginRepository.save(user);
     }
 
