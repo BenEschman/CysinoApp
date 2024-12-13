@@ -88,7 +88,7 @@ public class BlackjackActivity extends AppCompatActivity {
     /**
      * Current Lobby ID
      */
-    private static Integer lobbyID = 1;
+    private static Integer lobbyID;
     /**
      * User's user ID
      */
@@ -175,15 +175,14 @@ public class BlackjackActivity extends AppCompatActivity {
         sdcard = Environment.getExternalStorageDirectory();
         requestQueue = Volley.newRequestQueue(BlackjackActivity.this);
 
-        getXMLIDs();
-        setNumHands();
 
         Intent inIntent = getIntent();
         username = inIntent.getStringExtra("USERNAME");
         userID = inIntent.getIntExtra("UUID",-1);
         lobbyID = inIntent.getIntExtra("LOBBYID",-1);
 
-
+        getXMLIDs();
+        setNumHands();
 
         currBetText.setText(currBet.toString());
 
