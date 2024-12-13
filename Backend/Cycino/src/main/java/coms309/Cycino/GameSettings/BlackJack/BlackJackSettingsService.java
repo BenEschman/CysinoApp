@@ -18,6 +18,9 @@ public class BlackJackSettingsService {
 
     public BlackJackSettings getBlackJackSettings(Long id) {
         List<BlackJackSettings> blackJackSettingsAll = blackJackSettingsRepository.findAll();
+        System.out.println("id: ");
+        System.out.println(id);
+        System.out.println(blackJackSettingsAll);
         for(BlackJackSettings settings : blackJackSettingsAll) {
             if(settings.getUserId().equals(id)) {
                 return settings;

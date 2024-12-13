@@ -75,7 +75,7 @@ public class ViewFriendActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> {
             Intent backIntent = new Intent(ViewFriendActivity.this, FriendPageActivity.class); // Replace FriendChatActivity with the correct previous activity class
             backIntent.putExtra("USERNAME", currentUsername);
-            backIntent.putExtra("lUUID", currentUserID);
+            backIntent.putExtra("UUID", currentUserID);
             startActivity(backIntent);
             finish(); // Close the current activity
         });

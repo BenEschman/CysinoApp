@@ -62,6 +62,7 @@ android-build:
     - java -version
     - gradle -v
     - ls -la ./Frontend/Cycino/gradle/wrapper
+    - cd Frontend/Cycino   
     - ./gradlew build --info
     - echo $JAVA_HOME
     - echo $PATH

@@ -35,12 +35,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private EditText editFirstName;
     private EditText editLastName;
     private EditText editPhoneNumber;
-
-    //testing
-    private String userUsername;
-    private String userPassword = "123" ;
-    private Integer userID;
-
+    private String password ;
+    private String username ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +44,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_accountsettings);
 
         Intent intent = getIntent();
-        userID = intent.getIntExtra("UUID",-1);
-        userUsername = intent.getStringExtra("USERNAME");
+        int userID = intent.getIntExtra("UUID",-1);
+        String userUsername = intent.getStringExtra("USERNAME");
+        Toast.makeText(AccountSettingsActivity.this, "" + userID, Toast.LENGTH_SHORT).show();
+
+        getPassword(userID) ;
 
         // Initialize UI elements
         backButton = findViewById(R.id.bbackButton);
@@ -71,7 +70,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AccountSettingsActivity.this, MainSettingsActivity.class);
                 intent.putExtra("UUID",userID);
-                intent.putExtra("USERNAME",userUsername);
+                intent.putExtra("USERNAME",username);
                 startActivity(intent); // Start MainActivity
             }
         });
@@ -81,7 +80,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newUsername = editUsername.getText().toString();
                 if (newUsername.matches("^[a-zA-Z0-9_]+$")) {
-                    updateLogin(newUsername, userPassword) ;
+                    updateLogin(newUsername, password) ;
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid username. Only letters, numbers, and underscores are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -93,7 +92,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newPassword = editPassword.getText().toString();
                 if (!newPassword.contains(" ")) {
-                    updateLogin(userUsername, newPassword);
+                    updateLogin(username, newPassword);
                 } else {
                     Toast.makeText(AccountSettingsActivity.this, "Invalid password. No spaces are allowed.", Toast.LENGTH_SHORT).show();
                 }
@@ -142,7 +141,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteAccount(userUsername);
+                deleteAccount(username);
                 Toast.makeText(AccountSettingsActivity.this, "Account deleted" + userID, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AccountSettingsActivity.this, LoginActivity.class);
                 startActivity(intent);
@@ -196,7 +195,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
      * @param newPassword
      */
     private void updateLogin(String newUsername, String newPassword) {
-        String url = "http://coms-3090-052.class.las.iastate.edu:8080/settings/login/update/" + userUsername ;
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/update/" + username ;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JSONObject userData = new JSONObject();
         try {
@@ -212,8 +211,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Login information has been updated", Toast.LENGTH_LONG).show();
-                        userUsername = newUsername ;
-                        userPassword = newPassword ;
+                        username = newUsername ;
+                        password = newPassword ;
                         editUsername.setText("");
                         editPassword.setText("");
                     }
@@ -366,6 +365,39 @@ public class AccountSettingsActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(jsonObjectRequest);
     }
+
+    private void getPassword(int userID) {
+        String url = "http://coms-3090-052.class.las.iastate.edu:8080/login/" + userID;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                                username = response.getString("username") ;
+                                password = response.getString("password") ;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            String errorMsg = new String(error.networkResponse.data);
+                            Log.e("VolleyError", errorMsg);
+                        }
+                        Toast.makeText(getApplicationContext(), "Server error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        error.printStackTrace();
+                    }
+                }) {
+        };
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);
+
+    }
+
+
 
 
 
