@@ -20,19 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Edit Profile Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/editProfileButton"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:text="Edit Profile"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="#4CAF50"
-        app:cornerRadius="12dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Username -->
     <TextView
@@ -121,36 +108,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- Chat Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/chatButton"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="Chat"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:backgroundTint="#FFD700"
-        android:textColor="#FFFFFF"
-        app:cornerRadius="12dp"
-        app:layout_constraintTop_toBottomOf="@id/phoneNumber"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
-
-    <!-- Friend User Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/friendUserButton"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:text="Friend User"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:backgroundTint="#03A9F4"
-        android:textColor="#FFFFFF"
-        app:cornerRadius="12dp"
-        app:layout_constraintTop_toBottomOf="@id/chatButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

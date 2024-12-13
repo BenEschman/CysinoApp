@@ -39,8 +39,6 @@ public class UserpageActivity extends AppCompatActivity {
 
         // Initialize UI elements
         backButton = findViewById(R.id.backButton);
-        chatButton = findViewById(R.id.chatButton);
-        friendUserButton = findViewById(R.id.friendUserButton);
         profilePicture = findViewById(R.id.profilePicture);
         usernameTV = findViewById(R.id.username);
         userBioTV = findViewById(R.id.userBio);
