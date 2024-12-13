@@ -664,18 +664,7 @@ public class LobbyPageActivity extends AppCompatActivity implements AdapterView.
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("LobbyPage", "Server Response: " + response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("200 ok")) {
-                                Toast.makeText(LobbyPageActivity.this, "Lobby has been deleted.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LobbyPageActivity.this, HomePageActivity.class); // Go to home page.
-                                startActivity(intent);
-                                finish();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing server response", Toast.LENGTH_LONG).show();
-                        }
+
                     }
                 }, new Response.ErrorListener() {
                     /**
