@@ -85,7 +85,7 @@ public class BaccaratActivity extends AppCompatActivity {
         Intent inIntent = getIntent();
         userUsername = inIntent.getStringExtra("USERNAME");
         userID = inIntent.getIntExtra("UUID",-1);
-        lobbyID = inIntent.getIntExtra("LOBBY",-2);
+        lobbyID = inIntent.getIntExtra("LOBBYID",-2);
 
         addChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/" + userID + "/" ;
         removeChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/" + userID + "/" ;
