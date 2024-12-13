@@ -37,7 +37,7 @@ public class BaccaratActivity extends AppCompatActivity {
     private ImageView playerCard1, playerCard2, playerCard3, bankerCard1, bankerCard2, bankerCard3 ;
     private ScrollView chatArea;
     private boolean chatOpen = true;
-    private String serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/" + lobbyID + "/" + userUsername ;
+    private String serverURL;
     private int playerCardCount ;
     private int bankerCardCount ;
     private RequestQueue requestQueue;
@@ -82,15 +82,18 @@ public class BaccaratActivity extends AppCompatActivity {
         bankerBtn.setVisibility(View.GONE);
         tieBtn.setVisibility(View.GONE);
 
-        addChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/" + userID + "/" ;
-        removeChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/" + userID + "/" ;
-        getChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/get/" + userID ;
-
-
         Intent inIntent = getIntent();
         userUsername = inIntent.getStringExtra("USERNAME");
         userID = inIntent.getIntExtra("UUID",-1);
         lobbyID = inIntent.getIntExtra("LOBBY",-2);
+
+        addChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/add/" + userID + "/" ;
+        removeChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/remove/" + userID + "/" ;
+        getChipsUrl = "http://coms-3090-052.class.las.iastate.edu:8080/chips/get/" + userID ;
+        serverURL = "ws://coms-3090-052.class.las.iastate.edu:8080/chat/" + lobbyID + "/" + userUsername;
+
+
+
 
 
         String serverUrl = serverURL ;
