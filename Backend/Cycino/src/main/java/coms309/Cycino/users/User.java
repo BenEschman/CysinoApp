@@ -33,7 +33,7 @@ public class User implements Serializable {
     private Enums.Roles role = Enums.Roles.BEGINNER;
     private String userBiography;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user")
     @JsonIgnore
     private BlackJackSettings blackJackSettings;
 

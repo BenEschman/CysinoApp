@@ -20,6 +20,8 @@ public class LoginService {
     private LoginRepository loginRepository;
     @Autowired
     private UsersRepository repo;
+    @Autowired
+    private UserService service;
 
     public Map<String, Object> checkInfo(String username, String password){
         Map<String, Object> response = new HashMap<>();
@@ -71,7 +73,7 @@ public class LoginService {
     }
 
     public void addUser(LoginInfo user){
-        User user2 = new User();
+        User user2 = service.create(user);
         user.setUser(user2);
         user2.setUserName(user.getUsername());
         repo.save(user2);
@@ -123,12 +125,14 @@ public class LoginService {
         }
         if(login.getUsername() != null){
             temp.setUsername(login.getUsername());
+            temp.getUser().setUserName(login.getUsername());
             response.put("username", login.getUsername());
         }
         if(login.getPassword() != null){
             temp.setPassword(login.getPassword());
             response.put("password", login.getPassword());
         }
+        repo.save(temp.getUser());
         loginRepository.save(temp);
         return response;
     }

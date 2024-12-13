@@ -1,7 +1,9 @@
 package coms309.Cycino.users;
 
 import coms309.Cycino.GameSettings.BlackJack.BlackJackSettings;
+import coms309.Cycino.GameSettings.BlackJack.BlackJackSettingsRepository;
 import coms309.Cycino.login.LoginInfo;
+import coms309.Cycino.login.LoginRepository;
 import coms309.Cycino.login.LoginService;
 import coms309.Cycino.stats.UserStatsController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,9 @@ public class UserService {
     @Autowired
     private UserStatsController statsController;
     @Autowired
-    private LoginService loginService;
+    private LoginRepository repo;
+    @Autowired
+    private BlackJackSettingsRepository repo2;
 
     public User getUser(String firstName, String lastName){
 
@@ -40,7 +44,7 @@ public class UserService {
 //                return u;
 //            }
 //        }
-        LoginInfo login = loginService.getUser(id);
+        LoginInfo login = repo.findById(id).orElse(null);
         return login.getUser();
     }
 
@@ -64,6 +68,7 @@ public class UserService {
         BlackJackSettings blackJackSettings = new BlackJackSettings(17, 10, 1, 6);
         blackJackSettings.setUser(user);
         user.setBlackJackSettings(blackJackSettings);
+        repo2.save(blackJackSettings);
         userRepository.save(user);
         return user;
     }
