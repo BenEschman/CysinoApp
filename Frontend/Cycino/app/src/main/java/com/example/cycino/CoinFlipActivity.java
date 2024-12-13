@@ -342,18 +342,7 @@ public class CoinFlipActivity extends AppCompatActivity{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.getString("status");
-                            if (status.equals("200 OK")) {
-                                Toast.makeText(getApplicationContext(), "updated chips", Toast.LENGTH_SHORT).show();
                                 getUserChips();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "failed chip update", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Error parsing response", Toast.LENGTH_LONG).show();
-                        }
                     }
                 },
                 new Response.ErrorListener() {
