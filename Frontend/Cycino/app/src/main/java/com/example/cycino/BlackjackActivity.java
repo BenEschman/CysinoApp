@@ -1209,13 +1209,16 @@ public class BlackjackActivity extends AppCompatActivity {
                                     standButton.setVisibility(View.INVISIBLE);
                                 }
                             }
-
-                            if (cmd.contains("finish") && playerIDs[0] == userID) {
+                            if (cmd.contains("finish")) {
                                 finishGame();
                             }
-                            if (cmd.contains("finish") && playerIDs[0] != userID) {
-                                finishUpdate();
-                            }
+
+//                            if (cmd.contains("finish") && playerIDs[0] == userID) {
+                                finishGame();
+//                            }
+//                            if (cmd.contains("finish") && playerIDs[0] != userID) {
+//                                finishUpdate();
+//                            }
 
 
 
