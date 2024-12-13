@@ -99,11 +99,11 @@ public class LobbyService {
         Map<String, Object> response = new HashMap<>();
         User u = userService.getUser(userId);
         Enums.Roles role = u.getRole();
-        if(role.ordinal() >= 2){
-            response.put("status", 405);
-            response.put("error", "permission not allowed");
-            return response;
-        }
+//        if(role.ordinal() >= 2){
+//            response.put("status", 405);
+//            response.put("error", "permission not allowed");
+//            return response;
+//        }
         Lobby l = repo.findById(id).orElse(null);
         if(l == null){
             response.put("status", "404 not found");
