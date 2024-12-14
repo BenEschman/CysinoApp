@@ -181,8 +181,13 @@ public class BlackjackActivity extends AppCompatActivity {
         userID = inIntent.getIntExtra("UUID",-1);
         lobbyID = inIntent.getIntExtra("LOBBYID",-1);
 
+//        username = "Sam";
+//        userID = 4;
+//        lobbyID = 0;
+
         getXMLIDs();
         setNumHands();
+
 
         currBetText.setText(currBet.toString());
 
@@ -406,7 +411,6 @@ public class BlackjackActivity extends AppCompatActivity {
         p4Card1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
         p4Card2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+cardBack+".png")));
 
-        if (playerIDs[0] == userID) {
 
 
             JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.DELETE, url + "delete/" + lobbyID, null,
@@ -452,7 +456,6 @@ public class BlackjackActivity extends AppCompatActivity {
             myWait(1000);
             queue.add(jsonObjectRequest);
 
-        }
 
     }
 
@@ -1208,16 +1211,16 @@ public class BlackjackActivity extends AppCompatActivity {
                                     standButton.setVisibility(View.INVISIBLE);
                                 }
                             }
-//                            if (cmd.contains("finish")) {
-//                                finishGame();
-//                            }
-
-                            if (cmd.contains("finish") && playerIDs[0] == userID) {
+                            if (cmd.contains("finish")) {
                                 finishGame();
                             }
-                            if (cmd.contains("finish") && playerIDs[0] != userID) {
-                                finishUpdate();
-                            }
+
+//                            if (cmd.contains("finish") && playerIDs[0] == userID) {
+//                                finishGame();
+//                            }
+//                            if (cmd.contains("finish") && playerIDs[0] != userID) {
+//                                finishUpdate();
+//                            }
 
 
 

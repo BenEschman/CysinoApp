@@ -626,7 +626,7 @@ public class PokerActivity extends AppCompatActivity {
                                 String dcard1S = dco1.getString("suit").toLowerCase() + "_" + dco1.getString("number");
                                 String dcard2S = dco2.getString("suit").toLowerCase() + "_" + dco2.getString("number");
 
-                                p1c2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+dcard1S+".png")));
+                                p2c1.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+dcard1S+".png")));
                                 p2c2.setImageURI(Uri.fromFile(new File(sdcard,"Android/media/"+deckName+"/"+dcard2S+".png")));
 
 
