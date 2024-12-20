@@ -46,7 +46,7 @@ public class User implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<UserStats> userStatslist;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JsonIgnore
     private LoginInfo loginInfo;
 

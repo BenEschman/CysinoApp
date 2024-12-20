@@ -73,6 +73,7 @@ public class LoginService {
     }
 
     public void addUser(LoginInfo user){
+        loginRepository.save(user);
         User user2 = service.create(user);
         user.setUser(user2);
         user2.setUserName(user.getUsername());
@@ -99,8 +100,8 @@ public class LoginService {
         LoginInfo login = getUser(username);
         User u = login.getUser();
         if(u != null){
-            repo.delete(u);
             loginRepository.deleteById(login.getId());
+            repo.delete(u);
             response.put("status", "200 ok");
             return response;
         }

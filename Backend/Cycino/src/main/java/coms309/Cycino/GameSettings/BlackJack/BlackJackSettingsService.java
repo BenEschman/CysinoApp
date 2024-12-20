@@ -1,8 +1,11 @@
 package coms309.Cycino.GameSettings.BlackJack;
 
 import coms309.Cycino.Games.Blackjack.BlackJack;
+import coms309.Cycino.login.LoginInfo;
+import coms309.Cycino.login.LoginRepository;
 import coms309.Cycino.users.User;
 import coms309.Cycino.users.UserService;
+import coms309.Cycino.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,18 +18,15 @@ public class BlackJackSettingsService {
     private BlackJackSettingsRepository blackJackSettingsRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LoginRepository repo;
 
     public BlackJackSettings getBlackJackSettings(Long id) {
-        List<BlackJackSettings> blackJackSettingsAll = blackJackSettingsRepository.findAll();
-        System.out.println("id: ");
-        System.out.println(id);
-        System.out.println(blackJackSettingsAll);
-        for(BlackJackSettings settings : blackJackSettingsAll) {
-            if(settings.getUserId().equals(id)) {
-                return settings;
-            }
-        }
-        return null;
+        LoginInfo login = repo.findById(id).orElse(null);
+        assert login != null;
+        User u = login.getUser();
+        assert u != null;
+        return u.getBlackJackSettings();
     }
 
     @Transactional

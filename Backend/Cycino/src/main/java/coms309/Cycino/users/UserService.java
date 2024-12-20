@@ -66,6 +66,7 @@ public class UserService {
         User user = new User();
         user.setLoginInfo(loginInfo);
         BlackJackSettings blackJackSettings = new BlackJackSettings(17, 10, 1, 6);
+        userRepository.save(user);
         blackJackSettings.setUser(user);
         user.setBlackJackSettings(blackJackSettings);
         repo2.save(blackJackSettings);
